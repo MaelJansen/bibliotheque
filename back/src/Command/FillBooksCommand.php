@@ -28,30 +28,45 @@ class FillBooksCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('nbLivres', InputArgument::OPTIONAL, 'Number of books you want to add')
+            ->addArgument('nbBooks', InputArgument::OPTIONAL, 'Number of books you want to add')
+            ->addArgument('search', InputArgument::OPTIONAL, 'Search for a book')
+            ->setDescription('This function is used to fill the database with books from the api google books')
+
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $nbLivres = $input->getArgument('nbLivres');
-        $this->client->request(
+        $nbBooks = $input->getArgument('nbBooks');
+        $search = $input->getArgument('search');
+
+        if ($nbBooks && $nbBooks > 40) {
+            $io->error("You can't add more than 40 books");
+            return Command::FAILURE;
+        }
+        
+        $params = [
+            'maxResults' => 40,
+            'q' => "a",
+        ];
+
+        if ($nbBooks && $nbBooks < 40 && $nbBooks > 0) {
+            $io->note(sprintf('Number of books : %s', $nbBooks));
+            $params['maxResults'] = $nbBooks;
+        }
+        if ($search && $search != "") {
+            $io->note(sprintf('Research : %s', $search));
+            $params['q'] = $search;
+        }
+        $response = $this->client->request(
             'GET',
             'https://www.googleapis.com/books/v1/volumes',
             [
-                'query' => [
-                    'maxResults' => 40,
-                    'q' => 'a',
-                ],
+                'query' => $params,
             ]
         );
-
-        if ($nbLivres && $nbLivres < 40 && $nbLivres > 0) {
-            $io->note(sprintf('You passed an argument: %s', $nbLivres));
-        }
-
-
+        print(($response->getContent()));
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;
