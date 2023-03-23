@@ -4,13 +4,11 @@ export default function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
+  const imgPath = "https://http.cat/" + String(error.status);
+
   return (
-    <div id="error-page" className="w-screen flex flex-col items-center mt-5">
-      <h1 className="text-3xl">Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
+    <div id="error-page" className="w-screen h-screen flex flex-col items-center bg-black">
+      <img src={imgPath} alt={error.statusText}></img>
     </div>
   );
 }
