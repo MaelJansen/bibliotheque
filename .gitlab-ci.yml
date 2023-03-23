@@ -1,9 +1,5 @@
 image: jakzal/phpqa:php8.1
 
-before_script:
-    - cd back
-    - composer install
-
 cache:
     paths:
         - /back/vendor/
@@ -12,21 +8,38 @@ stages:
     - SecurityChecker
     - CodingStandards
     - UnitTests
+    - Eslint
 
 security-checker:
     stage: SecurityChecker
     script:
+        - cd back
+        - composer install
         - local-php-security-checker  --path=./composer.lock
     allow_failure: false
 
 phpcs:
     stage: CodingStandards
     script:
+        - cd back
+        - composer install
         - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
     allow_failure: false
 
 phpstan:
     stage: CodingStandards
     script:
+        - cd back
+        - composer install
         - phpstan analyse ./src
+    allow_failure: false
+
+eslint:
+    image: node:16
+    stage: Eslint
+    script:
+        - cd front
+        - npm install
+        - npm install eslint
+        - npx eslint src/*.js
     allow_failure: false
