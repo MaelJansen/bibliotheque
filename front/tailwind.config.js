@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'header-img': "url('/src/img/library.jpg')",
+      },
       fontFamily: {
         'saira' : ['Saira', 'cursive'],
       },
