@@ -8,7 +8,7 @@ export default function ErrorPage() {
 
   return (
     <div id="error-page" className="w-screen h-screen flex flex-col items-center bg-black">
-      <img src={imgPath} alt={error.statusText}></img>
+      <img src={imgPath} alt={error.status + " : " + error.statusText}></img>
     </div>
   );
 }
