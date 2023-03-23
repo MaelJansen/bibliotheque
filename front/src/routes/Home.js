@@ -1,16 +1,25 @@
-import SearchBar from "./components/searchbar";
+import SearchBar from "../components/searchbar";
 import React, {useState } from "react";
 
-function App() {
+function Home() {
 
   const [query, setQuery] = useState("");
   const [completion, setCompletion] = useState([]);
 
+  /**
+   * Handle the changement of the query
+   * @param {*} newQuery 
+   */
   const onChangeQuery = (newQuery) => {
     setQuery(newQuery);
     complete(newQuery)
   }
 
+  /**
+   * Temporar function to auto complete
+   * its actually dummy data to test the frontend
+   * @param {*} query the actual query
+   */
   const complete = ((query) => {
     var tmp = [];
     if (query === '') {
@@ -25,7 +34,7 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div className="Home">
       <h1 className='text-iut-green font-saira'>Hello</h1>
       <SearchBar
         query={query}
@@ -36,4 +45,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
