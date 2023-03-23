@@ -1,9 +1,5 @@
 image: jakzal/phpqa:php8.1
 
-cache:
-    paths:
-        - /back/vendor/
-
 stages:
     - SecurityChecker
     - CodingStandards
