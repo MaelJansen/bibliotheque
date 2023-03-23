@@ -37,5 +37,5 @@ eslint:
         - cd front
         - npm install
         - npm install eslint
-        - npx eslint src/*.js
+        - npx eslint src/*.js --max-warnings=0
     allow_failure: false
