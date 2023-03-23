@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Home from './Home';
+import Home from './routes/Home';
 import reportWebVitals from './reportWebVitals';
-import ErrorPage from "./error-page";
+import ErrorPage from "./routes/error-page";
 
 import {
   createBrowserRouter,
