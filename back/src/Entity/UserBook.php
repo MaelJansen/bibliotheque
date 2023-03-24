@@ -15,21 +15,21 @@ class UserBook
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $USB_Grade = null;
+    private ?int $USBGrade = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $USB_DateBorrowed = null;
+    private ?\DateTimeInterface $USBDateBorrowed = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $USB_DateGivenBack = null;
+    private ?\DateTimeInterface $USBDateGivenBack = null;
 
-    #[ORM\ManyToOne(inversedBy: 'USR_BorrowedBooks')]
+    #[ORM\ManyToOne(inversedBy: 'USRBorrowedBooks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $USB_IdUser = null;
+    private ?User $USBIdUser = null;
 
-    #[ORM\ManyToOne(inversedBy: 'BOO_Borrows')]
+    #[ORM\ManyToOne(inversedBy: 'BOOBorrows')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Book $USB_Book = null;
+    private ?Book $USBBook = null;
 
     public function getId(): ?int
     {
@@ -38,60 +38,60 @@ class UserBook
 
     public function getUSBGrade(): ?int
     {
-        return $this->USB_Grade;
+        return $this->USBGrade;
     }
 
-    public function setUSBGrade(?int $USB_Grade): self
+    public function setUSBGrade(?int $USBGrade): self
     {
-        $this->USB_Grade = $USB_Grade;
+        $this->USBGrade = $USBGrade;
 
         return $this;
     }
 
     public function getUSBDateBorrowed(): ?\DateTimeInterface
     {
-        return $this->USB_DateBorrowed;
+        return $this->USBDateBorrowed;
     }
 
-    public function setUSBDateBorrowed(\DateTimeInterface $USB_DateBorrowed): self
+    public function setUSBDateBorrowed(\DateTimeInterface $USBDateBorrowed): self
     {
-        $this->USB_DateBorrowed = $USB_DateBorrowed;
+        $this->USBDateBorrowed = $USBDateBorrowed;
 
         return $this;
     }
 
     public function getUSBDateGivenBack(): ?\DateTimeInterface
     {
-        return $this->USB_DateGivenBack;
+        return $this->USBDateGivenBack;
     }
 
-    public function setUSBDateGivenBack(?\DateTimeInterface $USB_DateGivenBack): self
+    public function setUSBDateGivenBack(?\DateTimeInterface $USBDateGivenBack): self
     {
-        $this->USB_DateGivenBack = $USB_DateGivenBack;
+        $this->USBDateGivenBack = $USBDateGivenBack;
 
         return $this;
     }
 
     public function getUSBIdUser(): ?User
     {
-        return $this->USB_IdUser;
+        return $this->USBIdUser;
     }
 
-    public function setUSBIdUser(?User $USB_IdUser): self
+    public function setUSBIdUser(?User $USBIdUser): self
     {
-        $this->USB_IdUser = $USB_IdUser;
+        $this->USBIdUser = $USBIdUser;
 
         return $this;
     }
 
     public function getUSBBook(): ?Book
     {
-        return $this->USB_Book;
+        return $this->USBBook;
     }
 
-    public function setUSBBook(?Book $USB_Book): self
+    public function setUSBBook(?Book $USBBook): self
     {
-        $this->USB_Book = $USB_Book;
+        $this->USBBook = $USBBook;
 
         return $this;
     }

@@ -16,34 +16,34 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $USR_Name = null;
+    private ?string $USRName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $USR_FirstName = null;
+    private ?string $USRFirstName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $USR_Email = null;
+    private ?string $USREmail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $USR_Password = null;
+    private ?string $USRPassword = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $USR_ProfilePicture = null;
+    private ?string $USRProfilePicture = null;
 
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'USR_FollowingUsers')]
-    private Collection $USR_FollowedUsers;
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'USRFollowingUsers')]
+    private Collection $USRFollowedUsers;
 
-    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'USR_FollowedUsers')]
-    private Collection $USR_FollowingUsers;
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'USRFollowedUsers')]
+    private Collection $USRFollowingUsers;
 
-    #[ORM\OneToMany(mappedBy: 'USB_IdUser', targetEntity: UserBook::class, orphanRemoval: true)]
-    private Collection $USR_BorrowedBooks;
+    #[ORM\OneToMany(mappedBy: 'USBIdUser', targetEntity: UserBook::class, orphanRemoval: true)]
+    private Collection $USRBorrowedBooks;
 
-    public function __construct()
+    public function construct()
     {
-        $this->USR_FollowedUsers = new ArrayCollection();
-        $this->USR_FollowingUsers = new ArrayCollection();
-        $this->USR_BorrowedBooks = new ArrayCollection();
+        $this->USRFollowedUsers = new ArrayCollection();
+        $this->USRFollowingUsers = new ArrayCollection();
+        $this->USRBorrowedBooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,60 +53,60 @@ class User
 
     public function getUSRName(): ?string
     {
-        return $this->USR_Name;
+        return $this->USRName;
     }
 
-    public function setUSRName(string $USR_Name): self
+    public function setUSRName(string $USRName): self
     {
-        $this->USR_Name = $USR_Name;
+        $this->USRName = $USRName;
 
         return $this;
     }
 
     public function getUSRFirstName(): ?string
     {
-        return $this->USR_FirstName;
+        return $this->USRFirstName;
     }
 
-    public function setUSRFirstName(string $USR_FirstName): self
+    public function setUSRFirstName(string $USRFirstName): self
     {
-        $this->USR_FirstName = $USR_FirstName;
+        $this->USRFirstName = $USRFirstName;
 
         return $this;
     }
 
     public function getUSREmail(): ?string
     {
-        return $this->USR_Email;
+        return $this->USREmail;
     }
 
-    public function setUSREmail(string $USR_Email): self
+    public function setUSREmail(string $USREmail): self
     {
-        $this->USR_Email = $USR_Email;
+        $this->USREmail = $USREmail;
 
         return $this;
     }
 
     public function getUSRPassword(): ?string
     {
-        return $this->USR_Password;
+        return $this->USRPassword;
     }
 
-    public function setUSRPassword(string $USR_Password): self
+    public function setUSRPassword(string $USRPassword): self
     {
-        $this->USR_Password = $USR_Password;
+        $this->USRPassword = $USRPassword;
 
         return $this;
     }
 
     public function getUSRProfilePicture(): ?string
     {
-        return $this->USR_ProfilePicture;
+        return $this->USRProfilePicture;
     }
 
-    public function setUSRProfilePicture(?string $USR_ProfilePicture): self
+    public function setUSRProfilePicture(?string $USRProfilePicture): self
     {
-        $this->USR_ProfilePicture = $USR_ProfilePicture;
+        $this->USRProfilePicture = $USRProfilePicture;
 
         return $this;
     }
@@ -116,13 +116,13 @@ class User
      */
     public function getUSRFollowedUsers(): Collection
     {
-        return $this->USR_FollowedUsers;
+        return $this->USRFollowedUsers;
     }
 
     public function addUSRFollowedUser(self $uSRFollowedUser): self
     {
-        if (!$this->USR_FollowedUsers->contains($uSRFollowedUser)) {
-            $this->USR_FollowedUsers->add($uSRFollowedUser);
+        if (!$this->USRFollowedUsers->contains($uSRFollowedUser)) {
+            $this->USRFollowedUsers->add($uSRFollowedUser);
         }
 
         return $this;
@@ -130,7 +130,7 @@ class User
 
     public function removeUSRFollowedUser(self $uSRFollowedUser): self
     {
-        $this->USR_FollowedUsers->removeElement($uSRFollowedUser);
+        $this->USRFollowedUsers->removeElement($uSRFollowedUser);
 
         return $this;
     }
@@ -140,13 +140,13 @@ class User
      */
     public function getUSRFollowingUsers(): Collection
     {
-        return $this->USR_FollowingUsers;
+        return $this->USRFollowingUsers;
     }
 
     public function addUSRFollowingUser(self $uSRFollowingUser): self
     {
-        if (!$this->USR_FollowingUsers->contains($uSRFollowingUser)) {
-            $this->USR_FollowingUsers->add($uSRFollowingUser);
+        if (!$this->USRFollowingUsers->contains($uSRFollowingUser)) {
+            $this->USRFollowingUsers->add($uSRFollowingUser);
             $uSRFollowingUser->addUSRFollowedUser($this);
         }
 
@@ -155,7 +155,7 @@ class User
 
     public function removeUSRFollowingUser(self $uSRFollowingUser): self
     {
-        if ($this->USR_FollowingUsers->removeElement($uSRFollowingUser)) {
+        if ($this->USRFollowingUsers->removeElement($uSRFollowingUser)) {
             $uSRFollowingUser->removeUSRFollowedUser($this);
         }
 
@@ -167,13 +167,13 @@ class User
      */
     public function getUSRBorrowedBooks(): Collection
     {
-        return $this->USR_BorrowedBooks;
+        return $this->USRBorrowedBooks;
     }
 
     public function addUSRBorrowedBook(UserBook $uSRBorrowedBook): self
     {
-        if (!$this->USR_BorrowedBooks->contains($uSRBorrowedBook)) {
-            $this->USR_BorrowedBooks->add($uSRBorrowedBook);
+        if (!$this->USRBorrowedBooks->contains($uSRBorrowedBook)) {
+            $this->USRBorrowedBooks->add($uSRBorrowedBook);
             $uSRBorrowedBook->setUSBIdUser($this);
         }
 
@@ -182,7 +182,7 @@ class User
 
     public function removeUSRBorrowedBook(UserBook $uSRBorrowedBook): self
     {
-        if ($this->USR_BorrowedBooks->removeElement($uSRBorrowedBook)) {
+        if ($this->USRBorrowedBooks->removeElement($uSRBorrowedBook)) {
             // set the owning side to null (unless already changed)
             if ($uSRBorrowedBook->getUSBIdUser() === $this) {
                 $uSRBorrowedBook->setUSBIdUser(null);

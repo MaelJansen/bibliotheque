@@ -14,7 +14,7 @@ class Editor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $EDI_Name = null;
+    private ?string $EDIName = null;
 
     public function getId(): ?int
     {
@@ -23,13 +23,14 @@ class Editor
 
     public function getEDIName(): ?string
     {
-        return $this->EDI_Name;
+        return $this->EDIName;
     }
 
-    public function setEDIName(string $EDI_Name): self
+    public function setEDIName(string $EDIName): self
     {
-        $this->EDI_Name = $EDI_Name;
+        $this->EDIName = $EDIName;
 
         return $this;
     }
+
 }

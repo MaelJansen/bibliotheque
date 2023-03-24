@@ -14,7 +14,7 @@ class Author
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $AUT_Name = null;
+    private ?string $AUTName = null;
 
     public function getId(): ?int
     {
@@ -23,12 +23,12 @@ class Author
 
     public function getAUTName(): ?string
     {
-        return $this->AUT_Name;
+        return $this->AUTName;
     }
 
-    public function setAUTName(string $AUT_Name): self
+    public function setAUTName(string $AUTName): self
     {
-        $this->AUT_Name = $AUT_Name;
+        $this->AUTName = $AUTName;
 
         return $this;
     }

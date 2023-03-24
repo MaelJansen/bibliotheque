@@ -14,21 +14,21 @@ class Language
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $LAN_Name = null;
+    private ?string $LANName = null;
 
-    public function getLAN_Id(): ?int
+    public function getLANId(): ?int
     {
         return $this->id;
     }
 
     public function getLANName(): ?string
     {
-        return $this->LAN_Name;
+        return $this->LANName;
     }
 
-    public function setLANName(string $LAN_Name): self
+    public function setLANName(string $LANName): self
     {
-        $this->LAN_Name = $LAN_Name;
+        $this->LANName = $LANName;
 
         return $this;
     }

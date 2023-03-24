@@ -16,39 +16,39 @@ class Book
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $BOO_Name = null;
+    private ?string $BOOName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $BOO_Summary = null;
+    private ?string $BOOSummary = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $BOO_NbPages = null;
+    private ?int $BOONbPages = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $BOO_LinkImg = null;
+    private ?string $BOOLinkImg = null;
 
     #[ORM\ManyToMany(targetEntity: Categories::class)]
-    private Collection $BOO_Categories;
+    private Collection $BOOCategories;
 
     #[ORM\ManyToMany(targetEntity: Language::class)]
-    private Collection $BOO_Languages;
+    private Collection $BOOLanguages;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Editor $BOO_Editor = null;
+    private ?Editor $BOOEditor = null;
 
     #[ORM\ManyToMany(targetEntity: Author::class)]
-    private Collection $BOO_Author;
+    private Collection $BOOAuthor;
 
-    #[ORM\OneToMany(mappedBy: 'USB_Book', targetEntity: UserBook::class, orphanRemoval: true)]
-    private Collection $BOO_Borrows;
+    #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
+    private Collection $BOOBorrows;
 
-    public function __construct()
+    public function construct()
     {
-        $this->BOO_Categories = new ArrayCollection();
-        $this->BOO_Languages = new ArrayCollection();
-        $this->BOO_Author = new ArrayCollection();
-        $this->BOO_Borrows = new ArrayCollection();
+        $this->BOOCategories = new ArrayCollection();
+        $this->BOOLanguages = new ArrayCollection();
+        $this->BOOAuthor = new ArrayCollection();
+        $this->BOOBorrows = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -58,48 +58,48 @@ class Book
 
     public function getBOOName(): ?string
     {
-        return $this->BOO_Name;
+        return $this->BOOName;
     }
 
-    public function setBOOName(string $BOO_Name): self
+    public function setBOOName(string $BOOName): self
     {
-        $this->BOO_Name = $BOO_Name;
+        $this->BOOName = $BOOName;
 
         return $this;
     }
 
     public function getBOOSummary(): ?string
     {
-        return $this->BOO_Summary;
+        return $this->BOOSummary;
     }
 
-    public function setBOOSummary(?string $BOO_Summary): self
+    public function setBOOSummary(?string $BOOSummary): self
     {
-        $this->BOO_Summary = $BOO_Summary;
+        $this->BOOSummary = $BOOSummary;
 
         return $this;
     }
 
     public function getBOONbPages(): ?int
     {
-        return $this->BOO_NbPages;
+        return $this->BOONbPages;
     }
 
-    public function setBOONbPages(?int $BOO_NbPages): self
+    public function setBOONbPages(?int $BOONbPages): self
     {
-        $this->BOO_NbPages = $BOO_NbPages;
+        $this->BOONbPages = $BOONbPages;
 
         return $this;
     }
 
     public function getBOOLinkImg(): ?string
     {
-        return $this->BOO_LinkImg;
+        return $this->BOOLinkImg;
     }
 
-    public function setBOOLinkImg(?string $BOO_LinkImg): self
+    public function setBOOLinkImg(?string $BOOLinkImg): self
     {
-        $this->BOO_LinkImg = $BOO_LinkImg;
+        $this->BOOLinkImg = $BOOLinkImg;
 
         return $this;
     }
@@ -109,13 +109,13 @@ class Book
      */
     public function getBOOCategories(): Collection
     {
-        return $this->BOO_Categories;
+        return $this->BOOCategories;
     }
 
     public function addBOOCategory(Categories $bOOCategory): self
     {
-        if (!$this->BOO_Categories->contains($bOOCategory)) {
-            $this->BOO_Categories->add($bOOCategory);
+        if (!$this->BOOCategories->contains($bOOCategory)) {
+            $this->BOOCategories->add($bOOCategory);
         }
 
         return $this;
@@ -123,7 +123,7 @@ class Book
 
     public function removeBOOCategory(Categories $bOOCategory): self
     {
-        $this->BOO_Categories->removeElement($bOOCategory);
+        $this->BOOCategories->removeElement($bOOCategory);
 
         return $this;
     }
@@ -133,13 +133,13 @@ class Book
      */
     public function getBOOLanguages(): Collection
     {
-        return $this->BOO_Languages;
+        return $this->BOOLanguages;
     }
 
     public function addBOOLanguage(Language $bOOLanguage): self
     {
-        if (!$this->BOO_Languages->contains($bOOLanguage)) {
-            $this->BOO_Languages->add($bOOLanguage);
+        if (!$this->BOOLanguages->contains($bOOLanguage)) {
+            $this->BOOLanguages->add($bOOLanguage);
         }
 
         return $this;
@@ -147,19 +147,19 @@ class Book
 
     public function removeBOOLanguage(Language $bOOLanguage): self
     {
-        $this->BOO_Languages->removeElement($bOOLanguage);
+        $this->BOOLanguages->removeElement($bOOLanguage);
 
         return $this;
     }
 
     public function getBOOEditor(): ?Editor
     {
-        return $this->BOO_Editor;
+        return $this->BOOEditor;
     }
 
-    public function setBOOEditor(?Editor $BOO_Editor): self
+    public function setBOOEditor(?Editor $BOOEditor): self
     {
-        $this->BOO_Editor = $BOO_Editor;
+        $this->BOOEditor = $BOOEditor;
 
         return $this;
     }
@@ -169,13 +169,13 @@ class Book
      */
     public function getBOOAuthor(): Collection
     {
-        return $this->BOO_Author;
+        return $this->BOOAuthor;
     }
 
     public function addBOOAuthor(Author $bOOAuthor): self
     {
-        if (!$this->BOO_Author->contains($bOOAuthor)) {
-            $this->BOO_Author->add($bOOAuthor);
+        if (!$this->BOOAuthor->contains($bOOAuthor)) {
+            $this->BOOAuthor->add($bOOAuthor);
         }
 
         return $this;
@@ -183,7 +183,7 @@ class Book
 
     public function removeBOOAuthor(Author $bOOAuthor): self
     {
-        $this->BOO_Author->removeElement($bOOAuthor);
+        $this->BOOAuthor->removeElement($bOOAuthor);
 
         return $this;
     }
@@ -193,13 +193,13 @@ class Book
      */
     public function getBOOBorrows(): Collection
     {
-        return $this->BOO_Borrows;
+        return $this->BOOBorrows;
     }
 
     public function addBOOBorrow(UserBook $bOOBorrow): self
     {
-        if (!$this->BOO_Borrows->contains($bOOBorrow)) {
-            $this->BOO_Borrows->add($bOOBorrow);
+        if (!$this->BOOBorrows->contains($bOOBorrow)) {
+            $this->BOOBorrows->add($bOOBorrow);
             $bOOBorrow->setUSBBook($this);
         }
 
@@ -208,7 +208,7 @@ class Book
 
     public function removeBOOBorrow(UserBook $bOOBorrow): self
     {
-        if ($this->BOO_Borrows->removeElement($bOOBorrow)) {
+        if ($this->BOOBorrows->removeElement($bOOBorrow)) {
             // set the owning side to null (unless already changed)
             if ($bOOBorrow->getUSBBook() === $this) {
                 $bOOBorrow->setUSBBook(null);

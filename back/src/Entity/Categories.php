@@ -14,28 +14,28 @@ class Categories
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $CAT_Name = null;
+    private ?string $CATName = null;
 
     public function getCATId(): ?int
     {
         return $this->id;
     }
 
-    public function setCATId(int $CAT_Id): self
+    public function setCATId(int $CATId): self
     {
-        $this->CAT_Id = $CAT_Id;
+        $this->id = $CATId;
 
         return $this;
     }
 
     public function getCATName(): ?string
     {
-        return $this->CAT_Name;
+        return $this->CATName;
     }
 
-    public function setCATName(string $CAT_Name): self
+    public function setCATName(string $CATName): self
     {
-        $this->CAT_Name = $CAT_Name;
+        $this->CATName = $CATName;
 
         return $this;
     }
