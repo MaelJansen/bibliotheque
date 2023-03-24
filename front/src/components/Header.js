@@ -29,9 +29,9 @@ function Header(){
         
 
         menuLine = <div class="hidden md:flex space-x-10">
-                        <a href="./" class="hover:underline">Acceuil</a>
-                        <a href="" class="hover:underline">Amis</a>
-                        <a href="" class="hover:underline">Mes livres</a>
+                        <a href="./" class="hover:underline hover:text-gray-700">Acceuil</a>
+                        <a href="" class="hover:underline hover:text-gray-700">Amis</a>
+                        <a href="" class="hover:underline hover:text-gray-700">Mes livres</a>
                     </div>;
     }
     else{
@@ -49,8 +49,8 @@ function Header(){
         </div>;
 
         menuLine = <div class="hidden md:flex space-x-10">
-                        <a href="./" class="hover:underline">Acceuil</a>
-                        <a href="" class="hover:underline">Se connecter</a>
+                        <a href="./" class="hover:underline hover:text-gray-700">Acceuil</a>
+                        <a href="" class="hover:underline hover:text-gray-700">Se connecter</a>
                     </div>;
     }
 

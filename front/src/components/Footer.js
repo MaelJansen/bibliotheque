@@ -18,9 +18,9 @@ function Footer(){
                     <div>
                         <h2 class="text-iut-green text-xl">Liens</h2>
                         <ul class="w-48 py-4">
-                            <li class="py-1"><a href="https://www.iut.u-bordeaux.fr/general/">IUT de Bordeaux</a></li>
-                            <li class="py-1"><a href="https://bibliotheques.u-bordeaux.fr/">Bibliothèque de l'université de Bordeaux</a></li>
-                            <li class="py-1"><a href="https://www.iut.u-bordeaux.fr/general/contacts/">Nous contacter</a></li>
+                            <li class="py-1"><a href="https://www.iut.u-bordeaux.fr/general/" class="hover:underline hover:text-gray-700">IUT de Bordeaux</a></li>
+                            <li class="py-1"><a href="https://bibliotheques.u-bordeaux.fr/" class="hover:underline hover:text-gray-700">Bibliothèque de l'université de Bordeaux</a></li>
+                            <li class="py-1"><a href="https://www.iut.u-bordeaux.fr/general/contacts/" class="hover:underline hover:text-gray-700">Nous contacter</a></li>
                         </ul>
                     </div>
                     <div class="flex flex-col space-y-20">
