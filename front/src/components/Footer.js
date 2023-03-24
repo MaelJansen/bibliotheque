@@ -1,3 +1,7 @@
+/**
+ * The footer
+ * @returns The footer
+ */
 function Footer(){
     return(
         <footer class="bg-gray-100">
