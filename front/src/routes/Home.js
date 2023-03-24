@@ -1,5 +1,6 @@
 import SearchBar from "../components/searchbar";
-import React, {useState } from "react";
+import React, { useState } from "react";
+import BookList from "../components/bookList";
 
 function Home() {
 
@@ -39,8 +40,16 @@ function Home() {
       <SearchBar
         query={query}
         onChangeQuery={onChangeQuery}
-        completion={completion}/>
+        completion={completion} />
       <p>You search : {query}</p>
+      <BookList
+        name={"Vos derniers livres empruntés"}
+        books={[]}
+      />
+      <BookList
+        name={"Dernieres sorties"}
+        books={[]}
+      />
     </div>
   );
 }
