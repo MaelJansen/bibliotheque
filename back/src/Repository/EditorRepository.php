@@ -54,13 +54,13 @@ class EditorRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-   public function findOneBySomeField($value): ?Editor
-   {
-       return $this->createQueryBuilder('e')
+    public function findOneBySomeField($value): ?Editor
+    {
+        return $this->createQueryBuilder('e')
            ->andWhere('e.exampleField = :val')
            ->setParameter('val', $value)
            ->getQuery()
            ->getOneOrNullResult()
-       ;
-   }
+        ;
+    }
 }

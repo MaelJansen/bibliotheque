@@ -20,7 +20,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Doctrine\DBAL\Logging\DebugStack;
 
-
 #[AsCommand(
     name: 'app:fill-books',
     description: 'Add a short description for your command',
@@ -70,7 +69,7 @@ class FillBooksCommand extends Command
             $io->error("You can't add more than 40 books");
             return Command::FAILURE;
         }
-        
+
         $params = [
             'maxResults' => 40,
             'q' => "all",
@@ -91,22 +90,20 @@ class FillBooksCommand extends Command
                 'query' => $params,
             ]
         );
-        
+
         foreach ($response->toArray()["items"] as $book) {
             print($book['volumeInfo']['title']);
             $createdBook = new Book();
             $createdBook->construct();
-            
+
             //Add authors
             if (array_key_exists('authors', $book['volumeInfo'])) {
                 $nbAuthors = count($book['volumeInfo']['authors']);
-                for ($autIndex=0; $autIndex < $nbAuthors; $autIndex++) { 
+                for ($autIndex=0; $autIndex < $nbAuthors; $autIndex++) {
                     $foundAuthor = $this->authorRepository->findOneBy(['AUTName' => $book['volumeInfo']['authors'][$autIndex]]);
                     if ($foundAuthor) {
                         $createdBook->addBOOAuthor($foundAuthor);
-                    }
-                    else
-                    {
+                    } else {
                         $createdAuthor = new Author();
                         $createdAuthor->setAUTName($book['volumeInfo']['authors'][$autIndex]);
                         $createdBook->addBOOAuthor($createdAuthor);
@@ -114,17 +111,15 @@ class FillBooksCommand extends Command
                     }
                 }
             }
-            
+
             //Add categories
             if (array_key_exists('categories', $book['volumeInfo'])) {
                 $nbCategories = count($book['volumeInfo']['categories']);
-                for ($catIndex=0; $catIndex < $nbCategories; $catIndex++) { 
+                for ($catIndex=0; $catIndex < $nbCategories; $catIndex++) {
                     $foundCat = $this->categoriesRepository->findOneBy(['CATName' => $book['volumeInfo']['categories'][$catIndex]]);
                     if ($foundCat) {
                         $createdBook->addBOOCategory($foundCat);
-                    }
-                    else
-                    {
+                    } else {
                         $createdCat = new Categories();
                         $createdCat->setCATName($book['volumeInfo']['categories'][$catIndex]);
                         $createdBook->addBOOCategory($createdCat);
@@ -148,21 +143,19 @@ class FillBooksCommand extends Command
             }
 
             //Add editor
-            if (array_key_exists('publisher', $book['volumeInfo'])){
+            if (array_key_exists('publisher', $book['volumeInfo'])) {
                 $foundEdi = $this->editorRepository->findOneBy(['EDIName' => $book['volumeInfo']['publisher']]);
                 if ($foundEdi) {
                     $createdBook->setBOOEditor($foundEdi);
-                }
-                else
-                {
+                } else {
                     $createdEditor = new Editor();
                     $createdEditor->setEDIName($book['volumeInfo']['publisher']);
                     $createdBook->setBOOEditor($createdEditor);
                     $this->entityManager->persist($createdEditor);
                 }
             }
-            
-            
+
+
 
             //Add book infos
             if (array_key_exists('pageCount', $book['volumeInfo'])) {
@@ -175,12 +168,10 @@ class FillBooksCommand extends Command
                 $createdBook->setBOOLinkImg($book['volumeInfo']['imageLinks']['thumbnail']);
             }
             $createdBook->setBOOName($book['volumeInfo']['title']);
-            
+
             //Add book to database
             $this->entityManager->persist($createdBook);
             $this->entityManager->flush();
-
-
         }
         $io->success('The books have been added to the database');
 

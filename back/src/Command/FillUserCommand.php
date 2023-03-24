@@ -29,7 +29,7 @@ class FillUserCommand extends Command
      * @param HttpClientInterface $client
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(HttpClientInterface $client,EntityManagerInterface $entityManager)
+    public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->client = $client;
@@ -72,13 +72,11 @@ class FillUserCommand extends Command
                         'results' => $arg1,
                         'inc' => 'name,email,picture,login',
                     ],
-                    
+
                 ]
-            
             );
             $io->success('You have created '.$arg1.' users !');
-        }
-        else {
+        } else {
             $io->success('You have created 50 users !');
         }
 
