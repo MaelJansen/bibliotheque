@@ -11,14 +11,14 @@ class Editor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $EDI_Id = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $EDI_Name = null;
 
     public function getId(): ?int
     {
-        return $this->EDI_Id;
+        return $this->id;
     }
 
     public function getEDIName(): ?string

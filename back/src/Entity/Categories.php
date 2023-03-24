@@ -11,14 +11,14 @@ class Categories
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $CAT_Id = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $CAT_Name = null;
 
     public function getCATId(): ?int
     {
-        return $this->CAT_Id;
+        return $this->id;
     }
 
     public function setCATId(int $CAT_Id): self

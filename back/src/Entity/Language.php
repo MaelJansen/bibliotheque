@@ -11,14 +11,14 @@ class Language
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $LAN_Id = null;
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $LAN_Name = null;
 
     public function getLAN_Id(): ?int
     {
-        return $this->LAN_Id;
+        return $this->id;
     }
 
     public function getLANName(): ?string
