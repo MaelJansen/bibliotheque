@@ -99,7 +99,8 @@ class FillBooksCommand extends Command
                 $nbAuthors = count($book['volumeInfo']['authors']);
                 for ($autIndex = 0; $autIndex < $nbAuthors; $autIndex++) {
                     $foundAuthor = $this->authorRepository->findOneBy(
-                        ['AUTName' => $book['volumeInfo']['authors'][$autIndex]]);
+                        ['AUTName' => $book['volumeInfo']['authors'][$autIndex]]
+                    );
                     if ($foundAuthor) {
                         $createdBook->addBOOAuthor($foundAuthor);
                     } else {
@@ -116,7 +117,8 @@ class FillBooksCommand extends Command
                 $nbCategories = count($book['volumeInfo']['categories']);
                 for ($catIndex = 0; $catIndex < $nbCategories; $catIndex++) {
                     $foundCat = $this->categoriesRepository->findOneBy(
-                        ['CATName' => $book['volumeInfo']['categories'][$catIndex]]);
+                        ['CATName' => $book['volumeInfo']['categories'][$catIndex]]
+                    );
                     if ($foundCat) {
                         $createdBook->addBOOCategory($foundCat);
                     } else {
