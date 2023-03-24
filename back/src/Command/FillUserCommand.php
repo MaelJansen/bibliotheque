@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Entity\TUser;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -39,8 +39,7 @@ class FillUserCommand extends Command
     {
         $this
             ->setDescription("This function is used to fill the database with user from the api randomuser.me")
-            ->addArgument('nbUser', InputArgument::OPTIONAL, 'Number of user you want to create')
-        ;
+            ->addArgument('nbUser', InputArgument::OPTIONAL, 'Number of user you want to create');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -75,18 +74,18 @@ class FillUserCommand extends Command
 
                 ]
             );
-            $io->success('You have created '.$arg1.' users !');
+            $io->success('You have created ' . $arg1 . ' users !');
         } else {
             $io->success('You have created 50 users !');
         }
 
         foreach ($response->toArray()["results"] as $user) {
             print($user['name']['first']);
-            $createdUser = new TUser();
-            $createdUser->setUsName($user['name']['first']);
-            $createdUser->setUsEmail($user['email']);
-            $createdUser->setUsPassword($user['login']['sha256']);
-            $createdUser->setUsProfilepicture($user['picture']['large']);
+            $createdUser = new User();
+            $createdUser->setUSRName($user['name']['first']);
+            $createdUser->setUSREmail($user['email']);
+            $createdUser->setUSRPassword($user['login']['sha256']);
+            $createdUser->setUSRProfilePicture($user['picture']['large']);
             $this->entityManager->persist($createdUser);
             $this->entityManager->flush();
         }

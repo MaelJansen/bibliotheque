@@ -51,9 +51,7 @@ class FillBooksCommand extends Command
         $this
             ->addArgument('nbBooks', InputArgument::OPTIONAL, 'Number of books you want to add')
             ->addArgument('search', InputArgument::OPTIONAL, 'Search for a book')
-            ->setDescription('This function is used to fill the database with books from the api google books')
-
-        ;
+            ->setDescription('This function is used to fill the database with books from the api google books');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -99,7 +97,7 @@ class FillBooksCommand extends Command
             //Add authors
             if (array_key_exists('authors', $book['volumeInfo'])) {
                 $nbAuthors = count($book['volumeInfo']['authors']);
-                for ($autIndex=0; $autIndex < $nbAuthors; $autIndex++) {
+                for ($autIndex = 0; $autIndex < $nbAuthors; $autIndex++) {
                     $foundAuthor = $this->authorRepository->findOneBy(['AUTName' => $book['volumeInfo']['authors'][$autIndex]]);
                     if ($foundAuthor) {
                         $createdBook->addBOOAuthor($foundAuthor);
@@ -115,7 +113,7 @@ class FillBooksCommand extends Command
             //Add categories
             if (array_key_exists('categories', $book['volumeInfo'])) {
                 $nbCategories = count($book['volumeInfo']['categories']);
-                for ($catIndex=0; $catIndex < $nbCategories; $catIndex++) {
+                for ($catIndex = 0; $catIndex < $nbCategories; $catIndex++) {
                     $foundCat = $this->categoriesRepository->findOneBy(['CATName' => $book['volumeInfo']['categories'][$catIndex]]);
                     if ($foundCat) {
                         $createdBook->addBOOCategory($foundCat);
