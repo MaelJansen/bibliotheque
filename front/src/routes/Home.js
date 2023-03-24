@@ -1,6 +1,6 @@
 import SearchBar from "../components/searchbar";
 import React, {useState } from "react";
-import Header from "./Header";
+import Header from "../components/Header";
 
 function Home() {
 
