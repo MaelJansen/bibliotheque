@@ -1,6 +1,8 @@
 import SearchBar from "../components/searchbar";
 import BookList from "../components/bookList";
-import Header from "./Header";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 import React, {useState } from "react";
 
 function Home() {
@@ -51,6 +53,7 @@ function Home() {
         name={"Dernieres sorties"}
         books={[]}
       />
+      <Footer />
     </div>
   );
 }
