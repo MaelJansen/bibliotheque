@@ -1,5 +1,6 @@
 import SearchBar from "../components/searchbar";
 import React, {useState } from "react";
+import Header from "./Header";
 
 function Home() {
 
@@ -35,7 +36,7 @@ function Home() {
 
   return (
     <div className="Home">
-      <h1 className='text-iut-green font-saira'>Hello</h1>
+      <Header />
       <SearchBar
         query={query}
         onChangeQuery={onChangeQuery}
