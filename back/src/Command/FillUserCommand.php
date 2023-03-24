@@ -51,7 +51,6 @@ class FillUserCommand extends Command
             'https://randomuser.me/api/',
             [
                 'query' => [
-                    'results' => $arg1,
                     'nat' => 'fr',
                     'results' => 50,
                     'inc' => 'name,email,picture,login',
