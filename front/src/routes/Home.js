@@ -1,6 +1,7 @@
 import SearchBar from "../components/searchbar";
-import React, { useState } from "react";
 import BookList from "../components/bookList";
+import Header from "./Header";
+import React, {useState } from "react";
 
 function Home() {
 
@@ -36,7 +37,7 @@ function Home() {
 
   return (
     <div className="Home">
-      <h1 className='text-iut-green font-saira'>Hello</h1>
+      <Header />
       <SearchBar
         query={query}
         onChangeQuery={onChangeQuery}
