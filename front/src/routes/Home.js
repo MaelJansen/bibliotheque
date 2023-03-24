@@ -1,6 +1,7 @@
 import SearchBar from "../components/searchbar";
 import React, {useState } from "react";
-import Header from "./Header";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
 
@@ -42,6 +43,7 @@ function Home() {
         onChangeQuery={onChangeQuery}
         completion={completion}/>
       <p>You search : {query}</p>
+      <Footer />
     </div>
   );
 }
