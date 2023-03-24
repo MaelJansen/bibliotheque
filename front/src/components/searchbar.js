@@ -22,12 +22,12 @@ function SearchBar({ query, onChangeQuery, completion }) {
                             ref={searchRef}
                             id="default-search"
                             value={query}
-                            class="block w-full p-4 pl-10 text-sm text-gray-900 bg-gray-50 focus:border-iut-hover-green"
+                            class="peer block w-full p-4 pl-10 text-sm text-gray-900 bg-gray-50 focus:border-iut-hover-green"
                             placeholder="Search"
                             onChange={e => handleChange(e.target.value)}
                             required
                         />
-                        <div className='absolute w-full border border-iut-green'>
+                        <div className='hidden peer-focus:block absolute w-full border border-iut-green'>
                             <ol className='bg-white w-full'>
                                 {completion.map((elem) => (
                                     <li key={elem}
