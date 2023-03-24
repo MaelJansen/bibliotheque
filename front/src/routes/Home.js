@@ -44,14 +44,69 @@ function Home() {
         query={query}
         onChangeQuery={onChangeQuery}
         completion={completion} />
-      <p>You search : {query}</p>
       <BookList
         name={"Vos derniers livres empruntés"}
-        books={[]}
+        books={[
+          {
+            "id" : 10,
+            "title" : "tchoupi",
+            "author" : "me",
+            "img" : "https://site.nathan.fr/sites/default/files/visuels/9782092574225.jpg"
+          },
+          {
+            "id" : 45,
+            "title" : "minecraft",
+            "author" : "",
+            "date" : 1945,
+            "img" : "https://kbimages1-a.akamaihd.net/09327661-3932-4b69-a3a8-2b95fa100cbf/353/569/90/False/diary-of-a-minecraft-noob-steve-book-6-biff-s-curse-an-unofficial-minecraft-diary-book.jpg"
+          },
+          {
+            "id" : 1,
+            "title" : "Livre avec un titre immense, on ne devrait pas le voir en entier",
+            "author" : "Cube",
+            "date" : 201,
+            "img" : "https://media.tenor.com/zvg8w0FkecYAAAAC/feur-theobabac.gif"
+          },
+          {
+            "id" : 100,
+            "title" : "Le temps des tempetes",
+            "author" : "Sarcoco",
+            "date" : 2007,
+            "img" : "https://m.media-amazon.com/images/I/41wY41ART8S._SL500_.jpg"
+          },
+        ]}
       />
       <BookList
         name={"Dernieres sorties"}
-        books={[]}
+        books={[
+          {
+            "id" : 10,
+            "title" : "tchoupi",
+            "author" : "me",
+            "date" : 2030,
+            "img" : "https://site.nathan.fr/sites/default/files/visuels/9782092574225.jpg"
+          },
+          {
+            "id" : 45,
+            "title" : "minecraft",
+            "author" : "pipeline",
+            "date" : 1945,
+            "img" : "https://static.wikia.nocookie.net/minecraft/images/0/02/Enchanted_Book.png/revision/latest?cb=20190911213857"
+          },
+          {
+            "id" : 1,
+            "title" : "Quoi",
+            "author" : "Cube",
+            "img" : "https://media.tenor.com/zvg8w0FkecYAAAAC/feur-theobabac.gif"
+          },
+          {
+            "id" : 100,
+            "title" : "Le temps des tempetes",
+            "author" : "Sarcoco",
+            "date" : 2007,
+            "img" : "https://m.media-amazon.com/images/I/41wY41ART8S._SL500_.jpg"
+          },
+        ]}
       />
       <Footer />
     </div>
