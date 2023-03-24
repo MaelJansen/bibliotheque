@@ -15,7 +15,7 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 2000)]
     private ?string $BOOName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -24,7 +24,7 @@ class Book
     #[ORM\Column(nullable: true)]
     private ?int $BOONbPages = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
     #[ORM\ManyToMany(targetEntity: Categories::class)]
@@ -34,7 +34,7 @@ class Book
     private Collection $BOOLanguages;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Editor $BOOEditor = null;
 
     #[ORM\ManyToMany(targetEntity: Author::class)]

@@ -6,15 +6,20 @@ use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Editor;
 use App\Entity\Language;
+use App\Entity\Categories;
+use App\Repository\AuthorRepository;
+use App\Repository\CategoriesRepository;
+use App\Repository\EditorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Doctrine\DBAL\Logging\DebugStack;
+
 
 #[AsCommand(
     name: 'app:fill-books',
@@ -22,12 +27,22 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 )]
 class FillBooksCommand extends Command
 {
+    private $logger;
     private $client;
     private $entityManager;
+    private $languageRepository;
+    private AuthorRepository $authorRepository;
+    private CategoriesRepository $categoriesRepository;
+
+    private EditorRepository $editorRepository;
 
     public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->categoriesRepository = $entityManager->getRepository(Categories::class);
+        $this->authorRepository = $entityManager->getRepository(Author::class);
+        $this->editorRepository = $entityManager->getRepository(Editor::class);
+        $this->languageRepository = $entityManager->getRepository(Language::class);
         $this->client = $client;
         parent::__construct();
     }
@@ -44,6 +59,9 @@ class FillBooksCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->logger = new DebugStack();
+        $this->entityManager->getConnection()->getConfiguration()->setSQLLogger($this->logger);
+
         $io = new SymfonyStyle($input, $output);
         $nbBooks = $input->getArgument('nbBooks');
         $search = $input->getArgument('search');
@@ -80,37 +98,91 @@ class FillBooksCommand extends Command
             $createdBook->construct();
             
             //Add authors
-            $nbAuthors = count($book['volumeInfo']['authors']);
-            for ($autIndex=0; $autIndex < $nbAuthors; $autIndex++) { 
-                $createdAuthor = new Author();
-                $createdAuthor->setAUTName($book['volumeInfo']['authors'][0]);
-                $createdBook->addBOOAuthor($createdAuthor);
-                $this->entityManager->persist($createdAuthor);
+            if (array_key_exists('authors', $book['volumeInfo'])) {
+                $nbAuthors = count($book['volumeInfo']['authors']);
+                for ($autIndex=0; $autIndex < $nbAuthors; $autIndex++) { 
+                    $foundAuthor = $this->authorRepository->findOneBy(['AUTName' => $book['volumeInfo']['authors'][$autIndex]]);
+                    if ($foundAuthor) {
+                        $createdBook->addBOOAuthor($foundAuthor);
+                    }
+                    else
+                    {
+                        $createdAuthor = new Author();
+                        $createdAuthor->setAUTName($book['volumeInfo']['authors'][$autIndex]);
+                        $createdBook->addBOOAuthor($createdAuthor);
+                        $this->entityManager->persist($createdAuthor);
+                    }
+                }
             }
             
-            //Add languages
-            $createdLanguage = new Language();
-            $createdLanguage->setLANName($book['volumeInfo']['language'][0]);
-            $createdBook->addBOOLanguage($createdLanguage);
-            $this->entityManager->persist($createdLanguage);
+            //Add categories
+            if (array_key_exists('categories', $book['volumeInfo'])) {
+                $nbCategories = count($book['volumeInfo']['categories']);
+                for ($catIndex=0; $catIndex < $nbCategories; $catIndex++) { 
+                    $foundCat = $this->categoriesRepository->findOneBy(['CATName' => $book['volumeInfo']['categories'][$catIndex]]);
+                    if ($foundCat) {
+                        $createdBook->addBOOCategory($foundCat);
+                    }
+                    else
+                    {
+                        $createdCat = new Categories();
+                        $createdCat->setCATName($book['volumeInfo']['categories'][$catIndex]);
+                        $createdBook->addBOOCategory($createdCat);
+                        $this->entityManager->persist($createdCat);
+                    }
+                }
+            }
 
+
+            //Add languages
+            if (array_key_exists('language', $book['volumeInfo'])) {
+                $foundLanguage = $this->languageRepository->findOneBy(['LANName' => $book['volumeInfo']['language']]);
+                if ($foundLanguage) {
+                    $createdBook->addBOOLanguage($foundLanguage);
+                } else {
+                    $createdLanguage = new Language();
+                    $createdLanguage->setLANName($book['volumeInfo']['language']);
+                    $createdBook->addBOOLanguage($createdLanguage);
+                    $this->entityManager->persist($createdLanguage);
+                }
+            }
 
             //Add editor
-            $createdEditor = new Editor();
-            $createdEditor->setEDIName($book['volumeInfo']['publisher']);
-            $createdBook->setBOOEditor($createdEditor);
-            $this->entityManager->persist($createdEditor);
+            if (array_key_exists('publisher', $book['volumeInfo'])){
+                $foundEdi = $this->editorRepository->findOneBy(['EDIName' => $book['volumeInfo']['publisher']]);
+                if ($foundEdi) {
+                    $createdBook->setBOOEditor($foundEdi);
+                }
+                else
+                {
+                    $createdEditor = new Editor();
+                    $createdEditor->setEDIName($book['volumeInfo']['publisher']);
+                    $createdBook->setBOOEditor($createdEditor);
+                    $this->entityManager->persist($createdEditor);
+                }
+            }
+            
+            
 
             //Add book infos
+            if (array_key_exists('pageCount', $book['volumeInfo'])) {
+                $createdBook->setBOONbPages($book['volumeInfo']['pageCount']);
+            }
+            if (array_key_exists('description', $book['volumeInfo'])) {
+                $createdBook->setBOOSummary($book['volumeInfo']['description']);
+            }
+            if (array_key_exists('imageLinks', $book['volumeInfo'])) {
+                $createdBook->setBOOLinkImg($book['volumeInfo']['imageLinks']['thumbnail']);
+            }
             $createdBook->setBOOName($book['volumeInfo']['title']);
-            $createdBook->setBOONbPages($book['volumeInfo']['pageCount']);
-            $createdBook->setBOOSummary($book['volumeInfo']['description']);
             
             //Add book to database
             $this->entityManager->persist($createdBook);
             $this->entityManager->flush();
+
+
         }
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('The books have been added to the database');
 
         return Command::SUCCESS;
     }
