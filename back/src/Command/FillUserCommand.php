@@ -40,8 +40,7 @@ class FillUserCommand extends Command
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
         BookRepository $bookRepository
-    )
-    {
+    ){
         $this->bookRepository = $bookRepository;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
@@ -96,7 +95,7 @@ class FillUserCommand extends Command
             print($user['name']['first']);
             $createdUser = new User();
             $createdUser->construct();
-            for ($i=0; $i < rand(0, 10); $i++) {
+            for ($i = 0; $i < rand(0, 10); $i++) {
                 $createdUserBook = new UserBook();
                 $createdUserBook->setUSBDateBorrowed(new \DateTime());
                 if ($i % 2 == 0) {
@@ -112,7 +111,7 @@ class FillUserCommand extends Command
             }
             $users = $this->userRepository->findAll();
             $nbFollowers = rand(0, 5);
-            for ($i=0; $i < $nbFollowers; $i++) {
+            for ($i = 0; $i < $nbFollowers; $i++) {
                 $createdUser->addUSRFollowedUser($users[array_rand($users)]);
             }
             $createdUser->setUSRName($user['name']['last']);
