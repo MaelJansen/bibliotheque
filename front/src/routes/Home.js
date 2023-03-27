@@ -39,7 +39,7 @@ function Home() {
   });
 
   const getLatest = (() => {
-    let query = "127.0.0.1:8000/api/books/latest";
+    let query = "http://127.0.0.1:8000/api/books/latest";
     axios
     .get(query)
     .then((response) => console.log(response));
