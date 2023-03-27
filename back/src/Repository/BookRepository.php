@@ -66,12 +66,12 @@ class BookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByAuthor(String $author)
+    public function findByAuthor(string $author)
     {
         return $this->createQueryBuilder('b')
             ->join('b.BOOAuthor', 'a')
             ->andWhere('a.AUTName LIKE :val')
-            ->setParameter('val', '%'.$author.'%')
+            ->setParameter('val', '%' . $author . '%')
             ->orderBy('b.id', 'ASC')
             ->getQuery()
             ->getResult();
