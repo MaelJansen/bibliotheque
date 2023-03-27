@@ -70,7 +70,7 @@ class FillBooksCommand extends Command
 
         $params = [
             'maxResults' => 40,
-            'q' => "e",
+            'q' => "all",
         ];
 
         if ($nbBooks && $nbBooks < 40 && $nbBooks > 0) {
