@@ -46,7 +46,7 @@ function Results() {
         completion={completion}
       />
       <BookList
-        name={`Result for query : ${searchParams.get('q')}`}
+        name={`Resultats pour : ${searchParams.get('q') ? searchParams.get('q') : "Tous les livres"}`}
         books={[
           {
             "id": 10,
