@@ -66,8 +66,91 @@ class FillBooksCommand extends Command
                 'query' => $params,
             ]
         );
-        print(($response->getContent()));
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+
+        foreach ($response->toArray()["items"] as $book) {
+            print($book['volumeInfo']['title']);
+            $createdBook = new Book();
+            $createdBook->construct();
+
+            //Add authors
+            if (array_key_exists('authors', $book['volumeInfo'])) {
+                $nbAuthors = count($book['volumeInfo']['authors']);
+                for ($autIndex = 0; $autIndex < $nbAuthors; $autIndex++) {
+                    $foundAuthor = $this->authorRepository->findOneBy(
+                        ['AUTName' => $book['volumeInfo']['authors'][$autIndex]]
+                    );
+                    if ($foundAuthor) {
+                        $createdBook->addBOOAuthor($foundAuthor);
+                    } else {
+                        $createdAuthor = new Author();
+                        $createdAuthor->setAUTName($book['volumeInfo']['authors'][$autIndex]);
+                        $createdBook->addBOOAuthor($createdAuthor);
+                        $this->entityManager->persist($createdAuthor);
+                    }
+                }
+            }
+
+            //Add categories
+            if (array_key_exists('categories', $book['volumeInfo'])) {
+                $foundCat = $this->categoriesRepository->findOneBy(
+                    ['CATName' => $book['volumeInfo']['categories'][0]]
+                );
+                if ($foundCat) {
+                    $createdBook->setBOOCategory($foundCat);
+                } else {
+                    $createdCat = new Categories();
+                    $createdCat->setCATName($book['volumeInfo']['categories'][0]);
+                    $createdBook->setBOOCategory($createdCat);
+                    $this->entityManager->persist($createdCat);
+                }
+            }
+
+
+            //Add languages
+            if (array_key_exists('language', $book['volumeInfo'])) {
+                $foundLanguage = $this->languageRepository->findOneBy(['LANName' => $book['volumeInfo']['language']]);
+                if ($foundLanguage) {
+                    $createdBook->addBOOLanguage($foundLanguage);
+                } else {
+                    $createdLanguage = new Language();
+                    $createdLanguage->setLANName($book['volumeInfo']['language']);
+                    $createdBook->addBOOLanguage($createdLanguage);
+                    $this->entityManager->persist($createdLanguage);
+                }
+            }
+
+            //Add editor
+            if (array_key_exists('publisher', $book['volumeInfo'])) {
+                $foundEdi = $this->editorRepository->findOneBy(['EDIName' => $book['volumeInfo']['publisher']]);
+                if ($foundEdi) {
+                    $createdBook->setBOOEditor($foundEdi);
+                } else {
+                    $createdEditor = new Editor();
+                    $createdEditor->setEDIName($book['volumeInfo']['publisher']);
+                    $createdBook->setBOOEditor($createdEditor);
+                    $this->entityManager->persist($createdEditor);
+                }
+            }
+
+
+
+            //Add book infos
+            if (array_key_exists('pageCount', $book['volumeInfo'])) {
+                $createdBook->setBOONbPages($book['volumeInfo']['pageCount']);
+            }
+            if (array_key_exists('description', $book['volumeInfo'])) {
+                $createdBook->setBOOSummary($book['volumeInfo']['description']);
+            }
+            if (array_key_exists('imageLinks', $book['volumeInfo'])) {
+                $createdBook->setBOOLinkImg($book['volumeInfo']['imageLinks']['thumbnail']);
+            }
+            $createdBook->setBOOName($book['volumeInfo']['title']);
+
+            //Add book to database
+            $this->entityManager->persist($createdBook);
+            $this->entityManager->flush();
+        }
+        $io->success('The books have been added to the database');
 
         return Command::SUCCESS;
     }
