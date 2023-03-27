@@ -1,0 +1,6 @@
+{
+    "require": {
+        "nelmio/api-doc-bundle": "^4.11",
+        "zircote/swagger-php": "^4.7"
+    }
+}
