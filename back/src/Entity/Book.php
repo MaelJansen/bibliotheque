@@ -264,46 +264,4 @@ class Book
 
         return $this;
     }
-
-    public function getBOOPublishDate(): ?\DateTimeInterface
-    {
-        return $this->BOOPublishDate;
-    }
-
-    public function setBOOPublishDate(?\DateTimeInterface $BOOPublishDate): self
-    {
-        $this->BOOPublishDate = $BOOPublishDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Grade>
-     */
-    public function getBOOGrades(): Collection
-    {
-        return $this->BOOGrades;
-    }
-
-    public function addBOOGrade(Grade $bOOGrade): self
-    {
-        if (!$this->BOOGrades->contains($bOOGrade)) {
-            $this->BOOGrades->add($bOOGrade);
-            $bOOGrade->setGRABook($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBOOGrade(Grade $bOOGrade): self
-    {
-        if ($this->BOOGrades->removeElement($bOOGrade)) {
-            // set the owning side to null (unless already changed)
-            if ($bOOGrade->getGRABook() === $this) {
-                $bOOGrade->setGRABook(null);
-            }
-        }
-
-        return $this;
-    }
 }
