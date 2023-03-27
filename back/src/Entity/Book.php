@@ -108,7 +108,7 @@ class Book
         return $this->BOOCategory;
     }
 
-    public function setBOOCategory(?Categories $category) : self
+    public function setBOOCategory(?Categories $category): self
     {
         $this->BOOCategory = $category;
         return $this;

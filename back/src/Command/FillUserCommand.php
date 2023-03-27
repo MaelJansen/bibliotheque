@@ -35,8 +35,12 @@ class FillUserCommand extends Command
      * @param HttpClientInterface $client
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager, 
-    UserRepository $userRepository, BookRepository $bookRepository)
+    public function __construct(
+        HttpClientInterface $client,
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
+        BookRepository $bookRepository
+    )
     {
         $this->bookRepository = $bookRepository;
         $this->entityManager = $entityManager;
@@ -115,7 +119,8 @@ class FillUserCommand extends Command
             $createdUser->setUSRFirstName($user['name']['first']);
             $createdUser->setUSREmail($user['email']);
             $createdUser->setUSRPassword(
-                password_hash($user['login']['password'], PASSWORD_BCRYPT));
+                password_hash($user['login']['password'], PASSWORD_BCRYPT)
+            );
             $createdUser->setUSRProfilePicture($user['picture']['large']);
             $this->entityManager->persist($createdUser);
             $this->entityManager->flush();
