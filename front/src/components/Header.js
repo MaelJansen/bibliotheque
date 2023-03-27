@@ -1,4 +1,5 @@
 import '../index.css';
+import { Link } from "react-router-dom";
 import { Dropdown } from 'flowbite-react';
 
 /**
@@ -16,22 +17,22 @@ function Header(){
             <Dropdown label="Menu" dismissOnClick={false}
             class = "text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
                 <Dropdown.Item>
-                    <a href="./">Accueil</a>
+                    <Link to={"/"}>Accueil</Link> 
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <a href="./">Amis</a>
+                    <Link to={"/"}>Amis</Link>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <a href="./">Mes livres</a>
+                    <Link to={"/"}>Mes livres</Link>
                 </Dropdown.Item>
             </Dropdown>
         </div>;
         
 
         menuLine = <div class="hidden md:flex space-x-10">
-                        <a href="./" class="hover:underline hover:text-gray-700">Acceuil</a>
-                        <a href="./" class="hover:underline hover:text-gray-700">Amis</a>
-                        <a href="./" class="hover:underline hover:text-gray-700">Mes livres</a>
+                        <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
+                        <Link to={"/"} class="hover:underline hover:text-gray-700">Amis</Link>
+                        <Link to={"/"} class="hover:underline hover:text-gray-700">Mes livres</Link>
                     </div>;
     }
     else{
@@ -40,17 +41,17 @@ function Header(){
             <Dropdown label="Menu" dismissOnClick={false}
             class = "text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
                 <Dropdown.Item>
-                <a href="./">Accueil</a>
+                <Link to={"/"}>Accueil</Link>
             </Dropdown.Item>
             <Dropdown.Item>
-                <a href="./">Se connecter</a>
+                <Link to={"/"}>Se connecter</Link>
             </Dropdown.Item>
             </Dropdown>
         </div>;
 
         menuLine = <div class="hidden md:flex space-x-10">
-                        <a href="./" class="hover:underline hover:text-gray-700">Acceuil</a>
-                        <a href="./" class="hover:underline hover:text-gray-700">Se connecter</a>
+                        <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
+                        <Link to={"/"} class="hover:underline hover:text-gray-700">Se connecter</Link>
                     </div>;
     }
 
@@ -58,7 +59,7 @@ function Header(){
         <header>    
             <div class="flex justify-between px-5 py-5 text-xl">
                 <div class="flex">
-                    <p class="text-iut-green">IUT - Bibliothèque</p>
+                    <Link to={'/'} class="text-iut-green">IUT - Bibliothèque</Link>
                 </div>
                 {menuDropdown}
                 {menuLine}
