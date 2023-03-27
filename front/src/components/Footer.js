@@ -4,7 +4,7 @@
  */
 function Footer(){
     return(
-        <footer class="bg-gray-100">
+        <footer class="bg-gray-200">
             <div class="px-20 py-5">
                 <div class="md:flex justify-between">
                     <div>
