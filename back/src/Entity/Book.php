@@ -18,7 +18,7 @@ class Book
     #[ORM\Column(length: 2000)]
     private ?string $BOOName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOSummary = null;
 
     #[ORM\Column(nullable: true)]
@@ -103,9 +103,6 @@ class Book
         return $this;
     }
 
-    /**
-     * @return Collection<int, Categories>
-     */
     public function getBOOCategory(): Categories
     {
         return $this->BOOCategory;
