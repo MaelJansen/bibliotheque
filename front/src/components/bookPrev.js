@@ -6,7 +6,7 @@ function BookPrev({ data }) {
     return (
         <div id="preview" className="h-64 w-full flex flex-col">
             <div className="group overflow-hidden cursor-pointer">
-                <Link to={`/book/${data.id}`} 
+                <Link to={`/books/${data.id}`} 
                 className="w-full h-fit overflow-hidden">
                     <img src={data.img}
                         className="object-cover object-top w-full h-full ease-in-out delay-100 transition-transform  group-hover:scale-110 group-focus:scale-110"

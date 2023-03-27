@@ -49,7 +49,6 @@ function Home() {
 
   return (
     <div className="Home">
-      <Header />
       <SearchBar
         query={query}
         onChangeQuery={onChangeQuery}
@@ -118,7 +117,6 @@ function Home() {
           },
         ]}
       />
-      <Footer />
     </div>
   );
 }
