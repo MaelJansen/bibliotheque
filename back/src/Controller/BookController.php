@@ -18,8 +18,7 @@ class BookController extends AbstractController
         $q = $_GET['q'];
         if ($q) {
             $result = $repository->findByAuthor($_GET['q']);
-        }
-        else {
+        } else {
             $result = $repository->getTenBook();
         }
         return $result;
@@ -34,7 +33,7 @@ class BookController extends AbstractController
     }
 
     #[View(serializerGroups: ['book_infos'])]
-    #[Route('/{id}', methods:['GET'])]
+    #[Route('/{id}', methods: ['GET'])]
     public function getOneBook(BookRepository $repository, int $id)
     {
         $result = $repository->getOneBook($id);
