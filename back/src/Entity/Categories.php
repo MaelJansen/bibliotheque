@@ -16,6 +16,11 @@ class Categories
     #[ORM\Column(length: 255)]
     private ?string $CATName = null;
 
+    public function getCATId(): ?int
+    {
+        return $this->id;
+    }
+
     public function setCATId(int $CATId): self
     {
         $this->id = $CATId;
@@ -33,10 +38,5 @@ class Categories
         $this->CATName = $CATName;
 
         return $this;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 }

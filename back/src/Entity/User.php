@@ -39,10 +39,7 @@ class User
     #[ORM\OneToMany(mappedBy: 'USBIdUser', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $USRBorrowedBooks;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $USRToken = null;
-
-    public function __construct()
+    public function construct()
     {
         $this->USRFollowedUsers = new ArrayCollection();
         $this->USRFollowingUsers = new ArrayCollection();
@@ -53,7 +50,6 @@ class User
     {
         return $this->id;
     }
-
 
     public function getUSRName(): ?string
     {
@@ -192,18 +188,6 @@ class User
                 $uSRBorrowedBook->setUSBIdUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getUSRToken(): ?string
-    {
-        return $this->USRToken;
-    }
-
-    public function setUSRToken(?string $USRToken): self
-    {
-        $this->USRToken = $USRToken;
 
         return $this;
     }

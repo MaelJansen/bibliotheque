@@ -16,6 +16,10 @@ class Language
     #[ORM\Column(length: 255)]
     private ?string $LANName = null;
 
+    public function getLANId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getLANName(): ?string
     {
@@ -27,10 +31,5 @@ class Language
         $this->LANName = $LANName;
 
         return $this;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 }

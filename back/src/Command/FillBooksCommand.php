@@ -2,14 +2,23 @@
 
 namespace App\Command;
 
+use App\Entity\Author;
+use App\Entity\Book;
+use App\Entity\Editor;
+use App\Entity\Language;
+use App\Entity\Categories;
+use App\Repository\AuthorRepository;
+use App\Repository\CategoriesRepository;
+use App\Repository\EditorRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Doctrine\DBAL\Logging\DebugStack;
 
 #[AsCommand(
     name: 'app:fill-books',
@@ -17,10 +26,22 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 )]
 class FillBooksCommand extends Command
 {
+    private $logger;
     private $client;
+    private $entityManager;
+    private $languageRepository;
+    private AuthorRepository $authorRepository;
+    private CategoriesRepository $categoriesRepository;
 
-    public function __construct(HttpClientInterface $client)
+    private EditorRepository $editorRepository;
+
+    public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager)
     {
+        $this->entityManager = $entityManager;
+        $this->categoriesRepository = $entityManager->getRepository(Categories::class);
+        $this->authorRepository = $entityManager->getRepository(Author::class);
+        $this->editorRepository = $entityManager->getRepository(Editor::class);
+        $this->languageRepository = $entityManager->getRepository(Language::class);
         $this->client = $client;
         parent::__construct();
     }
@@ -30,13 +51,14 @@ class FillBooksCommand extends Command
         $this
             ->addArgument('nbBooks', InputArgument::OPTIONAL, 'Number of books you want to add')
             ->addArgument('search', InputArgument::OPTIONAL, 'Search for a book')
-            ->setDescription('This function is used to fill the database with books from the api google books')
-
-        ;
+            ->setDescription('This function is used to fill the database with books from the api google books');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->logger = new DebugStack();
+        $this->entityManager->getConnection()->getConfiguration()->setSQLLogger($this->logger);
+
         $io = new SymfonyStyle($input, $output);
         $nbBooks = $input->getArgument('nbBooks');
         $search = $input->getArgument('search');
@@ -45,10 +67,10 @@ class FillBooksCommand extends Command
             $io->error("You can't add more than 40 books");
             return Command::FAILURE;
         }
-        
+
         $params = [
             'maxResults' => 40,
-            'q' => "a",
+            'q' => "all",
         ];
 
         if ($nbBooks && $nbBooks < 40 && $nbBooks > 0) {
@@ -92,16 +114,19 @@ class FillBooksCommand extends Command
 
             //Add categories
             if (array_key_exists('categories', $book['volumeInfo'])) {
-                $foundCat = $this->categoriesRepository->findOneBy(
-                    ['CATName' => $book['volumeInfo']['categories'][0]]
-                );
-                if ($foundCat) {
-                    $createdBook->setBOOCategory($foundCat);
-                } else {
-                    $createdCat = new Categories();
-                    $createdCat->setCATName($book['volumeInfo']['categories'][0]);
-                    $createdBook->setBOOCategory($createdCat);
-                    $this->entityManager->persist($createdCat);
+                $nbCategories = count($book['volumeInfo']['categories']);
+                for ($catIndex = 0; $catIndex < $nbCategories; $catIndex++) {
+                    $foundCat = $this->categoriesRepository->findOneBy(
+                        ['CATName' => $book['volumeInfo']['categories'][$catIndex]]
+                    );
+                    if ($foundCat) {
+                        $createdBook->addBOOCategory($foundCat);
+                    } else {
+                        $createdCat = new Categories();
+                        $createdCat->setCATName($book['volumeInfo']['categories'][$catIndex]);
+                        $createdBook->addBOOCategory($createdCat);
+                        $this->entityManager->persist($createdCat);
+                    }
                 }
             }
 

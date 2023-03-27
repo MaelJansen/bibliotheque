@@ -27,8 +27,8 @@ class Book
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
-    #[ORM\ManyToOne(targetEntity: Categories::class)]
-    private ?Categories $BOOCategories;
+    #[ORM\ManyToMany(targetEntity: Categories::class)]
+    private Collection $BOOCategories;
 
     #[ORM\ManyToMany(targetEntity: Language::class)]
     private Collection $BOOLanguages;
@@ -43,8 +43,9 @@ class Book
     #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $BOOBorrows;
 
-    public function __construct()
+    public function construct()
     {
+        $this->BOOCategories = new ArrayCollection();
         $this->BOOLanguages = new ArrayCollection();
         $this->BOOAuthor = new ArrayCollection();
         $this->BOOBorrows = new ArrayCollection();
@@ -99,6 +100,30 @@ class Book
     public function setBOOLinkImg(?string $BOOLinkImg): self
     {
         $this->BOOLinkImg = $BOOLinkImg;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Categories>
+     */
+    public function getBOOCategories(): Collection
+    {
+        return $this->BOOCategories;
+    }
+
+    public function addBOOCategory(Categories $bOOCategory): self
+    {
+        if (!$this->BOOCategories->contains($bOOCategory)) {
+            $this->BOOCategories->add($bOOCategory);
+        }
+
+        return $this;
+    }
+
+    public function removeBOOCategory(Categories $bOOCategory): self
+    {
+        $this->BOOCategories->removeElement($bOOCategory);
 
         return $this;
     }
@@ -189,18 +214,6 @@ class Book
                 $bOOBorrow->setUSBBook(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getBOOCategories(): ?Categories
-    {
-        return $this->BOOCategories;
-    }
-
-    public function setBOOCategories(?Categories $BOOCategories): self
-    {
-        $this->BOOCategories = $BOOCategories;
 
         return $this;
     }
