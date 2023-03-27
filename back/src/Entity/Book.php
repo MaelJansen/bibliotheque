@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -14,8 +15,10 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('preview')]
     private ?int $id = null;
 
+    #[Groups('preview')]
     #[ORM\Column(length: 2000)]
     private ?string $BOOName = null;
 
@@ -25,6 +28,7 @@ class Book
     #[ORM\Column(nullable: true)]
     private ?int $BOONbPages = null;
 
+    #[Groups('preview')]
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
@@ -38,12 +42,14 @@ class Book
     #[ORM\JoinColumn(nullable: true)]
     private ?Editor $BOOEditor = null;
 
+    #[Groups('preview')]
     #[ORM\ManyToMany(targetEntity: Author::class)]
     private Collection $BOOAuthor;
 
     #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $BOOBorrows;
 
+    #[Groups('preview')]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $BOOPublishDate = null;
 

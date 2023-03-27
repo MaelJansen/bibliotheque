@@ -116,7 +116,9 @@ class FillUserCommand extends Command
             $users = $this->userRepository->findAll();
             $nbFollowers = rand(0, 5);
             for ($i = 0; $i < $nbFollowers; $i++) {
-                $createdUser->addUSRFollowedUser($users[array_rand($users)]);
+                if (count($users) > 0) {
+                    $createdUser->addUSRFollowedUser($users[array_rand($users)]);
+                }
             }
             $createdUser->setUSRName($user['name']['last']);
             $createdUser->setUSRFirstName($user['name']['first']);
