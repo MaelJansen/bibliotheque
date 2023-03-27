@@ -15,7 +15,13 @@ class BookController extends AbstractController
     #[Route('/', name: 'app_book')]
     public function index(BookRepository $repository)
     {
-        $result = $repository->getTenBook();
+        $q = $_GET['q'];
+        if ($q) {
+            $result = $repository->findByAuthor($_GET['q']);
+        }
+        else {
+            $result = $repository->getTenBook();
+        }
         return $result;
     }
 
