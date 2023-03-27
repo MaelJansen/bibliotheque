@@ -12,8 +12,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
-    #[Context (groups:["preview"])]
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

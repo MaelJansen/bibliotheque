@@ -116,7 +116,7 @@ class FillUserCommand extends Command
             $users = $this->userRepository->findAll();
             $nbFollowers = rand(0, 5);
             for ($i = 0; $i < $nbFollowers; $i++) {
-                if (count($users) >0) {
+                if (count($users) > 0) {
                     $createdUser->addUSRFollowedUser($users[array_rand($users)]);
                 }
             }

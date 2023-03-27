@@ -55,7 +55,7 @@ class BookRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
 //    /**
 //     * @return Book[] Returns an array of Book objects
 //     */
