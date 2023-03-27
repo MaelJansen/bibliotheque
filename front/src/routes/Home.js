@@ -49,28 +49,28 @@ function Home() {
         books={[
           {
             "id" : 10,
-            "title" : "tchoupi",
+            "title" : "Tchoupi",
             "author" : "me",
             "img" : "https://site.nathan.fr/sites/default/files/visuels/9782092574225.jpg"
           },
           {
             "id" : 45,
-            "title" : "minecraft",
+            "title" : "Minecraft",
             "author" : "",
-            "date" : 1945,
+            "date" : 1940,
             "img" : "https://kbimages1-a.akamaihd.net/09327661-3932-4b69-a3a8-2b95fa100cbf/353/569/90/False/diary-of-a-minecraft-noob-steve-book-6-biff-s-curse-an-unofficial-minecraft-diary-book.jpg"
           },
           {
             "id" : 1,
             "title" : "Livre avec un titre immense, on ne devrait pas le voir en entier",
             "author" : "Cube",
-            "date" : 201,
-            "img" : "https://media.tenor.com/zvg8w0FkecYAAAAC/feur-theobabac.gif"
+            "date" : 2010,
+            "img" : "https://image0.commarts.com/images1/8/0/6/8/860837_102_1160_LTg2NzQwODc2MjIxMjk3NDc3MzU.jpg"
           },
           {
             "id" : 100,
             "title" : "Le temps des tempetes",
-            "author" : "Sarcoco",
+            "author" : "Sarkozy",
             "date" : 2007,
             "img" : "https://m.media-amazon.com/images/I/41wY41ART8S._SL500_.jpg"
           },
@@ -80,31 +80,31 @@ function Home() {
         name={"Dernieres sorties"}
         books={[
           {
-            "id" : 10,
-            "title" : "tchoupi",
-            "author" : "me",
+            "id" : 30,
+            "title" : "Le C",
+            "author" : "C man",
             "date" : 2030,
-            "img" : "https://site.nathan.fr/sites/default/files/visuels/9782092574225.jpg"
+            "img" : "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/51HTieS6nkL._SX342_SY445_QL70_ML2_.jpg"
           },
           {
-            "id" : 45,
-            "title" : "minecraft",
-            "author" : "pipeline",
+            "id" : 55,
+            "title" : "API Please",
+            "author" : "Equipe back",
             "date" : 1945,
-            "img" : "https://static.wikia.nocookie.net/minecraft/images/0/02/Enchanted_Book.png/revision/latest?cb=20190911213857"
+            "img" : "https://www.editions-eni.fr/livre/symfony-5-developpez-des-sites-web-php-structures-et-performants-9782409037221_XL.jpg"
           },
           {
-            "id" : 1,
-            "title" : "Quoi",
-            "author" : "Cube",
-            "img" : "https://media.tenor.com/zvg8w0FkecYAAAAC/feur-theobabac.gif"
+            "id" : 2,
+            "title" : "UI/UX",
+            "author" : "Equipe Frontend",
+            "img" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlEF_yPjr9mxkJqsp86RsIYtjXxpGQiEElAA&usqp=CAU"
           },
           {
-            "id" : 100,
-            "title" : "Le temps des tempetes",
-            "author" : "Sarcoco",
+            "id" : 101,
+            "title" : "Vous avez dit du style ?",
+            "author" : "Equipe Frontend",
             "date" : 2007,
-            "img" : "https://m.media-amazon.com/images/I/41wY41ART8S._SL500_.jpg"
+            "img" : "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/71anm5gu60L._AC_UF1000,1000_QL80_.jpg"
           },
         ]}
       />
