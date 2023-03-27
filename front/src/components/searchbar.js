@@ -45,7 +45,7 @@ function SearchBar({ query, onChangeQuery, completion }) {
                             </ol>
                         </div>
                     </div>
-                    <Link to={`/search/${query}`} className="w-fit h-fit">
+                    <Link to={`/books?q=${query}`} className="w-fit h-fit">
                         <button type="submit"
                             class="p-4 text-sm font-medium text-white bg-iut-green border border-iut-green hover:bg-iut-hover-green focus:outline-none">
 
