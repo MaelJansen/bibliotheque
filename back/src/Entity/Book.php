@@ -6,6 +6,7 @@ use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -216,6 +217,48 @@ class Book
             // set the owning side to null (unless already changed)
             if ($bOOBorrow->getUSBBook() === $this) {
                 $bOOBorrow->setUSBBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBOOPublishDate(): ?\DateTimeInterface
+    {
+        return $this->BOOPublishDate;
+    }
+
+    public function setBOOPublishDate(?\DateTimeInterface $BOOPublishDate): self
+    {
+        $this->BOOPublishDate = $BOOPublishDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Grade>
+     */
+    public function getBOOGrades(): Collection
+    {
+        return $this->BOOGrades;
+    }
+
+    public function addBOOGrade(Grade $bOOGrade): self
+    {
+        if (!$this->BOOGrades->contains($bOOGrade)) {
+            $this->BOOGrades->add($bOOGrade);
+            $bOOGrade->setGRABook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBOOGrade(Grade $bOOGrade): self
+    {
+        if ($this->BOOGrades->removeElement($bOOGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($bOOGrade->getGRABook() === $this) {
+                $bOOGrade->setGRABook(null);
             }
         }
 
