@@ -11,6 +11,7 @@ function Home() {
 
   const [query, setQuery] = useState("");
   const [completion, setCompletion] = useState([]);
+  const [latest, setLatest] = useState([]);
 
   /**
    * Handle the changement of the query
@@ -42,10 +43,22 @@ function Home() {
     let query = "http://127.0.0.1:8000/api/books/latest";
     axios
     .get(query)
-    .then((response) => console.log(response));
-  });
+    .then((response) => {
+      let tmp = [];
+      for(let book of response.data) {
+        console.log(book);
+        let tmpBook = {
+          "id": book.id,
+          "title": book.BOOName,
+          "author": book.BOOAuthor ? book.BOOAuthor[0] ? book.BOOAuthor[0].AUTName: null : null ,
+          "img": book.BOOLinkImg,
+          "date": book.BOOPublishDate,
+        };
+        tmp.push(tmpBook);        
+      };
+      setLatest(tmp);
+    });
 
-  getLatest();
 
   return (
     <div className="Home">
@@ -55,35 +68,7 @@ function Home() {
         completion={completion} />
       <BookList
         name={"Vos derniers livres empruntés"}
-        books={[
-          {
-            "id" : 10,
-            "title" : "Tchoupi",
-            "author" : "me",
-            "img" : "https://site.nathan.fr/sites/default/files/visuels/9782092574225.jpg"
-          },
-          {
-            "id" : 45,
-            "title" : "Minecraft",
-            "author" : "",
-            "date" : 1940,
-            "img" : "https://kbimages1-a.akamaihd.net/09327661-3932-4b69-a3a8-2b95fa100cbf/353/569/90/False/diary-of-a-minecraft-noob-steve-book-6-biff-s-curse-an-unofficial-minecraft-diary-book.jpg"
-          },
-          {
-            "id" : 1,
-            "title" : "Livre avec un titre immense, on ne devrait pas le voir en entier",
-            "author" : "Cube",
-            "date" : 2010,
-            "img" : "https://image0.commarts.com/images1/8/0/6/8/860837_102_1160_LTg2NzQwODc2MjIxMjk3NDc3MzU.jpg"
-          },
-          {
-            "id" : 100,
-            "title" : "Le temps des tempetes",
-            "author" : "Sarkozy",
-            "date" : 2007,
-            "img" : "https://m.media-amazon.com/images/I/41wY41ART8S._SL500_.jpg"
-          },
-        ]}
+        books={latest}
       />
       <BookList
         name={"Dernieres sorties"}
