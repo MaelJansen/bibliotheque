@@ -107,7 +107,7 @@ class FillUserCommand extends Command
                     $createdGrade = new Grade();
                     $createdGrade->setGRABook($createdUserBook->getUSBBook());
                     $createdGrade->setGRAUser($createdUser);
-                    $createdGrade->setGRARate(rand(0,5));
+                    $createdGrade->setGRARate(rand(0, 5));
                     $this->entityManager->persist($createdGrade);
                 }
                 $createdUserBook->setUSBIdUser($createdUser->getId());
