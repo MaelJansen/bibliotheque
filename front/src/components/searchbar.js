@@ -34,6 +34,7 @@ function SearchBar({ query, onChangeQuery, completion }) {
                                         className="border border-b-gray-200 w-full">
                                         <button
                                             type='button'
+                                            title={elem}
                                             className='w-full text-left pl-2 py-2 overflow-x-clip hover:text-iut-hover-green hover:ring-1 hover:ring-iut-hover-green focus:text-iut-hover-green focus:ring-1 focus:ring-iut-hover-green'
                                             value={elem}
                                             onClick={e => handleChange(e.target.value)}>
