@@ -31,7 +31,7 @@ function Footer(){
                             <li><a href="https://www.linkedin.com/school/iut-de-bordeaux/"><img class="w-10" src={require("../img/linkedin.png")} alt="linkedin"/></a></li>
                             <li><a href="https://www.youtube.com/channel/UCaWP9UzIsK3H9NKx9AruRdA"><img class="w-10" src={require("../img/youtube.png")} alt="youtube"/></a></li>
                         </ul>
-                        <a>Conditions générales d'utilisation</a>
+                        <a href="https://www.iut.u-bordeaux.fr/qlio/wp-content/uploads/2020/09/ri_iut_de_bx_2020-02-27.pdf" class="hover:underline hover:text-gray-700">Conditions générales d'utilisation</a>
                     </div>
                 </div>
 

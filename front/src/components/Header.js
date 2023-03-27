@@ -19,10 +19,10 @@ function Header(){
                     <a href="./">Accueil</a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <a href="">Amis</a>
+                    <a href="./">Amis</a>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <a href="">Mes livres</a>
+                    <a href="./">Mes livres</a>
                 </Dropdown.Item>
             </Dropdown>
         </div>;
@@ -30,8 +30,8 @@ function Header(){
 
         menuLine = <div class="hidden md:flex space-x-10">
                         <a href="./" class="hover:underline hover:text-gray-700">Acceuil</a>
-                        <a href="" class="hover:underline hover:text-gray-700">Amis</a>
-                        <a href="" class="hover:underline hover:text-gray-700">Mes livres</a>
+                        <a href="./" class="hover:underline hover:text-gray-700">Amis</a>
+                        <a href="./" class="hover:underline hover:text-gray-700">Mes livres</a>
                     </div>;
     }
     else{
@@ -43,14 +43,14 @@ function Header(){
                 <a href="./">Accueil</a>
             </Dropdown.Item>
             <Dropdown.Item>
-                <a href="">Se connecter</a>
+                <a href="./">Se connecter</a>
             </Dropdown.Item>
             </Dropdown>
         </div>;
 
         menuLine = <div class="hidden md:flex space-x-10">
                         <a href="./" class="hover:underline hover:text-gray-700">Acceuil</a>
-                        <a href="" class="hover:underline hover:text-gray-700">Se connecter</a>
+                        <a href="./" class="hover:underline hover:text-gray-700">Se connecter</a>
                     </div>;
     }
 
