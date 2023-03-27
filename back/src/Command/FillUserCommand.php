@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Grade;
 use App\Entity\User;
 use App\Entity\UserBook;
 use App\Repository\BookRepository;
@@ -26,7 +27,6 @@ class FillUserCommand extends Command
 {
     private $client;
     private $entityManager;
-
     private $bookRepository;
     private $userRepository;
 
@@ -97,14 +97,18 @@ class FillUserCommand extends Command
             $createdUser->construct();
             for ($i = 0; $i < rand(0, 10); $i++) {
                 $createdUserBook = new UserBook();
+                $createdUserBook->setUSBBook($books[array_rand($books)]);
                 $createdUserBook->setUSBDateBorrowed(new \DateTime());
                 if ($i % 2 == 0) {
                     $createdUserBook->setUSBDateGivenBack(new \DateTime(datetime : 'now + 1 week'));
                 }
                 if ($i % 3 == 0) {
-                    $createdUserBook->setUSBGrade(rand(0, 1));
+                    $createdGrade = new Grade();
+                    $createdGrade->setGRABook($createdUserBook->getUSBBook());
+                    $createdGrade->setGRAUser($createdUser);
+                    $createdGrade->setGRARate(rand(0, 5));
+                    $this->entityManager->persist($createdGrade);
                 }
-                $createdUserBook->setUSBBook($books[array_rand($books)]);
                 $createdUserBook->setUSBIdUser($createdUser->getId());
                 $this->entityManager->persist($createdUserBook);
                 $createdUser->addUSRBorrowedBook($createdUserBook);
