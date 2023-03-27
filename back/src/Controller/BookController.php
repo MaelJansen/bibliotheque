@@ -10,7 +10,8 @@ use FOS\RestBundle\Controller\Annotations\View;
 
 #[Route('/api/books')]
 class BookController extends AbstractController
-{
+{   
+    #[View(serializerGroups: ['preview'])]
     #[Route('/', name: 'app_book')]
     public function index(BookRepository $repository)
     {
