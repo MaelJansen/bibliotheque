@@ -39,6 +39,14 @@ class User
     #[ORM\OneToMany(mappedBy: 'USBIdUser', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $USRBorrowedBooks;
 
+    #[ORM\OneToMany(mappedBy: 'GRAUserId', targetEntity: Grade::class, orphanRemoval: true)]
+    private Collection $USRGrades;
+
+    public function __construct()
+    {
+        $this->USRGrades = new ArrayCollection();
+    }
+
     public function construct()
     {
         $this->USRFollowedUsers = new ArrayCollection();
@@ -186,6 +194,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($uSRBorrowedBook->getUSBIdUser() === $this) {
                 $uSRBorrowedBook->setUSBIdUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Grade>
+     */
+    public function getUSRGrades(): Collection
+    {
+        return $this->USRGrades;
+    }
+
+    public function addUSRGrade(Grade $uSRGrade): self
+    {
+        if (!$this->USRGrades->contains($uSRGrade)) {
+            $this->USRGrades->add($uSRGrade);
+            $uSRGrade->setGRAUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUSRGrade(Grade $uSRGrade): self
+    {
+        if ($this->USRGrades->removeElement($uSRGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($uSRGrade->getGRAUserId() === $this) {
+                $uSRGrade->setGRAUserId(null);
             }
         }
 

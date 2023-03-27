@@ -14,9 +14,6 @@ class UserBook
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $USBGrade = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $USBDateBorrowed = null;
 
@@ -25,7 +22,7 @@ class UserBook
 
     #[ORM\ManyToOne(inversedBy: 'USRBorrowedBooks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $USBIdUser = null;
+    private ?User $USBUser = null;
 
     #[ORM\ManyToOne(inversedBy: 'BOOBorrows')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,18 +31,6 @@ class UserBook
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUSBGrade(): ?int
-    {
-        return $this->USBGrade;
-    }
-
-    public function setUSBGrade(?int $USBGrade): self
-    {
-        $this->USBGrade = $USBGrade;
-
-        return $this;
     }
 
     public function getUSBDateBorrowed(): ?\DateTimeInterface
@@ -74,12 +59,12 @@ class UserBook
 
     public function getUSBIdUser(): ?User
     {
-        return $this->USBIdUser;
+        return $this->USBUser;
     }
 
     public function setUSBIdUser(?User $USBIdUser): self
     {
-        $this->USBIdUser = $USBIdUser;
+        $this->USBUser = $USBIdUser;
 
         return $this;
     }

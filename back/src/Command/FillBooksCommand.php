@@ -10,6 +10,7 @@ use App\Entity\Categories;
 use App\Repository\AuthorRepository;
 use App\Repository\CategoriesRepository;
 use App\Repository\EditorRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -165,6 +166,14 @@ class FillBooksCommand extends Command
             }
             if (array_key_exists('imageLinks', $book['volumeInfo'])) {
                 $createdBook->setBOOLinkImg($book['volumeInfo']['imageLinks']['thumbnail']);
+            }
+            if (array_key_exists('publishedDate', $book['volumeInfo'])) {
+                $date = DateTime::createFromFormat('Y-m-d', $book['volumeInfo']['publishedDate']);
+                if ($date == false) {
+                    $date = DateTime::createFromFormat('Y', $book['volumeInfo']['publishedDate']);
+                    $date->setDate($date->format("Y"), 01, 01);
+                }
+                $createdBook->setBOOPublishDate($date);
             }
             $createdBook->setBOOName($book['volumeInfo']['title']);
 
