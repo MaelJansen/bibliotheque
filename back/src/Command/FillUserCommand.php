@@ -3,6 +3,9 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Entity\UserBook;
+use App\Repository\BookRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -24,14 +27,20 @@ class FillUserCommand extends Command
     private $client;
     private $entityManager;
 
+    private $bookRepository;
+    private $userRepository;
+
     /**
      * Summary of __construct
      * @param HttpClientInterface $client
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager)
+    public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager, 
+    UserRepository $userRepository, BookRepository $bookRepository)
     {
+        $this->bookRepository = $bookRepository;
         $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
         $this->client = $client;
         parent::__construct();
     }
@@ -74,20 +83,45 @@ class FillUserCommand extends Command
                 ]
             );
             $io->success('You have created ' . $arg1 . ' users !');
-        } else {
-            $io->success('You have created 50 users !');
         }
+
+        $books = $this->bookRepository->findAll();
+
 
         foreach ($response->toArray()["results"] as $user) {
             print($user['name']['first']);
             $createdUser = new User();
-            $createdUser->setUSRName($user['name']['first']);
+            $createdUser->construct();
+            for ($i=0; $i < rand(0, 10); $i++) {
+                $createdUserBook = new UserBook();
+                $createdUserBook->setUSBDateBorrowed(new \DateTime());
+                if ($i % 2 == 0) {
+                    $createdUserBook->setUSBDateGivenBack(new \DateTime(datetime : 'now + 1 week'));
+                }
+                if ($i % 3 == 0) {
+                    $createdUserBook->setUSBGrade(rand(0, 1));
+                }
+                $createdUserBook->setUSBBook($books[array_rand($books)]);
+                $createdUserBook->setUSBIdUser($createdUser->getId());
+                $this->entityManager->persist($createdUserBook);
+                $createdUser->addUSRBorrowedBook($createdUserBook);
+            }
+            $users = $this->userRepository->findAll();
+            $nbFollowers = rand(0, 5);
+            for ($i=0; $i < $nbFollowers; $i++) {
+                $createdUser->addUSRFollowedUser($users[array_rand($users)]);
+            }
+            $createdUser->setUSRName($user['name']['last']);
+            $createdUser->setUSRFirstName($user['name']['first']);
             $createdUser->setUSREmail($user['email']);
-            $createdUser->setUSRPassword($user['login']['sha256']);
+            $createdUser->setUSRPassword(
+                password_hash($user['login']['password'], PASSWORD_BCRYPT));
             $createdUser->setUSRProfilePicture($user['picture']['large']);
             $this->entityManager->persist($createdUser);
             $this->entityManager->flush();
         }
+
+        $io->success('You have created 50 users !');
 
         return Command::SUCCESS;
     }
