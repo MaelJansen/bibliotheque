@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
@@ -18,7 +19,7 @@ class Book
     #[ORM\Column(length: 2000)]
     private ?string $BOOName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOSummary = null;
 
     #[ORM\Column(nullable: true)]
@@ -27,8 +28,8 @@ class Book
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
-    #[ORM\ManyToMany(targetEntity: Categories::class)]
-    private Collection $BOOCategories;
+    #[ORM\ManyToOne(targetEntity: Categories::class)]
+    private Categories $BOOCategory;
 
     #[ORM\ManyToMany(targetEntity: Language::class)]
     private Collection $BOOLanguages;
@@ -43,9 +44,19 @@ class Book
     #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $BOOBorrows;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $BOOPublishDate = null;
+
+    #[ORM\OneToMany(mappedBy: 'GRABookId', targetEntity: Grade::class, orphanRemoval: true)]
+    private Collection $BOOGrades;
+
+    public function __construct()
+    {
+        $this->BOOGrades = new ArrayCollection();
+    }
+
     public function construct()
     {
-        $this->BOOCategories = new ArrayCollection();
         $this->BOOLanguages = new ArrayCollection();
         $this->BOOAuthor = new ArrayCollection();
         $this->BOOBorrows = new ArrayCollection();
@@ -104,27 +115,14 @@ class Book
         return $this;
     }
 
-    /**
-     * @return Collection<int, Categories>
-     */
-    public function getBOOCategories(): Collection
+    public function getBOOCategory(): Categories
     {
-        return $this->BOOCategories;
+        return $this->BOOCategory;
     }
 
-    public function addBOOCategory(Categories $bOOCategory): self
+    public function setBOOCategory(?Categories $category): self
     {
-        if (!$this->BOOCategories->contains($bOOCategory)) {
-            $this->BOOCategories->add($bOOCategory);
-        }
-
-        return $this;
-    }
-
-    public function removeBOOCategory(Categories $bOOCategory): self
-    {
-        $this->BOOCategories->removeElement($bOOCategory);
-
+        $this->BOOCategory = $category;
         return $this;
     }
 
@@ -212,6 +210,48 @@ class Book
             // set the owning side to null (unless already changed)
             if ($bOOBorrow->getUSBBook() === $this) {
                 $bOOBorrow->setUSBBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBOOPublishDate(): ?\DateTimeInterface
+    {
+        return $this->BOOPublishDate;
+    }
+
+    public function setBOOPublishDate(?\DateTimeInterface $BOOPublishDate): self
+    {
+        $this->BOOPublishDate = $BOOPublishDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Grade>
+     */
+    public function getBOOGrades(): Collection
+    {
+        return $this->BOOGrades;
+    }
+
+    public function addBOOGrade(Grade $bOOGrade): self
+    {
+        if (!$this->BOOGrades->contains($bOOGrade)) {
+            $this->BOOGrades->add($bOOGrade);
+            $bOOGrade->setGRABook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBOOGrade(Grade $bOOGrade): self
+    {
+        if ($this->BOOGrades->removeElement($bOOGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($bOOGrade->getGRABook() === $this) {
+                $bOOGrade->setGRABook(null);
             }
         }
 
