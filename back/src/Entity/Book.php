@@ -27,8 +27,8 @@ class Book
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
-    #[ORM\ManyToMany(targetEntity: Categories::class)]
-    private Collection $BOOCategories;
+    #[ORM\ManyToOne(targetEntity: Categories::class)]
+    private Categories $BOOCategory;
 
     #[ORM\ManyToMany(targetEntity: Language::class)]
     private Collection $BOOLanguages;
@@ -45,7 +45,6 @@ class Book
 
     public function construct()
     {
-        $this->BOOCategories = new ArrayCollection();
         $this->BOOLanguages = new ArrayCollection();
         $this->BOOAuthor = new ArrayCollection();
         $this->BOOBorrows = new ArrayCollection();
@@ -107,24 +106,14 @@ class Book
     /**
      * @return Collection<int, Categories>
      */
-    public function getBOOCategories(): Collection
+    public function getBOOCategory(): Categories
     {
-        return $this->BOOCategories;
+        return $this->BOOCategory;
     }
 
-    public function addBOOCategory(Categories $bOOCategory): self
+    public function setBOOCategory(?Categories $category) : self
     {
-        if (!$this->BOOCategories->contains($bOOCategory)) {
-            $this->BOOCategories->add($bOOCategory);
-        }
-
-        return $this;
-    }
-
-    public function removeBOOCategory(Categories $bOOCategory): self
-    {
-        $this->BOOCategories->removeElement($bOOCategory);
-
+        $this->BOOCategory = $category;
         return $this;
     }
 
