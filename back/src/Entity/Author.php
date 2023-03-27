@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 class Author
@@ -13,6 +14,7 @@ class Author
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('preview')]
     #[ORM\Column(length: 255)]
     private ?string $AUTName = null;
 

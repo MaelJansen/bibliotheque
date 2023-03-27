@@ -12,12 +12,10 @@ use FOS\RestBundle\Controller\Annotations\View;
 class BookController extends AbstractController
 {
     #[Route('/', name: 'app_book')]
-    public function index(): JsonResponse
+    public function index(BookRepository $repository)
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/BookController.php',
-        ]);
+        $result = $repository->getTenBook();
+        return $result;
     }
 
     #[View(serializerGroups: ['preview'])]
@@ -25,6 +23,6 @@ class BookController extends AbstractController
     public function getFourLastBook(BookRepository $repository)
     {
         $result = $repository->getLastBook();
-        return json_encode($result);
+        return $result;
     }
 }

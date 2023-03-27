@@ -39,6 +39,14 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+    public function getTenBook(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getLastBook(): array
     {
         return $this->createQueryBuilder('b')
