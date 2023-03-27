@@ -15,34 +15,39 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('preview')]
+    #[Groups(['preview', 'book_infos'])]
     private ?int $id = null;
 
-    #[Groups('preview')]
+    #[Groups(['preview', 'book_infos'])]
     #[ORM\Column(length: 2000)]
     private ?string $BOOName = null;
 
+    #[Groups('book_infos')]
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOSummary = null;
 
+    #[Groups('book_infos')]
     #[ORM\Column(nullable: true)]
     private ?int $BOONbPages = null;
 
-    #[Groups('preview')]
+    #[Groups(['preview', 'book_infos'])]
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
+    #[Groups('book_infos')]
     #[ORM\ManyToOne(targetEntity: Categories::class)]
     private Categories $BOOCategory;
 
+    #[Groups('book_infos')]
     #[ORM\ManyToMany(targetEntity: Language::class)]
     private Collection $BOOLanguages;
 
+    #[Groups('book_infos')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?Editor $BOOEditor = null;
 
-    #[Groups('preview')]
+    #[Groups(['preview', 'book_infos'])]
     #[ORM\ManyToMany(targetEntity: Author::class)]
     private Collection $BOOAuthor;
 

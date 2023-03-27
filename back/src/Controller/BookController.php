@@ -26,4 +26,12 @@ class BookController extends AbstractController
         $result = $repository->getLastBook();
         return $result;
     }
+
+    #[View(serializerGroups: ['book_infos'])]
+    #[Route('/{id}', methods:['GET'])]
+    public function getOneBook(BookRepository $repository, int $id)
+    {
+        $result = $repository->getOneBook($id);
+        return $result;
+    }
 }

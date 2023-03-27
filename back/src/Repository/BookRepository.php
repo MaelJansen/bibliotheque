@@ -39,6 +39,16 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+    public function getOneBook(int $id): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.id = :val')
+            ->setParameter('val', $id)
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getTenBook(): array
     {
         return $this->createQueryBuilder('b')

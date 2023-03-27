@@ -13,6 +13,7 @@ class Categories
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('book_infos')]
     #[ORM\Column(length: 255)]
     private ?string $CATName = null;
 

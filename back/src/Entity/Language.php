@@ -13,6 +13,7 @@ class Language
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('book_infos')]
     #[ORM\Column(length: 255)]
     private ?string $LANName = null;
 
