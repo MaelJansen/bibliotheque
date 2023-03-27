@@ -51,6 +51,7 @@ class Book
     #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $BOOBorrows;
 
+    #[Groups('preview')]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $BOOPublishDate = null;
 
