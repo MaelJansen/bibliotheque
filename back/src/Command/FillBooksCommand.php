@@ -114,19 +114,16 @@ class FillBooksCommand extends Command
 
             //Add categories
             if (array_key_exists('categories', $book['volumeInfo'])) {
-                $nbCategories = count($book['volumeInfo']['categories']);
-                for ($catIndex = 0; $catIndex < $nbCategories; $catIndex++) {
-                    $foundCat = $this->categoriesRepository->findOneBy(
-                        ['CATName' => $book['volumeInfo']['categories'][$catIndex]]
-                    );
-                    if ($foundCat) {
-                        $createdBook->addBOOCategory($foundCat);
-                    } else {
-                        $createdCat = new Categories();
-                        $createdCat->setCATName($book['volumeInfo']['categories'][$catIndex]);
-                        $createdBook->addBOOCategory($createdCat);
-                        $this->entityManager->persist($createdCat);
-                    }
+                $foundCat = $this->categoriesRepository->findOneBy(
+                    ['CATName' => $book['volumeInfo']['categories'][0]]
+                );
+                if ($foundCat) {
+                    $createdBook->setBOOCategory($foundCat);
+                } else {
+                    $createdCat = new Categories();
+                    $createdCat->setCATName($book['volumeInfo']['categories'][0]);
+                    $createdBook->setBOOCategory($createdCat);
+                    $this->entityManager->persist($createdCat);
                 }
             }
 
