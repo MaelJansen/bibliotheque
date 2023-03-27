@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
@@ -42,6 +43,17 @@ class Book
 
     #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $BOOBorrows;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $BOOPublishDate = null;
+
+    #[ORM\OneToMany(mappedBy: 'GRABookId', targetEntity: Grade::class, orphanRemoval: true)]
+    private Collection $BOOGrades;
+
+    public function __construct()
+    {
+        $this->BOOGrades = new ArrayCollection();
+    }
 
     public function construct()
     {
@@ -198,6 +210,48 @@ class Book
             // set the owning side to null (unless already changed)
             if ($bOOBorrow->getUSBBook() === $this) {
                 $bOOBorrow->setUSBBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBOOPublishDate(): ?\DateTimeInterface
+    {
+        return $this->BOOPublishDate;
+    }
+
+    public function setBOOPublishDate(?\DateTimeInterface $BOOPublishDate): self
+    {
+        $this->BOOPublishDate = $BOOPublishDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Grade>
+     */
+    public function getBOOGrades(): Collection
+    {
+        return $this->BOOGrades;
+    }
+
+    public function addBOOGrade(Grade $bOOGrade): self
+    {
+        if (!$this->BOOGrades->contains($bOOGrade)) {
+            $this->BOOGrades->add($bOOGrade);
+            $bOOGrade->setGRABook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBOOGrade(Grade $bOOGrade): self
+    {
+        if ($this->BOOGrades->removeElement($bOOGrade)) {
+            // set the owning side to null (unless already changed)
+            if ($bOOGrade->getGRABook() === $this) {
+                $bOOGrade->setGRABook(null);
             }
         }
 
