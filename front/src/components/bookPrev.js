@@ -13,8 +13,8 @@ function BookPrev({ data }) {
                         alt={data.title}/>
                 </Link>
             </div>
-            <div className="flex flex-row justify-between px-1">
-                <p>{data.title}</p>
+            <div className="flex space-x-2 justify-between px-1">
+                <p title={data.title} className="truncate">{data.title}</p>
                 <p>{data.author || "no author"}</p>
                 <p>{data.date || "no date"}</p>
             </div>
