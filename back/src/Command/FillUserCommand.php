@@ -40,7 +40,7 @@ class FillUserCommand extends Command
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
         BookRepository $bookRepository
-    ){
+    ) {
         $this->bookRepository = $bookRepository;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
