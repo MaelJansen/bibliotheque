@@ -71,7 +71,7 @@ function SearchBar() {
                             </ol>
                         </div>
                     </div>
-                    <Link to={`/books?q=${query}`} className="w-fit h-fit">
+                    <Link to={`/books?q=${query}&page=1`} className="w-fit h-fit">
                         <button type="submit"
                             class="p-4 text-sm font-medium text-white bg-iut-green border border-iut-green hover:bg-iut-hover-green focus:outline-none">
 
