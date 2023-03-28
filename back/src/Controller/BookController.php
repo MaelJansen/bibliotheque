@@ -38,7 +38,7 @@ class BookController extends AbstractController
             }
             $res = array_slice($repository->findByAuthor($query), ($page - 1) * $NbResult, $NbResult);
         }
-        return ["nbResult"=>count($repository->findByAuthor($query)) , "datas"=>$res];
+        return ["nbResult" => count($repository->findByAuthor($query)) , "datas" => $res];
     }
 
     #[View(serializerGroups: ['preview'])]
