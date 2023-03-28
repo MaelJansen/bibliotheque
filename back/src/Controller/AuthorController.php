@@ -6,6 +6,7 @@ use App\Repository\AuthorRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\View;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes as OA;
@@ -41,7 +42,7 @@ class AuthorController extends AbstractController
         if (isset($_GET['q'])) {
             return $repository->getAuthorByName($_GET['q']);
         } else {
-            return [];
+            throw new HttpException(400, "Missing query string");
         }
     }
 }
