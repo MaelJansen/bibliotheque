@@ -12,10 +12,13 @@ class Author
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['author_infos'])]
+    #[OA\Property(example: "1")]
     private ?int $id = null;
 
-    #[Groups(['preview', 'book_infos', 'author_name'])]
     #[ORM\Column(length: 255)]
+    #[Groups(['preview', 'book_infos', 'author_name', 'author_infos'])]
+    #[OA\Property(example: "Eliza Bradley")]
     private ?string $AUTName = null;
 
     public function getId(): ?int

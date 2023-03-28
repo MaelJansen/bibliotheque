@@ -13,15 +13,23 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user_infos'])]
+    #[OA\Property(example: "1")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_infos'])]
+    #[OA\Property(example: "Gonzalez")]
     private ?string $USRName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_infos'])]
+    #[OA\Property(example: "Constance")]
     private ?string $USRFirstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_infos'])]
+    #[OA\Property(example: "constance.gonzalez@example.com")]
     private ?string $USREmail = null;
 
     #[ORM\Column(length: 255)]
