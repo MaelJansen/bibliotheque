@@ -9,7 +9,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 
 #[Route('/api/authors')]
 class AuthorController extends AbstractController
-{   
+{
     #[View(serializerGroups: ['author_name'])]
     #[Route('/', name: 'app_author')]
     public function index(AuthorRepository $repository)
