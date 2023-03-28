@@ -41,6 +41,10 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
+    // Provient de Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted
+    #[IsGranted("ROLE_USER")]
+    // Provient de Nelmio\ApiDocBundle\Annotation\Security;
+    #[Security(name: "Bearer")]
     // Get all friends from one user
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
@@ -55,7 +59,7 @@ class UserController extends AbstractController
         return $this->json($friends, 200, [], ['groups' => 'user_infos']);
     }
 
-    #[Route('/login')]
+    #[Route('/login', methods: ['POST'])]
     public function login(){
 
     }
