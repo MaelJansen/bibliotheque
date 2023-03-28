@@ -42,6 +42,11 @@ class FillBooksCommand extends Command
     private BookRepository $bookRepository;
     private EditorRepository $editorRepository;
 
+    /**
+     * Used to create the command and to set the different repositories
+     * @param HttpClientInterface $client
+     * @param EntityManagerInterface $entityManager
+     */
     public function __construct(HttpClientInterface $client, EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -55,6 +60,10 @@ class FillBooksCommand extends Command
         parent::__construct();
     }
 
+    /**
+     * Used to configure the command
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -65,7 +74,7 @@ class FillBooksCommand extends Command
 
 
     /**
-     * Summary of addingBookResults
+     * Used to create all the books which are in the response
      * @param ResponseInterface $response the books from the api
      * @return void
      */
@@ -172,6 +181,12 @@ class FillBooksCommand extends Command
         }
     }
 
+    /**
+     * Used to execute the command
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->logger = new DebugStack();
