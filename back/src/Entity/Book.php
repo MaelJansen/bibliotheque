@@ -15,10 +15,10 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'last_books'])]
     private ?int $id = null;
 
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 2000)]
     private ?string $BOOName = null;
 
@@ -30,7 +30,7 @@ class Book
     #[ORM\Column(nullable: true)]
     private ?int $BOONbPages = null;
 
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $BOOLinkImg = null;
 
