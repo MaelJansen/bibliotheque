@@ -1,42 +1,9 @@
-import SearchBar from "../components/searchbar";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import BookList from "../components/bookList";
 import { useSearchParams } from 'react-router-dom';
 
-import { useState } from "react";
-
 function Results() {
 
-  const [query, setQuery] = useState("");
-  const [completion, setCompletion] = useState([]);
   const [searchParams] = useSearchParams();
-
-  /**
-   * Handle the changement of the query
-   * @param {*} newQuery 
-   */
-  const onChangeQuery = (newQuery) => {
-    setQuery(newQuery);
-    complete(newQuery)
-  }
-
-  /**
-   * Temporar function to auto complete
-   * its actually dummy data to test the frontend
-   * @param {*} query the actual query
-   */
-  const complete = ((query) => {
-    var tmp = [];
-    if (query === '') {
-      setCompletion([]);
-      return;
-    }
-    for (let step = 0; step < 10; step++) {
-      tmp.push(query + step);
-    }
-    setCompletion(tmp);
-  });
 
   return (
     <div className="results">
