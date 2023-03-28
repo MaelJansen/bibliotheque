@@ -40,13 +40,13 @@ class UserBookRepository extends ServiceEntityRepository
     }
 
     #Return the book entities linked to the borrowed book
-    public function getBorrowedBook(int $id): array
+    public function getBorrowedBook(int $id, int $nbBooks): array
     {
         return $this->createQueryBuilder('ub')
             ->andWhere('ub.USBUser = :val')
             ->setParameter('val', $id)
             ->orderBy('ub.USBDateBorrowed', 'DESC')
-            ->setMaxResults(4)
+            ->setMaxResults($nbBooks)
             ->getQuery()
             ->getResult();
     }
