@@ -8,10 +8,25 @@ use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Attributes as OA;
 
 #[Route('/user')]
+#[OA\Tag("User")]
 class UserController extends AbstractController
 {
+    #[OA\Get(
+        summary: "Gives 1 user and its books"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "1 user and its books",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserLastBooks"
+            )
+        )
+    )]
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'], requirements: ['_format' => 'json'])]
     public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)

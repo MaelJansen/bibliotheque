@@ -5,6 +5,7 @@ nelmio_api_doc:
             - { alias: BookPreview, type: App\Entity\Book, groups:[preview] }
             - { alias : AuthorInfos, type: App\Entity\Author, groups:[author_infos] }
             - { alias : UserInfos, type: App\Entity\User, groups:[user_infos] }
+            - { alias : LastBooksInfos, type: App\Entity\Books, groups:[last_books] }
     documentation:
         info:
             title: My App

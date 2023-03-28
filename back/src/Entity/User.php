@@ -18,15 +18,13 @@ class User
     #[OA\Property(example: "1")]
     private ?int $id = null;
 
-    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255)]
-    #[Groups(['user_infos'])]
+    #[Groups(['last_books', 'user_infos'])]
     #[OA\Property(example: "Gonzalez")]
     private ?string $USRName = null;
 
-    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255)]
-    #[Groups(['user_infos'])]
+    #[Groups(['last_books', 'user_infos'])]
     #[OA\Property(example: "Constance")]
     private ?string $USRFirstName = null;
 
