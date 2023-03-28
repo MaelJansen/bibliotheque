@@ -34,7 +34,6 @@ function Home() {
 
   return (
     <div className="Home">
-      <SearchBar />
       <BookList
         name={"Dernieres sorties"}
         books={latest}

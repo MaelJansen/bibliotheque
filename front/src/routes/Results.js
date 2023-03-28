@@ -40,11 +40,6 @@ function Results() {
 
   return (
     <div className="results">
-      <SearchBar
-        query={query}
-        onChangeQuery={onChangeQuery}
-        completion={completion}
-      />
       <BookList
         name={`Resultats pour : ${searchParams.get('q') ? searchParams.get('q') : "Tous les livres"}`}
         books={[
