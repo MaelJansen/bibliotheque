@@ -49,7 +49,6 @@ class UserBookRepository extends ServiceEntityRepository
             ->setMaxResults(3)
             ->getQuery()
             ->getResult();
-
     }
 
 
