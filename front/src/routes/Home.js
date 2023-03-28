@@ -4,14 +4,36 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import axios from 'axios';
 
-
-import React, {useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function Home() {
 
   const [query, setQuery] = useState("");
   const [completion, setCompletion] = useState([]);
   const [latest, setLatest] = useState([]);
+
+
+
+  async function getLatest() {
+    let query = "http://127.0.0.1:8000/api/books/latest";
+    axios
+      .get(query)
+      .then((response) => {
+        let tmp = [];
+        for (let book of response.data) {
+          let tmpBook = {
+            "id": book.id,
+            "title": book.BOOName,
+            "author": book.BOOAuthor ? book.BOOAuthor[0] ? book.BOOAuthor[0].AUTName : null : null,
+            "img": book.BOOLinkImg,
+            "date": book.BOOPublishDate ? book.BOOPublishDate.slice(0, 4) : null,
+          };
+          tmp.push(tmpBook);
+          console.log("query done");
+        }
+        setLatest(tmp);
+      });
+  }
 
   /**
    * Handle the changement of the query
@@ -39,26 +61,9 @@ function Home() {
     setCompletion(tmp);
   });
 
-  const getLatest = (() => {
-    let query = "http://127.0.0.1:8000/api/books/latest";
-    axios
-    .get(query)
-    .then((response) => {
-      let tmp = [];
-      for(let book of response.data) {
-        console.log(book);
-        let tmpBook = {
-          "id": book.id,
-          "title": book.BOOName,
-          "author": book.BOOAuthor ? book.BOOAuthor[0] ? book.BOOAuthor[0].AUTName: null : null ,
-          "img": book.BOOLinkImg,
-          "date": book.BOOPublishDate,
-        };
-        tmp.push(tmpBook);        
-      };
-      setLatest(tmp);
-    });
-
+  useEffect(() => {
+      getLatest();
+  }, []);
 
   return (
     <div className="Home">
@@ -67,43 +72,16 @@ function Home() {
         onChangeQuery={onChangeQuery}
         completion={completion} />
       <BookList
-        name={"Vos derniers livres empruntés"}
-        books={latest}
-      />
-      <BookList
         name={"Dernieres sorties"}
-        books={[
-          {
-            "id" : 30,
-            "title" : "Le C",
-            "author" : "C man",
-            "date" : 2030,
-            "img" : "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/51HTieS6nkL._SX342_SY445_QL70_ML2_.jpg"
-          },
-          {
-            "id" : 55,
-            "title" : "API Please",
-            "author" : "Equipe back",
-            "date" : 1945,
-            "img" : "https://www.editions-eni.fr/livre/symfony-5-developpez-des-sites-web-php-structures-et-performants-9782409037221_XL.jpg"
-          },
-          {
-            "id" : 2,
-            "title" : "UI/UX",
-            "author" : "Equipe Frontend",
-            "img" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlEF_yPjr9mxkJqsp86RsIYtjXxpGQiEElAA&usqp=CAU"
-          },
-          {
-            "id" : 101,
-            "title" : "Vous avez dit du style ?",
-            "author" : "Equipe Frontend",
-            "date" : 2007,
-            "img" : "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/71anm5gu60L._AC_UF1000,1000_QL80_.jpg"
-          },
-        ]}
+        books={latest}
+        />
+      <BookList
+        name={"Vos derniers livres empruntés"}
+        books={[]}
       />
     </div>
   );
 }
+
 
 export default Home;
