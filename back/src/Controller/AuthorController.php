@@ -31,7 +31,7 @@ class AuthorController extends AbstractController
     #[OA\Parameter(
         name: "q",
         in: "query",
-        description: "part of the name of the author",
+        description: "Une partie du nom de l'auteur",
         required: true,
         schema: new OA\Schema(type: "string")
     )]

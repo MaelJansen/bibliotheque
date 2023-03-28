@@ -15,11 +15,11 @@ use OpenApi\Attributes as OA;
 class UserController extends AbstractController
 {
     #[OA\Get(
-        summary: "Gives 1 user and its books"
+        summary: "Donne un utilisateur et ses livres"
     )]
     #[OA\Response(
         response: 200,
-        description: "1 user and its books",
+        description: "1 utilisateur et ses livres",
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
@@ -57,6 +57,19 @@ class UserController extends AbstractController
     }
 
     // Get all friends from one user
+    #[OA\Get(
+        summary: "Donne les amis d'un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les amis de l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {

@@ -29,6 +29,27 @@ class BookController extends AbstractController
             )
         )
     )]
+    #[OA\Parameter(
+        name: "q",
+        in: "query",
+        description: "une partie du nom de l'auteur",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        in: "query",
+        description: "le numéro de la page",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "result",
+        in: "query",
+        description: "le nombre de résultat à afficher",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[View(serializerGroups: ['preview'])]
     #[Route('/', name: 'app_book', methods:['GET'])]
     public function index(BookRepository $repository)
