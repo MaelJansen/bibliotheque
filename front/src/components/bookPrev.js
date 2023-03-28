@@ -16,7 +16,7 @@ function BookPrev({ data }) {
             <div className="flex space-x-4 justify-between bg-gray-200 p-1">
                 <p title={data.title} className="truncate">{data.title}</p>
                 <p>{data.author || "no author"}</p>
-                <p>{data.date || "no date"}</p>
+                <p>{ data.date || "no date"}</p>
             </div>
         </div>
     )
