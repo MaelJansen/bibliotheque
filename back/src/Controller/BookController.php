@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BookRepository;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -15,8 +14,7 @@ class BookController extends AbstractController
     #[Route('/', name: 'app_book')]
     public function index(BookRepository $repository)
     {
-        $q = $_GET['q'];
-        if ($q) {
+        if (isset($_GET['q'])) {
             $result = $repository->findByAuthor($_GET['q']);
         } else {
             $result = $repository->getTenBook();
