@@ -28,7 +28,7 @@ class AuthorController extends AbstractController
         )
     )]
     #[OA\Parameter(
-        name: "part of author name",
+        name: "q",
         in: "query",
         description: "part of the name of the author",
         required: false,
