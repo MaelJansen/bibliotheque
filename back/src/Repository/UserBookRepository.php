@@ -46,7 +46,7 @@ class UserBookRepository extends ServiceEntityRepository
             ->andWhere('ub.USBUser = :val')
             ->setParameter('val', $id)
             ->orderBy('ub.USBDateBorrowed', 'DESC')
-            ->setMaxResults(3)
+            ->setMaxResults(4)
             ->getQuery()
             ->getResult();
     }
