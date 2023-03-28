@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
 
-#[Route('/user')]
+#[Route('/api/user')]
 #[OA\Tag("User")]
 class UserController extends AbstractController
 {
@@ -23,7 +23,7 @@ class UserController extends AbstractController
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
-                ref: "#/components/schemas/UserLastBooks"
+                ref: "#/components/schemas/UserInfos"
             )
         )
     )]
