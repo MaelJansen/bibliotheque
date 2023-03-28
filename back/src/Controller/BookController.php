@@ -22,14 +22,14 @@ class BookController extends AbstractController
         } else {
             $query = $_GET['q'] ? $_GET['q'] : "";
             if (isset($_GET['page'])) {
-                if (is_int($_GET['page']) && $_GET['page'] > 0) {
+                if (is_numeric($_GET['page']) && $_GET['page'] > 0) {
                     $page = $_GET['page'];
                 } else {
                     throw new HttpException(400, "Wrong parameter");
                 }
             }
             if (isset($_GET['result'])) {
-                if (is_int($_GET['result']) && $_GET['result'] > 0) {
+                if (is_numeric($_GET['result']) && $_GET['result'] > 0) {
                     $NbResult = $_GET['result'];
                 } else {
                     throw new HttpException(400, "Wrong parameter");
