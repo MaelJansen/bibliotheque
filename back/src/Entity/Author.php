@@ -14,7 +14,7 @@ class Author
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'author_name'])]
     #[ORM\Column(length: 255)]
     private ?string $AUTName = null;
 
