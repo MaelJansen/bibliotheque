@@ -16,11 +16,11 @@ use OpenApi\Attributes as OA;
 class UserController extends AbstractController
 {
     #[OA\Get(
-        summary: "Donne un utilisateur et ses livres"
+        summary: "Donne un utilisateur"
     )]
     #[OA\Response(
         response: 200,
-        description: "1 utilisateur et ses livres",
+        description: "1 utilisateur",
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
@@ -45,6 +45,19 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
+    #[OA\Get(
+        summary: "Donne les livres d'un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les livres de l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/LastBooksInfos"
+            )
+        )
+    )]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
