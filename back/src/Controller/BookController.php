@@ -12,11 +12,10 @@ use FOS\RestBundle\Controller\Annotations\View;
 class BookController extends AbstractController
 {
     #[View(serializerGroups: ['preview'])]
-    #[Route('/', name: 'app_book')]
+    #[Route('/', name: 'app_book', methods:['GET'])]
     public function index(BookRepository $repository)
     {
-        $q = $_GET['q'];
-        if ($q) {
+        if (isset($_GET['q'])) {
             $result = $repository->findByAuthor($_GET['q']);
         } else {
             $result = $repository->getTenBook();
@@ -25,7 +24,7 @@ class BookController extends AbstractController
     }
 
     #[View(serializerGroups: ['preview'])]
-    #[Route('/latest')]
+    #[Route('/latest', name: 'endpoint_latestBook')]
     public function getFourLastBook(BookRepository $repository)
     {
         $result = $repository->getLastBook();
@@ -33,7 +32,7 @@ class BookController extends AbstractController
     }
 
     #[View(serializerGroups: ['book_infos'])]
-    #[Route('/{id}', methods: ['GET'])]
+    #[Route('/{id}', name: 'endpointId', methods: ['GET'])]
     public function getOneBook(BookRepository $repository, int $id)
     {
         $result = $repository->getOneBook($id);
