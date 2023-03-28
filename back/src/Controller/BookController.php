@@ -22,7 +22,7 @@ class BookController extends AbstractController
         $page = $_GET['page'] ? $_GET['page'] : 1;
         $NbResult = $_GET['result'] ? $_GET['result'] : 10;
 
-        $res = array_slice($repository->findByAuthor($query), $page - 1, $NbResult);
+        $res = array_slice($repository->findByAuthor($query), ($page - 1) * $NbResult, $NbResult);
         return $res;
     }
 
