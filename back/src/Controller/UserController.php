@@ -9,11 +9,11 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/user')]
+#[Route('/api/user')]
 class UserController extends AbstractController
 {
     #[View(serializerGroups: ['user_infos', 'last_books'])]
-    #[Route('/{id}', methods: ['GET'], requirements: ['_format' => 'json'])]
+    #[Route('/{id}', methods: ['GET'])]
     public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)
     {
         $newUser = $userRepository->getOneUser($id);
@@ -30,5 +30,13 @@ class UserController extends AbstractController
 
         // Retourner le tableau associatif dans la réponse JSON
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
+    }
+
+    #[Route('/{id}/friends', methods: ['GET'])]
+    public function getUserFriends(int $id, UserRepository $userRepository)
+    {
+        $user = $userRepository->getOneUser($id);
+        $friends = $user->getUSRFollowedUsers();
+        return $this->json($friends, 200, [], ['groups' => 'user_infos']);
     }
 }
