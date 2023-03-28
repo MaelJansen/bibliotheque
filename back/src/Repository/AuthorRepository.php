@@ -39,6 +39,16 @@ class AuthorRepository extends ServiceEntityRepository
         }
     }
 
+    public function getAuthorByName(String $name): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.AUTName LIKE :val')
+            ->setParameter('val', $name . '%')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Author[] Returns an array of Author objects
 //     */
