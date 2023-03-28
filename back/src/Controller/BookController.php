@@ -41,14 +41,14 @@ class BookController extends AbstractController
         in: "query",
         description: "le numéro de la page",
         required: false,
-        schema: new OA\Schema(type: "string")
+        schema: new OA\Schema(type: "int")
     )]
     #[OA\Parameter(
         name: "result",
         in: "query",
         description: "le nombre de résultat à afficher",
         required: false,
-        schema: new OA\Schema(type: "string")
+        schema: new OA\Schema(type: "int")
     )]
     #[View(serializerGroups: ['preview'])]
     #[Route('/', name: 'app_book', methods:['GET'])]

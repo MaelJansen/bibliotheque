@@ -23,7 +23,7 @@ class UserController extends AbstractController
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
-                ref: "#/components/schemas/UserInfos"
+                ref: "#/components/schemas/UserLastBooks"
             )
         )
     )]
