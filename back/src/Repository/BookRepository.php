@@ -83,7 +83,9 @@ class BookRepository extends ServiceEntityRepository
             ->join('b.BOOAuthor', 'a')
             ->andWhere('a.AUTName LIKE :val')
             ->setParameter('val', '%' . $author . '%')
+            ->andWhere('b.id > :index')
             ->orderBy('b.id', 'ASC')
+            ->setMaxResults($nbResult)
             ->getQuery()
             ->getResult();
     }
