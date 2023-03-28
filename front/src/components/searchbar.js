@@ -1,13 +1,39 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from "react-router-dom";
-function SearchBar({ query, onChangeQuery, completion }) {
+
+function SearchBar() {
 
     const searchRef = useRef(null);
 
+    const [query, setQuery] = useState("");
+    const [completion, setCompletion] = useState([]);
+
     const handleChange = (newQuery) => {
         searchRef.current.focus();
-        onChangeQuery(newQuery);
+        setQuery(newQuery);
     }
+
+    async function getCompletion() {
+        let serverQuery = "http://127.0.0.1:8000/api/authors?q=" + query;
+        axios
+            .get(serverQuery)
+            .then((response) => {
+                let tmp = [];
+                for (let author of response.data) {
+                    tmp.push(author.AUTName);
+                }
+                setCompletion(tmp);
+            })
+    }
+
+    useEffect(() => {
+        if (query.length >= 4) {
+            getCompletion();
+        } else {
+            setCompletion([]);
+        }
+    }, [query])
 
     return (
         <>
