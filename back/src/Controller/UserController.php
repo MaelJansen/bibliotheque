@@ -31,11 +31,20 @@ class UserController extends AbstractController
     #[Route('/{id}', methods: ['GET'])]
     public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)
     {
+        if (isset($_GET['nb_books'])) {
+            if ($_GET['nb_books'] < 0 || !is_numeric($_GET['nb_books'])) {
+                return $this->json(['message' => 'Invalid number of books'], 400);
+            } else {
+                $nbBooks = $_GET['nb_books'];
+            }
+        } else {
+            $nbBooks = 4;
+        }
         $newUser = $userRepository->getOneUser($id);
         if (!$newUser) {
             return $this->json(['message' => 'User not found'], 400);
         }
-        $books = $userBookRepository->getBorrowedBook($newUser->getId());
+        $books = $userBookRepository->getBorrowedBook($newUser->getId(), $nbBooks);
 
         // Créer un tableau associatif contenant les données de $newUser et $books
         $responseData = [
