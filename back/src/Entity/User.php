@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
+    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -28,7 +28,7 @@ class UserController extends AbstractController
         )
     )]
     #[View(serializerGroups: ['user_infos', 'last_books'])]
-    #[Route('/{id}', methods: ['GET'], requirements: ['_format' => 'json'])]
+    #[Route('/{id}', methods: ['GET'])]
     public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)
     {
         $newUser = $userRepository->getOneUser($id);
@@ -45,5 +45,19 @@ class UserController extends AbstractController
 
         // Retourner le tableau associatif dans la réponse JSON
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
+    }
+
+    // Get all friends from one user
+    #[Route('/{id}/friends', methods: ['GET'])]
+    public function getUserFriends(int $id, UserRepository $userRepository)
+    {
+        // Get the user with the specified id
+        $user = $userRepository->getOneUser($id);
+        if (!$user) {
+            return $this->json(['message' => 'User not found'], 400);
+        }
+        // Get the friends of the user
+        $friends = $user->getUSRFollowedUsers();
+        return $this->json($friends, 200, [], ['groups' => 'user_infos']);
     }
 }
