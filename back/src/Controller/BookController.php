@@ -33,21 +33,21 @@ class BookController extends AbstractController
         name: "q",
         in: "query",
         description: "une partie du nom de l'auteur",
-        required: true,
+        required: false,
         schema: new OA\Schema(type: "string")
     )]
     #[OA\Parameter(
         name: "page",
         in: "query",
         description: "le numéro de la page",
-        required: true,
+        required: false,
         schema: new OA\Schema(type: "string")
     )]
     #[OA\Parameter(
         name: "result",
         in: "query",
         description: "le nombre de résultat à afficher",
-        required: true,
+        required: false,
         schema: new OA\Schema(type: "string")
     )]
     #[View(serializerGroups: ['preview'])]
