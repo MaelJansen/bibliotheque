@@ -98,7 +98,7 @@ class FillBooksCommand extends Command
                     }
                 }
 
-                //Add categories 
+                //Add categories
                 if (array_key_exists('categories', $book['volumeInfo'])) {
                     $foundCat = $this->categoriesRepository->findOneBy(
                         ['CATName' => $book['volumeInfo']['categories'][0]]
@@ -157,8 +157,9 @@ class FillBooksCommand extends Command
                         $date = DateTime::createFromFormat('Y', $book['volumeInfo']['publishedDate']);
                         if ($date != false) {
                             $date->setDate($date->format("Y"), 01, 01);
+                        } else {
+                            $date = null;
                         }
-                        else $date = null;
                     }
                     $createdBook->setBOOPublishDate($date);
                 }
@@ -207,6 +208,7 @@ class FillBooksCommand extends Command
             $params['q'] = $search;
         }
 
+        // Loop to get all the requested books
         for ($i=0; $i <= $nbBooks/40; $i++) {
             $params['startIndex'] = $i*40;
             $response = $this->client->request(
@@ -216,11 +218,11 @@ class FillBooksCommand extends Command
                     'query' => $params,
                 ]
             );
+            // We check if there is a response
             if (array_key_exists("items", $response->toArray())) {
                 $this->addingBookResults($response);
             }
         }
-
 
         $io->success('The books have been added to the database');
 
