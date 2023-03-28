@@ -77,6 +77,17 @@ class BookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByAuthorAndPages(string $author, int $nbResult, int $page)
+    {
+        return $this->createQueryBuilder('b')
+            ->join('b.BOOAuthor', 'a')
+            ->andWhere('a.AUTName LIKE :val')
+            ->setParameter('val', '%' . $author . '%')
+            ->orderBy('b.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Book[] Returns an array of Book objects
     //     */
