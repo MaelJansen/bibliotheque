@@ -9,8 +9,6 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-use function PHPSTORM_META\type;
-
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
