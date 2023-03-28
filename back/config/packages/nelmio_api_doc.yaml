@@ -2,6 +2,7 @@ nelmio_api_doc:
     models:
         names:
             - { alias: BookInfos, type: App\Entity\Book, groups:[book_infos] }
+            - { alias: BookPreview, type: App\Entity\Book, groups:[preview] }
             - { alias : AuthorInfos, type: App\Entity\Author, groups:[author_infos] }
             - { alias : UserInfos, type: App\Entity\User, groups:[user_infos] }
     documentation:

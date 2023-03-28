@@ -17,7 +17,7 @@ class Author
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['preview', 'book_infos', 'author_name', 'author_infos'])]
+    #[Groups(['preview', 'book_infos', 'author_infos'])]
     #[OA\Property(example: "Eliza Bradley")]
     private ?string $AUTName = null;
 

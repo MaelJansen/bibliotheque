@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class BookController extends AbstractController
 {
     #[OA\Get(
-        summary: "Donne le menu de la page d'accueil"
+        summary: "Donne les 10 livres affichés sur la page d'accueil"
     )]
     #[OA\Response(
         response: 200,
@@ -24,7 +24,7 @@ class BookController extends AbstractController
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
-                ref: "#/components/schemas/BookInfos"
+                ref: "#/components/schemas/BookPreview"
             )
         )
     )]
@@ -49,7 +49,7 @@ class BookController extends AbstractController
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
-                ref: "#/components/schemas/BookInfos"
+                ref: "#/components/schemas/BookPreview"
             )
         )
     )]

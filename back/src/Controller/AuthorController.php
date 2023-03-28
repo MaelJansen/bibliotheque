@@ -16,11 +16,11 @@ use OpenApi\Attributes as OA;
 class AuthorController extends AbstractController
 {
     #[OA\Get(
-        summary: "Donne des auteurs"
+        summary: "Donne des auteurs commençant par une partie du nom donné"
     )]
     #[OA\Response(
         response: 200,
-        description: "Des auteurs",
+        description: "Des auteurs commençant par une partie du nom donné",
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
@@ -32,10 +32,10 @@ class AuthorController extends AbstractController
         name: "q",
         in: "query",
         description: "part of the name of the author",
-        required: false,
+        required: true,
         schema: new OA\Schema(type: "string")
     )]
-    #[View(serializerGroups: ['author_name'])]
+    #[View(serializerGroups: ['author_infos'])]
     #[Route('/', name: 'app_author', methods:['GET'])]
     public function index(AuthorRepository $repository)
     {
