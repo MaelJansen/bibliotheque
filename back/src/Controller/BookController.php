@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BookRepository;
 use FOS\RestBundle\Controller\Annotations\View;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -21,7 +21,7 @@ class BookController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: "Menu de la page d'accueil",
+        description: "10 livres pour la page d'accueil",
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
