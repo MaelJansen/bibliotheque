@@ -1,23 +1,16 @@
 import SearchBar from "../components/searchbar";
 import BookList from "../components/bookList";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import axios from 'axios';
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 
 function Home() {
 
-  const [query, setQuery] = useState("");
-  const [completion, setCompletion] = useState([]);
   const [latest, setLatest] = useState([]);
 
-
-
   async function getLatest() {
-    let query = "http://127.0.0.1:8000/api/books/latest";
+    let serverQuery = "http://127.0.0.1:8000/api/books/latest";
     axios
-      .get(query)
+      .get(serverQuery)
       .then((response) => {
         let tmp = [];
         for (let book of response.data) {
@@ -35,46 +28,17 @@ function Home() {
       });
   }
 
-  /**
-   * Handle the changement of the query
-   * @param {*} newQuery 
-   */
-  const onChangeQuery = (newQuery) => {
-    setQuery(newQuery);
-    complete(newQuery)
-  }
-
-  /**
-   * Temporar function to auto complete
-   * its actually dummy data to test the frontend
-   * @param {*} query the actual query
-   */
-  const complete = ((query) => {
-    var tmp = [];
-    if (query === '') {
-      setCompletion([]);
-      return;
-    }
-    for (let step = 0; step < 10; step++) {
-      tmp.push(query + step);
-    }
-    setCompletion(tmp);
-  });
-
   useEffect(() => {
-      getLatest();
+    getLatest();
   }, []);
 
   return (
     <div className="Home">
-      <SearchBar
-        query={query}
-        onChangeQuery={onChangeQuery}
-        completion={completion} />
+      <SearchBar />
       <BookList
         name={"Dernieres sorties"}
         books={latest}
-        />
+      />
       <BookList
         name={"Vos derniers livres empruntés"}
         books={[]}
