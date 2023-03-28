@@ -56,19 +56,20 @@ class BookController extends AbstractController
     {
         $page = 1;
         $NbResult = 10;
+        $query = "";
         if (!isset($_GET['q'])) {
-            $res = array_slice($repository->findByAuthor(""), ($page - 1) * $NbResult, $NbResult);
+            $res = array_slice($repository->findByAuthor($query), ($page - 1) * $NbResult, $NbResult);
         } else {
             $query = $_GET['q'] ? $_GET['q'] : "";
             if (isset($_GET['page'])) {
-                if (is_int($_GET['page']) && $_GET['page'] > 0) {
+                if (is_numeric($_GET['page']) && $_GET['page'] > 0) {
                     $page = $_GET['page'];
                 } else {
                     throw new HttpException(400, "Wrong parameter");
                 }
             }
             if (isset($_GET['result'])) {
-                if (is_int($_GET['result']) && $_GET['result'] > 0) {
+                if (is_numeric($_GET['result']) && $_GET['result'] > 0) {
                     $NbResult = $_GET['result'];
                 } else {
                     throw new HttpException(400, "Wrong parameter");
@@ -76,7 +77,7 @@ class BookController extends AbstractController
             }
             $res = array_slice($repository->findByAuthor($query), ($page - 1) * $NbResult, $NbResult);
         }
-        return $res;
+        return ["nbResult" => count($repository->findByAuthor($query)) , "datas" => $res];
     }
 
     #[OA\Get(
