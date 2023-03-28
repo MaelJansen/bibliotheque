@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -17,11 +18,13 @@ class User
     #[OA\Property(example: "1")]
     private ?int $id = null;
 
+    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255)]
     #[Groups(['user_infos'])]
     #[OA\Property(example: "Gonzalez")]
     private ?string $USRName = null;
 
+    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255)]
     #[Groups(['user_infos'])]
     #[OA\Property(example: "Constance")]
@@ -35,6 +38,7 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $USRPassword = null;
 
+    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $USRProfilePicture = null;
 
@@ -44,7 +48,7 @@ class User
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'USRFollowedUsers')]
     private Collection $USRFollowingUsers;
 
-    #[ORM\OneToMany(mappedBy: 'USBIdUser', targetEntity: UserBook::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'USBUser', targetEntity: UserBook::class, orphanRemoval: true)]
     private Collection $USRBorrowedBooks;
 
     #[ORM\OneToMany(mappedBy: 'GRAUserId', targetEntity: Grade::class, orphanRemoval: true)]
@@ -190,7 +194,7 @@ class User
     {
         if (!$this->USRBorrowedBooks->contains($uSRBorrowedBook)) {
             $this->USRBorrowedBooks->add($uSRBorrowedBook);
-            $uSRBorrowedBook->setUSBIdUser($this);
+            $uSRBorrowedBook->setUSBUser($this);
         }
 
         return $this;
@@ -200,8 +204,8 @@ class User
     {
         if ($this->USRBorrowedBooks->removeElement($uSRBorrowedBook)) {
             // set the owning side to null (unless already changed)
-            if ($uSRBorrowedBook->getUSBIdUser() === $this) {
-                $uSRBorrowedBook->setUSBIdUser(null);
+            if ($uSRBorrowedBook->getUSBUser() === $this) {
+                $uSRBorrowedBook->setUSBUser(null);
             }
         }
 
@@ -220,7 +224,7 @@ class User
     {
         if (!$this->USRGrades->contains($uSRGrade)) {
             $this->USRGrades->add($uSRGrade);
-            $uSRGrade->setGRAUserId($this);
+            $uSRGrade->setGRAUser($this);
         }
 
         return $this;
@@ -230,8 +234,8 @@ class User
     {
         if ($this->USRGrades->removeElement($uSRGrade)) {
             // set the owning side to null (unless already changed)
-            if ($uSRGrade->getGRAUserId() === $this) {
-                $uSRGrade->setGRAUserId(null);
+            if ($uSRGrade->getGRAUser() === $this) {
+                $uSRGrade->setGRAUser(null);
             }
         }
 

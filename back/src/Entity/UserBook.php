@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserBookRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserBookRepository::class)]
 class UserBook
@@ -24,6 +25,7 @@ class UserBook
     #[ORM\JoinColumn(nullable: false)]
     private ?User $USBUser = null;
 
+    #[Groups(['last_books'])]
     #[ORM\ManyToOne(inversedBy: 'BOOBorrows')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Book $USBBook = null;
@@ -57,14 +59,14 @@ class UserBook
         return $this;
     }
 
-    public function getUSBIdUser(): ?User
+    public function getUSBUser(): ?User
     {
         return $this->USBUser;
     }
 
-    public function setUSBIdUser(?User $USBIdUser): self
+    public function setUSBUser(?User $user): self
     {
-        $this->USBUser = $USBIdUser;
+        $this->USBUser = $user;
 
         return $this;
     }

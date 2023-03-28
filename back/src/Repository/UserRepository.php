@@ -39,6 +39,18 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
+    public function getOneUser(int $id): ?User
+    {
+        $user = $this->createQueryBuilder('u')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $user;
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

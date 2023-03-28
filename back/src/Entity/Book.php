@@ -15,11 +15,11 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'last_books'])]
     #[OA\Property(example: "1")]
     private ?int $id = null;
 
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 2000)]
     #[OA\Property(example: "All-New Deadpool (2016)", description: "Nom du livre")]
     private ?string $BOOName = null;
@@ -34,7 +34,7 @@ class Book
     #[OA\Property(example: "136", description: "Le nombre de page du livre")]
     private ?int $BOONbPages = null;
 
-    #[Groups(['preview', 'book_infos'])]
+    #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 5000, nullable: true)]
     #[OA\Property(example: "http://books.google.com/books/content?id=PRZBDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api", description: "Le lien vers l'image de couverture du livre")]
     private ?string $BOOLinkImg = null;
