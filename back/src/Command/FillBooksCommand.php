@@ -209,8 +209,8 @@ class FillBooksCommand extends Command
         }
 
         // Loop to get all the requested books
-        for ($i=0; $i <= $nbBooks/40; $i++) {
-            $params['startIndex'] = $i*40;
+        for ($i = 0; $i <= $nbBooks / 40; $i++) {
+            $params['startIndex'] = $i * 40;
             $response = $this->client->request(
                 'GET',
                 'https://www.googleapis.com/books/v1/volumes',
