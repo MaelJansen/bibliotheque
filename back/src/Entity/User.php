@@ -11,11 +11,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
-    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user_infos'])]
+    #[Groups(['last_books', 'user_infos'])]
     #[OA\Property(example: "1")]
     private ?int $id = null;
 
