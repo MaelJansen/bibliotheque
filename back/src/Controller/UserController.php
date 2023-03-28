@@ -54,4 +54,9 @@ class UserController extends AbstractController
         $friends = $user->getUSRFollowedUsers();
         return $this->json($friends, 200, [], ['groups' => 'user_infos']);
     }
+
+    #[Route('/login')]
+    public function login(){
+
+    }
 }
