@@ -14,7 +14,7 @@ class AuthorController extends AbstractController
     #[Route('/', name: 'app_author')]
     public function index(AuthorRepository $repository)
     {
-        if(isset($_GET['q'])){
+        if (isset($_GET['q'])) {
             return $repository->getAuthorByName($_GET['q']);
         } else {
             return [];
