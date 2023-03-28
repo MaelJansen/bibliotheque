@@ -28,12 +28,12 @@ function BookPage() {
                     <img src={bookData.BOOLinkImg} alt={bookData.BOOName} className="object-cover w-full h-fit group-hover:scale-110"/>
                 </div>
                 <div className="bg-gray-200 w-full md:w-2/5 grid grid-cols-2 p-2 rounded-md">
-                    <p>Langue : <span className="text-iut-green h-min p-1">{ bookData.BOOLanguages ? bookData.BOOLanguages[0].LANName : ""}</span></p>
-                    <p>Nombre de pages : <span className="text-iut-green h-min p-1">{ bookData.BOONbPages | "?"}</span></p>
-                    <p>Catégorie : <span className="text-iut-green h-min p-1">{ bookData.BOOCategory ? bookData.BOOCategory.CATName : ""}</span></p>
-                    <p>Editeur : <span className="text-iut-green h-min p-1">{ bookData.BOOEditor ? bookData.BOOEditor.EDIName : ""}</span></p>
+                    <p>Langue : <span className="text-iut-green h-min p-1">{ bookData.BOOLanguages ? bookData.BOOLanguages[0].LANName : "Non renseigné"}</span></p>
+                    <p>Nombre de pages : <span className="text-iut-green h-min p-1">{ bookData.BOONbPages | "Non renseigné"}</span></p>
+                    <p>Catégorie : <span className="text-iut-green h-min p-1">{ bookData.BOOCategory ? bookData.BOOCategory.CATName : "Non renseigné"}</span></p>
+                    <p>Editeur : <span className="text-iut-green h-min p-1">{ bookData.BOOEditor ? bookData.BOOEditor.EDIName : "Non renseigné"}</span></p>
                     <p className="text-xl col-span-2 font-semi-bold">Resume</p>
-                    <p className="col-span-2">{bookData.BOOSummary}</p>
+                    <p className="col-span-2">{bookData.BOOSummary ? bookData.BOOSummary : "Non renseigné"}</p>
                 </div>
             </div>
         </div>
