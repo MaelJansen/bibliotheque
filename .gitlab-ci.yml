@@ -41,6 +41,26 @@ eslint:
         - npx eslint src/*.js --max-warnings=0
     allow_failure: false
 
+variables:
+  MYSQL_DATABASE: "symfony_test"
+  MYSQL_ROOT_PASSWORD: "symfony"
+  MYSQL_USER: "symfony"
+  MYSQL_PASSWORD: "symfony"
+  MYSQL_HOST: mysql
+
+unit-tests:
+  stage: UnitTests
+  script:
+    - apt-get update && apt-get install -y libpq-dev libicu-dev libxml2-dev && docker-php-ext-install pdo pdo_mysql pdo_pgsql intl xml zip
+    - cd back
+    - composer install
+    - php bin/console doctrine:database:create --if-not-exists
+    - php bin/console doctrine:schema:update --force --no-interaction
+    - php bin/console app:fill-books 200
+    # - php bin/console app:fill-user
+    - php bin/phpunit
+  allow_failure: false
+
 deploy:
   image: curlimages/curl:latest
   stage: Deploy
