@@ -14,9 +14,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(
@@ -33,8 +30,6 @@ class FillUserCommand extends Command
     private $entityManager;
     private $bookRepository;
     private $userRepository;
-    private $passwordHasher;
-    private $passwordAuthenticatedUserInterface;
 
     /**
      * Summary of __construct
@@ -45,16 +40,12 @@ class FillUserCommand extends Command
         HttpClientInterface $client,
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
-        BookRepository $bookRepository,
-        UserPasswordHasherInterface $passwordHasher,
-        PasswordAuthenticatedUserInterface $passwordAuthenticatedUserInterface
+        BookRepository $bookRepository
     ) {
         // Setting the different repositories
         $this->bookRepository = $bookRepository;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
-        $this->passwordHasher = $passwordHasher;
-        $this->passwordAuthenticatedUserInterface = $passwordAuthenticatedUserInterface;
         $this->client = $client;
         parent::__construct();
     }
@@ -144,7 +135,7 @@ class FillUserCommand extends Command
             $createdUser->setUSRFirstName($user['name']['first']);
             $createdUser->setUSREmail($user['email']);
             $createdUser->setUSRPassword(
-                $this->passwordHasher->hashPassword($createdUser, $user['login']['password'])
+                password_hash($user['login']['password'], PASSWORD_BCRYPT)
             );
             $createdUser->setUSRProfilePicture($user['picture']['large']);
             // We persist the user
