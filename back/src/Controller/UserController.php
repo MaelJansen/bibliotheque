@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class UserController extends AbstractController
 {
 
-    #[Route('/login', name: "api_login", methods: ['POST'])]
+    /*#[Route('/login', name: "api_login", methods: ['POST'])]
     public function login(#[CurrentUser] ?User $user)
     {
         if (null === $user) {
@@ -31,7 +31,31 @@ class UserController extends AbstractController
             'user' => $user->getId(),
             'token' => $token,
         ]);
+    }*/
+
+    #[Route('/register', name: 'app_endpoint_register', methods: ['POST'])]
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher){
+        $data = json_decode($request->getContent(), true);
+        $user = new User();
+        $user->setEmail($data["email"]);
+        $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,
+                $data["password"]
+            )
+        );
+        return $this->json($user);
     }
+
+    #[Route('/login', name: 'app_endpoint_login', methods: ['POST'])]
+    public function login(User $user){
+        $token = uniqid();
+        if($user->getToken() == null){
+            $user->setToken($token);
+        }
+        return $this->json($user);
+    }
+
 
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
