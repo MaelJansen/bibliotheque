@@ -55,10 +55,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function __construct()
     {
         $this->USRGrades = new ArrayCollection();
-    }
-
-    public function construct()
-    {
         $this->USRFollowedUsers = new ArrayCollection();
         $this->USRFollowingUsers = new ArrayCollection();
         $this->USRBorrowedBooks = new ArrayCollection();

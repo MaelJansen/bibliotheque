@@ -88,7 +88,6 @@ class FillUserCommand extends Command
 
                 ]
             );
-            $io->success('You have created ' . $arg1 . ' users !');
         }
         // We get all the books from the database
         $books = $this->bookRepository->findAll();
@@ -98,7 +97,7 @@ class FillUserCommand extends Command
             print($user['name']['first']);
             //Creating the user
             $createdUser = new User();
-            $createdUser->construct();
+            $createdUser->__construct();
             // Add to the user a random number of book between 0 and 10
             for ($i = 0; $i < rand(0, 10); $i++) {
                 $createdUserBook = new UserBook();
@@ -117,7 +116,7 @@ class FillUserCommand extends Command
                     $createdGrade->setGRARate(rand(0, 5));
                     $this->entityManager->persist($createdGrade);
                 }
-                $createdUserBook->setUSBIdUser($createdUser->getId());
+                $createdUserBook->setUSBUser($createdUser);
                 $this->entityManager->persist($createdUserBook);
                 $createdUser->addUSRBorrowedBook($createdUserBook);
             }

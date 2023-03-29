@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -55,19 +58,21 @@ class Book
     private Collection $BOOBorrows;
 
     #[Groups('preview')]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $BOOPublishDate = null;
 
     #[ORM\OneToMany(mappedBy: 'GRABookId', targetEntity: Grade::class, orphanRemoval: true)]
     private Collection $BOOGrades;
 
+    
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $BOOReceivingDate = null;
+
     public function __construct()
     {
         $this->BOOGrades = new ArrayCollection();
-    }
-
-    public function construct()
-    {
         $this->BOOLanguages = new ArrayCollection();
         $this->BOOAuthor = new ArrayCollection();
         $this->BOOBorrows = new ArrayCollection();
@@ -265,6 +270,18 @@ class Book
                 $bOOGrade->setGRABook(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBOOReceivingDate(): ?\DateTimeInterface
+    {
+        return $this->BOOReceivingDate;
+    }
+
+    public function setBOOReceivingDate(\DateTimeInterface $BOOReceivingDate): self
+    {
+        $this->BOOReceivingDate = $BOOReceivingDate;
 
         return $this;
     }
