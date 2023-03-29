@@ -1,11 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 
 function BookPage() {
 
-    const [bookData, setBookData] = useState({});
+    const navigate = useNavigate();
     const params = useParams();
+    const [bookData, setBookData] = useState({});
 
     async function getBookData(id) {
         let serverQuery = "http://127.0.0.1:8000/api/books/" + id;
@@ -26,6 +27,7 @@ function BookPage() {
 
     return (
         <div className="m-5">
+            <button onClick={() => navigate(-1)} className="mb-3 hover:text-iut-hover-green">{"<"} Revenir en arrière</button>
             <p className="text-iut-green text-lg mb-3">{bookData.BOOName}</p>
             <div className="flex flex-col w-full h-full overflow-hidden md:flex-row" >
                 <div className="mb-3 md:mb-0 w-full md:w-3/5 max-h-[600px] overflow-hidden md:mr-3 rounded-md">
