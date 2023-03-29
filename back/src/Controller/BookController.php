@@ -7,7 +7,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BookRepository;
 use FOS\RestBundle\Controller\Annotations\View;
 use OpenApi\Attributes as OA;
-
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;

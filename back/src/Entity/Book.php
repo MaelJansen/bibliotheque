@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use App\Entity\OA\Property;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -39,7 +39,10 @@ class Book
 
     #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 5000, nullable: true)]
-    #[OA\Property(example: "http://books.google.com/books/content?id=PRZBDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api", description: "Le lien vers l'image de couverture du livre")]
+    #[OA\Property(
+        example: "http://books.google.com/books/content?id=PRZBDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        description: "Le lien vers l'image de couverture du livre"
+    )]
     private ?string $BOOLinkImg = null;
 
     #[Groups('book_infos')]

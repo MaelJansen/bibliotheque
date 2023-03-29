@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Entity\OA\Property;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 class Author
