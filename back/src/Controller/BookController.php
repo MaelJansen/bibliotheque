@@ -81,11 +81,11 @@ class BookController extends AbstractController
     }
 
     #[OA\Get(
-        summary: "Donne les 4 derniers livres",
+        summary: "Donne un certain nombre (4 par défaut) de livre populaires",
     )]
     #[OA\Response(
         response: 200,
-        description: "Les 4 derniers livres",
+        description: "Les livres populaires",
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
@@ -93,8 +93,14 @@ class BookController extends AbstractController
             )
         )
     )]
+    #[OA\Parameter(
+        name: "result",
+        in: "query",
+        description: "le nombre de résultat à afficher",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 4)
+    )]
     #[View(serializerGroups: ['preview'])]
-
     #[Route('/popular', name: 'endpoint_popularBook', methods: ['GET'])]
     public function getPopularBooks(BookRepository $repository)
     {
@@ -111,6 +117,19 @@ class BookController extends AbstractController
     }
 
     // Get the four last books added to the database
+    #[OA\Get(
+        summary: "Donne les 4 derniers livres",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Les 4 derniers livres",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/BookPreview"
+            )
+        )
+    )]
     #[View(serializerGroups: ['preview'])]
     #[Route('/latest', name: 'endpoint_latestBook', methods:['GET'])]
     public function getFourLastBook(BookRepository $repository)

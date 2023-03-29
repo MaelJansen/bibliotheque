@@ -133,6 +133,26 @@ class UserController extends AbstractController
         return $this->json($res, 200, [], ['groups' => 'user_infos']);
     }
 
+    #[OA\Get(
+        summary: "Donne un certain nombre (4 par défaut) de livres recommandés à un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les livres recommandés à l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_books",
+        in: "query",
+        description: "le nombre de livres à afficher",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 4)
+    )]
     #[Route('/{id}/recommendedbooks', methods: ['GET'])]
     public function getUserBookRecommendations(int $id, BookRepository $bookRepository, UserRepository $userRepository)
     {
