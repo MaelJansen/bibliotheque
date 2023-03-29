@@ -9,7 +9,7 @@ function BookPage() {
     const [bookData, setBookData] = useState({});
 
     async function getBookData(id) {
-        let serverQuery = "http://127.0.0.1:8000/api/books/" + id;
+        let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/books/${id}`;
         axios
             .get(serverQuery)
             .then((response) => {

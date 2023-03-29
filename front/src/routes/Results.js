@@ -15,7 +15,7 @@ function Results() {
     let q = params.get('q') ? params.get('q') : "";
     let page = params.get('page') ? "&page=" + params.get('page') : "";
     let nbResult = params.get('result') ? "&result=" + params.get('result') : "";
-    let searchQuery = "http://127.0.0.1:8000/api/books?q=" + q + page + nbResult;
+    let searchQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/books?q=${q}${page}${nbResult}`;
     console.log(searchQuery);
     axios
       .get(searchQuery)
