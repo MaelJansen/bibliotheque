@@ -3,11 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Paginator from "../components/Paginator";
 
 function Results() {
 
   const [searchParams] = useSearchParams();
-  const [booksData, setBooksData] = useState([]);
+  const [booksData, setBooksData] = useState({});
 
   async function getBookData(params) {
     let q = params.get('q') ? params.get('q') : "";
@@ -29,11 +30,10 @@ function Results() {
           };
           tmp.push(tmpBook);
         }
-        setBooksData(tmp);
-        console.log("query done");
+        setBooksData({"nbResult" : response.data.nbResult, "datas" : tmp});
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error.response.status);
     })
   }
 
@@ -42,12 +42,15 @@ function Results() {
   }, [searchParams]);
 
 
-
   return (
     <div className="results">
+      <Paginator
+      nbResult={booksData.nbResult || 0}/>
       <BookList
         name={`Resultats pour : ${searchParams.get('q') ? searchParams.get('q') : "Tous les livres"}`}
-        books={booksData} />
+        books={booksData.datas || []} />
+        <Paginator
+      nbResult={booksData.nbResult || 0}/>
     </div>
   );
 }
