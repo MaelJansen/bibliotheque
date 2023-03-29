@@ -11,7 +11,6 @@ use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
-
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
@@ -65,7 +64,7 @@ class Book
     #[ORM\OneToMany(mappedBy: 'GRABookId', targetEntity: Grade::class, orphanRemoval: true)]
     private Collection $BOOGrades;
 
-    
+
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $BOOReceivingDate = null;
