@@ -9,13 +9,33 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
+
+    #[Route('/login', name: "api_login", methods: ['POST'])]
+    public function login(#[CurrentUser] ?User $user)
+    {
+        if (null === $user) {
+            throw new HttpException(401, "Unauthorized");
+        }
+
+        $token = random_bytes(10);
+        
+        return $this->json([
+            'user' => $user->getId(),
+            'token' => $token,
+        ]);
+    }
+
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
-    public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)
+    public function getOneUser(UserRepository $userRepository, int $id)
     {
         $newUser = $userRepository->getOneUser($id);
         if (!$newUser) {
@@ -30,6 +50,8 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
@@ -58,6 +80,8 @@ class UserController extends AbstractController
     }
 
     // Get all friends from one user
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
@@ -90,4 +114,6 @@ class UserController extends AbstractController
         $res = array_slice($friends, ($page - 1) * $nbUsers, $nbUsers);
         return $this->json($res, 200, [], ['groups' => 'user_infos']);
     }
+
+   
 }
