@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/api/user')]
 #[OA\Tag("User")]
@@ -31,7 +33,7 @@ class UserController extends AbstractController
     )]
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
-    public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)
+    public function getOneUser(UserRepository $userRepository, int $id)
     {
         $newUser = $userRepository->getOneUser($id);
         if (!$newUser) {
@@ -59,6 +61,8 @@ class UserController extends AbstractController
             )
         )
     )]
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
