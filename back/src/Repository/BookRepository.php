@@ -49,10 +49,14 @@ class BookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getTenBook(): array
+    public function getPopularBooks(int $nbBooks): array
     {
         return $this->createQueryBuilder('b')
-            ->setMaxResults(10)
+            ->select('b', 'COUNT(ub.USBUser) as nb_reads')
+            ->join('b.BOOBorrows', 'ub')
+            ->groupBy('b.id')
+            ->orderBy('nb_reads', 'DESC')
+            ->setMaxResults($nbBooks)
             ->getQuery()
             ->getResult();
     }
@@ -60,7 +64,7 @@ class BookRepository extends ServiceEntityRepository
     public function getLastBook(): array
     {
         return $this->createQueryBuilder('b')
-            ->orderBy('b.id', 'DESC')
+            ->orderBy('b.BOOReceivingDate', 'DESC')
             ->setMaxResults(4)
             ->getQuery()
             ->getResult();

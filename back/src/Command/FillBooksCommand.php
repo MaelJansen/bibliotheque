@@ -22,6 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Doctrine\DBAL\Logging\DebugStack;
 use PhpParser\Node\Expr\Cast\String_;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 #[AsCommand(
@@ -86,7 +87,7 @@ class FillBooksCommand extends Command
             if (!$this->bookRepository->findOneBy(['BOOName' => $book['volumeInfo']['title']])) {
                 // Create a new book
                 $createdBook = new Book();
-                $createdBook->construct();
+                $createdBook->__construct();
 
                 // If there is an author given by the api and if it's not already in the database, create it and add it
                 if (array_key_exists('authors', $book['volumeInfo'])) {
@@ -171,6 +172,24 @@ class FillBooksCommand extends Command
                         }
                     }
                     $createdBook->setBOOPublishDate($date);
+                }
+                if ($date != null) {
+                    $receivedDate = new DateTime();
+                    $minDate = $date->getTimestamp();
+                    if ($minDate < strtotime("01-01-2010")) {
+                        $minDate = strtotime("01-01-2010");
+                    }
+                    $maxDate = time();
+                    $randStamp = rand($minDate, $maxDate);
+                    $receivedDate->setDate(date("Y", $randStamp), date("m", $randStamp), date("d", $randStamp));
+                    $createdBook->setBOOReceivingDate($receivedDate);
+                } else {
+                    $receivedDate = new DateTime();
+                    $minDate = strtotime("01-01-2010");
+                    $maxDate = time();
+                    $randStamp = rand($minDate, $maxDate);
+                    $receivedDate->setDate(date("Y", $randStamp), date("m", $randStamp), date("d", $randStamp));
+                    $createdBook->setBOOReceivingDate($receivedDate);
                 }
                 $createdBook->setBOOName($book['volumeInfo']['title']);
 
