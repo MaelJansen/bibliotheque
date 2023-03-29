@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[Groups(['last_books', 'user_infos'])]
     #[ORM\Id]
@@ -47,9 +49,8 @@ class User
     #[ORM\OneToMany(mappedBy: 'GRAUserId', targetEntity: Grade::class, orphanRemoval: true)]
     private Collection $USRGrades;
 
-    #[Groups(['user_token'])]
     #[ORM\Column(nullable: true)]
-    private ?int $USRToken = null;
+    private ?string $token = null;
 
     public function __construct()
     {
@@ -239,15 +240,30 @@ class User
         return $this;
     }
 
-    public function getUSRToken(): ?int
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->USRToken;
+        return $this->USRPassword;
     }
 
-    public function setUSRToken(?int $USRToken): self
+    public function getUserIdentifier(): string
     {
-        $this->USRToken = $USRToken;
+        return (string) $this->USREmail;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $Token): self
+    {
+        $this->token = $Token;
 
         return $this;
     }
+    public function getRoles(): array { return ['ROLE_USER']; }
+    public function eraseCredentials() { }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Repository\UserBookRepository;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -11,45 +10,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
-    #[Route('/register', name: 'app_endpoint_register', methods: ['POST'])]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher){
-        $email = $request->request->get('email');
-        $password = $request->request->get('password');
-        $user = new User();
-        $user->setUSREmail($email);
-        $user->setUSRPassword(
-            password_hash($password, PASSWORD_BCRYPT)
-        );
-        return $this->json($user);
-    }
-
-    #[View(serializerGroups: ['user_token'])]
-    #[Route('/login', methods: ['POST'])]
-    public function login(String $email, String $password, UserRepository $repository)
-    {
-        $user = $repository->findOneBy("USREmail", $email);
-        if (!isset($user)){
-            throw HttpException('400', "Email doesn't exist");
-        } else {
-            if ($user->getUSRPassword() === password_hash($password, PASSWORD_BCRYPT)) {
-                $token = uniqid();
-                if($user->getUSRToken() == null){
-                    $user->setUSRToken($token);
-                }
-            } else {
-                throw HttpException('400', "Password doesn't match");
-            }
-        }
-        return $user;
-    }
-
-
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
     public function getOneUser(UserRepository $userRepository, int $id)
@@ -76,7 +40,7 @@ class UserController extends AbstractController
         // Check if nb_books is valid
         if (isset($_GET['nb_books'])) {
             if ($_GET['nb_books'] < 0 || !is_numeric($_GET['nb_books'])) {
-                return $this->json(['message' => 'Invalid number of books'], 400);
+                return $this->json(['message' => 'Invalid number of books'], 400);  
             } else {
                 $nbBooks = $_GET['nb_books'];
             }
@@ -96,9 +60,6 @@ class UserController extends AbstractController
         return $this->json($books, 200, [], ['groups' => 'last_books']);
     }
 
-    // Get all friends from one user
-    #[IsGranted("ROLE_USER")]
-    #[Security(name: "Bearer")]
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
