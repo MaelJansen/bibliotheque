@@ -51,6 +51,23 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
+    public function getRecommendedBooks(int $id, int $nbBooks): array
+    {
+        $books = $this->createQueryBuilder('u')
+            ->select('b', 'COUNT(ub.USBUser) as nb_reads')
+            ->join('u.USRBooks', 'ub')
+            ->join('ub.USBBook', 'b')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $id)
+            ->groupBy('b.id')
+            ->orderBy('nb_reads', 'DESC')
+            ->setMaxResults($nbBooks)
+            ->getQuery()
+            ->getResult();
+
+        return $books;
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
