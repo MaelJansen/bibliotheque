@@ -8,10 +8,40 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use OpenApi\Attributes as OA;
 
+#[Route('/api/login')]
+#[OA\Tag("Login")]
 class ApiLoginController extends AbstractController
 {
-    #[Route('/api/login', name: 'app_api_login')]
+    #[OA\Post(
+        summary: "Connecte un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Connecte un utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserLastBooks"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "email",
+        in: "query",
+        description: "l'email de l'utilisateur",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "password",
+        in: "query",
+        description: "le mot de passe (en clair) de l'utilisateur",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[Route('/', name: 'app_api_login', methods: ['POST'])]
     public function index(Request $request, UserRepository $repository, EntityManagerInterface $entityManager)
     {
         $email = $request->request->get('email');
