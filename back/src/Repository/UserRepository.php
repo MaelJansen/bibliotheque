@@ -51,7 +51,7 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
-    public function getOneUserByEmail(String $email): ?User
+    public function getOneUserByEmail(string $email): ?User
     {
         $user = $this->createQueryBuilder('u')
             ->andWhere('u.USREmail = :val')

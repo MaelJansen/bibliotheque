@@ -69,11 +69,6 @@ class Book
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $BOOReceivingDate = null;
 
-
-    #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])]
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $BOOReceivingDate = null;
-
     public function __construct()
     {
         $this->BOOGrades = new ArrayCollection();

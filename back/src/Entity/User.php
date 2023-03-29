@@ -260,6 +260,14 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
         return $this;
     }
-    public function getRoles(): array { return ['ROLE_USER']; }
-    public function eraseCredentials() { }
+
+    public function getRoles(): array 
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials() 
+    { 
+        
+    }
 }

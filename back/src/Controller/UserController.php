@@ -42,7 +42,7 @@ class UserController extends AbstractController
         // Check if nb_books is valid
         if (isset($_GET['nb_books'])) {
             if ($_GET['nb_books'] < 0 || !is_numeric($_GET['nb_books'])) {
-                return $this->json(['message' => 'Invalid number of books'], 400);  
+                return $this->json(['message' => 'Invalid number of books'], 400);
             } else {
                 $nbBooks = $_GET['nb_books'];
             }
