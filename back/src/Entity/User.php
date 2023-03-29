@@ -47,6 +47,10 @@ class User
     #[ORM\OneToMany(mappedBy: 'GRAUserId', targetEntity: Grade::class, orphanRemoval: true)]
     private Collection $USRGrades;
 
+    #[Groups(['user_token'])]
+    #[ORM\Column(nullable: true)]
+    private ?int $USRToken = null;
+
     public function __construct()
     {
         $this->USRGrades = new ArrayCollection();
@@ -231,6 +235,18 @@ class User
                 $uSRGrade->setGRAUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUSRToken(): ?int
+    {
+        return $this->USRToken;
+    }
+
+    public function setUSRToken(?int $USRToken): self
+    {
+        $this->USRToken = $USRToken;
 
         return $this;
     }

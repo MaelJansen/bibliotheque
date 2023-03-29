@@ -11,49 +11,42 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
-
-    /*#[Route('/login', name: "api_login", methods: ['POST'])]
-    public function login(#[CurrentUser] ?User $user)
-    {
-        if (null === $user) {
-            throw new HttpException(401, "Unauthorized");
-        }
-
-        $token = random_bytes(10);
-        
-        return $this->json([
-            'user' => $user->getId(),
-            'token' => $token,
-        ]);
-    }*/
-
     #[Route('/register', name: 'app_endpoint_register', methods: ['POST'])]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher){
-        $data = json_decode($request->getContent(), true);
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
         $user = new User();
-        $user->setEmail($data["email"]);
-        $user->setPassword(
-            $userPasswordHasher->hashPassword(
-                $user,
-                $data["password"]
-            )
+        $user->setUSREmail($email);
+        $user->setUSRPassword(
+            password_hash($password, PASSWORD_BCRYPT)
         );
         return $this->json($user);
     }
 
-    #[Route('/login', name: 'app_endpoint_login', methods: ['POST'])]
-    public function login(User $user){
-        $token = uniqid();
-        if($user->getToken() == null){
-            $user->setToken($token);
+    #[View(serializerGroups: ['user_token'])]
+    #[Route('/login', methods: ['POST'])]
+    public function login(String $email, String $password, UserRepository $repository)
+    {
+        $user = $repository->findOneBy("USREmail", $email);
+        if (!isset($user)){
+            throw HttpException('400', "Email doesn't exist");
+        } else {
+            if ($user->getUSRPassword() === password_hash($password, PASSWORD_BCRYPT)) {
+                $token = uniqid();
+                if($user->getUSRToken() == null){
+                    $user->setUSRToken($token);
+                }
+            } else {
+                throw HttpException('400', "Password doesn't match");
+            }
         }
-        return $this->json($user);
+        return $user;
     }
 
 
