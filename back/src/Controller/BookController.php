@@ -16,10 +16,10 @@ class BookController extends AbstractController
     public function index(BookRepository $repository)
     {
         $page = 1;
-        $NbResult = 10;
+        $nbResult = 10;
         $query = "";
         if (!isset($_GET['q'])) {
-            $res = array_slice($repository->findByAuthor($query), ($page - 1) * $NbResult, $NbResult);
+            $res = array_slice($repository->findByAuthor($query), ($page - 1) * $nbResult, $nbResult);
         } else {
             $query = $_GET['q'] ? $_GET['q'] : "";
             if (isset($_GET['page'])) {
@@ -31,29 +31,44 @@ class BookController extends AbstractController
             }
             if (isset($_GET['result'])) {
                 if (is_numeric($_GET['result']) && $_GET['result'] > 0) {
-                    $NbResult = $_GET['result'];
+                    $nbResult = $_GET['result'];
                 } else {
                     throw new HttpException(400, "Wrong parameter");
                 }
             }
-            $res = array_slice($repository->findByAuthor($query), ($page - 1) * $NbResult, $NbResult);
+            $res = array_slice($repository->findByAuthor($query), ($page - 1) * $nbResult, $nbResult);
         }
         return ["nbResult" => count($repository->findByAuthor($query)) , "datas" => $res];
     }
 
     #[View(serializerGroups: ['preview'])]
+    #[Route('/popular', name: 'endpoint_popularBook', methods: ['GET'])]
+    public function getPopularBooks(BookRepository $repository)
+    {
+        if (isset($_GET['result'])) {
+            if (is_numeric($_GET['result']) && $_GET['result'] > 0) {
+                $nbResult = $_GET['result'];
+            } else {
+                throw new HttpException(400, "Wrong parameter");
+            }
+        } else {
+            $nbResult = 4;
+        }
+        return $repository->getPopularBooks($nbResult);
+    }
+
+    // Get the four last books added to the database
+    #[View(serializerGroups: ['preview'])]
     #[Route('/latest', name: 'endpoint_latestBook')]
     public function getFourLastBook(BookRepository $repository)
     {
-        $result = $repository->getLastBook();
-        return $result;
+        return $repository->getLastBook();
     }
 
     #[View(serializerGroups: ['book_infos'])]
     #[Route('/{id}', name: 'endpointId', methods: ['GET'])]
     public function getOneBook(BookRepository $repository, int $id)
     {
-        $result = $repository->getOneBook($id);
-        return $result;
+        return $repository->getOneBook($id);
     }
 }
