@@ -10,6 +10,8 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
@@ -48,7 +50,7 @@ class UserController extends AbstractController
 
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
-    public function getOneUser(UserRepository $userRepository, UserBookRepository $userBookRepository, int $id)
+    public function getOneUser(UserRepository $userRepository, int $id)
     {
         $newUser = $userRepository->getOneUser($id);
         if (!$newUser) {
@@ -63,6 +65,8 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
@@ -90,7 +94,6 @@ class UserController extends AbstractController
         return $this->json($books, 200, [], ['groups' => 'last_books']);
     }
 
-    // Get all friends from one user
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {

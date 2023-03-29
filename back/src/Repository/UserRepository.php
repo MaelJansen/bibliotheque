@@ -51,6 +51,18 @@ class UserRepository extends ServiceEntityRepository
         return $user;
     }
 
+    public function getOneUserByEmail(string $email): ?User
+    {
+        $user = $this->createQueryBuilder('u')
+            ->andWhere('u.USREmail = :val')
+            ->setParameter('val', $email)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $user;
+    }
+
     public function getRecommendedBooks(int $id, int $nbBooks): array
     {
         $books = $this->createQueryBuilder('u')
