@@ -1,7 +1,6 @@
 import BookPrev from "./bookPrev";
 
 function BookList({ name, books }) {
-    console.log(books);
     if (books.length === 0) {
         return (
             <>
