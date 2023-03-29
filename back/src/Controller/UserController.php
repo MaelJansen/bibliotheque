@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\BookRepository;
 use App\Repository\UserBookRepository;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -130,5 +131,52 @@ class UserController extends AbstractController
         $friends = $user->getUSRFollowedUsers()->toArray();
         $res = array_slice($friends, ($page - 1) * $nbUsers, $nbUsers);
         return $this->json($res, 200, [], ['groups' => 'user_infos']);
+    }
+
+    #[Route('/{id}/recommendedbooks', methods: ['GET'])]
+    public function getUserBookRecommendations(int $id, BookRepository $bookRepository, UserRepository $userRepository)
+    {
+        // Get the user with the specified id
+        $user = $userRepository->getOneUser($id);
+        if (!$user) {
+            return $this->json(['message' => 'User not found'], 400);
+        }
+        // Check if nb_books is valid
+        if (isset($_GET['nb_books'])) {
+            if ($_GET['nb_books'] < 0 || !is_numeric($_GET['nb_books'])) {
+                return $this->json(['message' => 'Invalid number of books'], 400);
+            } else {
+                $nbBooks = $_GET['nb_books'];
+            }
+        } else {
+            $nbBooks = 4;
+        }
+        // Get the friends of the user
+        $friends = $user->getUSRFollowedUsers()->toArray();
+        $books = [];
+        // Get the books of the friends
+        foreach ($friends as $friend) {
+            $friendsBooks = $friend->getUSRBorrowedBooks()->toArray();
+            // Adding the friends books to the books array
+            foreach ($friendsBooks as $book) {
+                array_push($books, $book->getUSBBook()->getId());
+            }
+        }
+        // Count the number of times a book is in the array
+        $books = array_count_values($books);
+        // Sort the books by the number of times they are in the array
+        uasort($books, function ($a, $b) {
+            if ($a == $b) {
+                return 0;
+            }
+            return ($a > $b) ? -1 : 1;
+        });
+        $sortedBooks = [];
+        foreach ($books as $key => $value) {
+            array_push($sortedBooks, $bookRepository->getOneBook($key)[0]);
+        }
+        $sortedBooks = array_slice($sortedBooks, 0, $nbBooks);
+
+        return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
     }
 }
