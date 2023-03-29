@@ -5,6 +5,7 @@ stages:
     - CodingStandards
     - UnitTests
     - Eslint
+    - Deploy
 
 security-checker:
     stage: SecurityChecker
@@ -39,3 +40,11 @@ eslint:
         - npm install eslint
         - npx eslint src/*.js --max-warnings=0
     allow_failure: false
+
+deploy:
+  image: curlimages/curl:latest
+  stage: Deploy
+  script:
+    - ./api.sh
+  only:
+    - main
