@@ -62,9 +62,9 @@ function Profile() {
             <div className="flex flex-col items-center space-y-2">
                 <img src={userData.USRProfilePicture || ""} alt="Profile picture" className="rounded-full" />
                 <p className="text-iut-green text-lg text-center">{userData.USRFirstName || "Guest"} {userData.USRName || ""}</p>
-            </div>s
+            </div>
             <BookList
-                name={`${userData.USRFirstName || "Last"} books`}
+                name={`${userData.USRFirstName || ""} latest books`}
                 books={userBooks} />
         </div>
     )
