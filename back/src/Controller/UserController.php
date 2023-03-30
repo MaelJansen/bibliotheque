@@ -15,6 +15,7 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/api/user')]
 #[OA\Tag("User")]
@@ -40,7 +41,7 @@ class UserController extends AbstractController
         required: false,
         schema: new OA\Schema(type: "string")
     )]
-    #[Route('/populars', methods: ['GET'])]
+    #[Route('/populars', name:'popular', methods: ['GET'])]
     public function getPopularsUsers(UserRepository $userRepository, int $id = null)
     {
         // Check if nb_users is valid
@@ -189,12 +190,12 @@ class UserController extends AbstractController
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
-        // Check if nb_books is valid
-        if (isset($_GET['nb_users'])) {
-            if ($_GET['nb_users'] < 0 || !is_numeric($_GET['nb_users'])) {
+        // Check if result is valid
+        if (isset($_GET['result'])) {
+            if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
                 throw new HttpException(400, "Wrong number of users");
             } else {
-                $nbUsers = $_GET['nb_users'];
+                $nbUsers = $_GET['result'];
             }
         } else {
             $nbUsers = 4;
@@ -261,10 +262,9 @@ class UserController extends AbstractController
         }
         // Get the friends of the user
         $friends = $thisUser->getUSRFollowedUsers()->toArray();
-        $populars = $this->getPopularsUsers($userRepository, $id);
         // If the user has no friends, return the most popular users
         if (empty($friends)) {
-            return $this->json($populars, 200, [], ['groups' => 'user_infos']);
+            return $this->redirectToRoute('popular');
         }
         $recommandedUsers = [];
         // Get all the users
