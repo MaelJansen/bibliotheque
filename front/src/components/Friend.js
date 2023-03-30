@@ -20,7 +20,7 @@ function Friend({ data, following }) {
       .get(serverQuery)
       .then((response) => {
         let tmp = [];
-        for (let bookElem of response.data) {
+        for (let bookElem of response.data.books) {
           let book = bookElem.USBBook;
           let tmpBook = {
             "id": book.id,
