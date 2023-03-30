@@ -238,14 +238,14 @@ class UserController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
-    #[Route('/{id}/friend', methods:['POST'])]
+    #[Route('/{id}/friend', methods: ['POST'])]
     public function addFriends(
         int $id,
         UserRepository $repository,
         Request $request,
         EntityManagerInterface $entityManager
     ) {
-        $friendId = $request->request->get('friendId');
+        $friendId = $request->query->get('friendId');
         if (is_numeric($friendId)) {
             $user = $repository->getOneUser($id);
             $userFollowed = $repository->getOneUser($friendId);
@@ -274,7 +274,7 @@ class UserController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
-    #[Route('/{id}/friend', methods:['DELETE'])]
+    #[Route('/{id}/friend', methods: ['DELETE'])]
     public function removeFriends(
         int $id,
         UserRepository $repository,
@@ -282,7 +282,8 @@ class UserController extends AbstractController
         EntityManagerInterface $entityManager
     ) {
         $followed = false;
-        $friendId = $request->request->get('friendId');
+        $friendId = $request->query->get('friendId');
+        var_dump($friendId);
         if (is_numeric($friendId)) {
             $user = $repository->getOneUser($id);
             $userFollowed = $repository->getOneUser($friendId);
