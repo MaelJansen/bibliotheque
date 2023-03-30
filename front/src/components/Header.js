@@ -11,8 +11,6 @@ function Header(){
     let menuLine;
 
     const userId = localStorage.getItem("userId");
-    console.log(localStorage.getItem("token"));
-
     //the layout of the menu depends on whether or not the user is connected
     if(userId){
         menuDropdown = 

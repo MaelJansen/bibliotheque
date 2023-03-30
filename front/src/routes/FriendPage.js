@@ -28,8 +28,9 @@ function FriendPage() {
         axios
         .get(serverQuery)
         .then(response => {
+            console.log(response);
             let tmp = [];
-            for (let friend of response.data){
+            for (let friend of response.data.data){
                 let data = {
                     "id": friend.id,
                     "fname": friend.USRFirstName,
@@ -38,7 +39,7 @@ function FriendPage() {
                 }
                 tmp.push(data);
             }
-            setFriends(tmp);
+            setFriends({'nbResult': response.data.nbResult ,'data': tmp});
         })
         .catch(error => {
             console.log(error.response.status);
@@ -47,7 +48,6 @@ function FriendPage() {
 
     function getSuggestFriends () {
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/recommendedusers`;
-        console.log(serverQuery);
         axios
         .get(serverQuery)
         .then(response => {
@@ -74,9 +74,9 @@ function FriendPage() {
             <FriendList 
             name={"Mes amis"}
             follow={false}
-            friends={friends}/>
+            friends={friends.data ? friends.data : []}/>
             <Paginator 
-            nbResult={friends.length}/>
+            nbResult={friends.nbResult ? friends.nbResult : 0}/>
             <FriendList 
             name={"Recommendations"}
             follow={true}

@@ -8,11 +8,9 @@ function Friend({ data, follow }) {
 
   function getBooks() {
     let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${data.id}/books?nb_books=3`;
-    console.log(serverQuery);
     axios
       .get(serverQuery)
       .then((response) => {
-        console.log(response);
         let tmp = [];
         for (let bookElem of response.data) {
           let book = bookElem.USBBook;
@@ -21,7 +19,6 @@ function Friend({ data, follow }) {
             "img": book.BOOLinkImg,
           };
           tmp.push(tmpBook);
-          console.log("query done");
         }
         setBooks(tmp);
       });
