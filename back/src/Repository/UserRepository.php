@@ -87,6 +87,16 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getUserByToken(string $token): ?User
+    {
+        return $this->createQueryBuilder('u')
+        ->andWhere('u.token = :val')
+            ->setParameter('val', $token)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

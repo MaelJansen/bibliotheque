@@ -88,6 +88,7 @@ class FillBooksCommand extends Command
                 // Create a new book
                 $createdBook = new Book();
                 $createdBook->__construct();
+                $date = null;
 
                 // If there is an author given by the api and if it's not already in the database, create it and add it
                 if (array_key_exists('authors', $book['volumeInfo'])) {
