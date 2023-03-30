@@ -32,4 +32,16 @@ class DatabaseTest extends KernelTestCase
         // assert if authors >= 50
         $this->assertGreaterThanOrEqual(50, count($authors));
     }
+
+    public function testBooksUnicity(): void
+    {
+        $entityManager = self::bootKernel()->getContainer()
+            ->get('doctrine')
+            ->getManager();
+        $bookRepository = $entityManager->getRepository(Book::class);
+        $books = $bookRepository->findAll();
+        
+        // assert if books are unique (column name is unique)
+        $this->assertEquals(count($books), count(array_unique($books)));
+    }
 }
