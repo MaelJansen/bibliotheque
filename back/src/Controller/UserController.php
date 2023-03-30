@@ -14,11 +14,12 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
-    #[Route('/populars', methods: ['GET'])]
+    #[Route('/populars',name:'popular', methods: ['GET'])]
     public function getPopularsUsers(UserRepository $userRepository, int $id = null)
     {
         // Check if nb_users is valid
@@ -156,10 +157,9 @@ class UserController extends AbstractController
         }
         // Get the friends of the user
         $friends = $thisUser->getUSRFollowedUsers()->toArray();
-        $populars = $this->getPopularsUsers($userRepository, $id);
         // If the user has no friends, return the most popular users
         if (empty($friends)) {
-            return $this->json($populars, 200, [], ['groups' => 'user_infos']);
+            return $this->redirectToRoute('popular');
         }
         $recommandedUsers = [];
         // Get all the users
