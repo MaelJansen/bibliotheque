@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import BookList from "../components/bookList";
@@ -7,6 +7,7 @@ import BookList from "../components/bookList";
 function Profile() {
     const navigate = useNavigate();
     const params = useParams();
+    const [searchParams] = useSearchParams();
     const [userData, setUserData] = useState({});
     const [userBooks, setUserBooks] = useState([]);
 
@@ -17,24 +18,34 @@ function Profile() {
         axios
             .get(serverQuery)
             .then((response) => {
-                console.log(response);
                 if (response.data.user) {
                     let user = response.data.user;
                     setUserData(user);
-                    console.log(user);
                 } else {
                     setUserData({ "error": true });
                 }
             })
     }
 
-    async function getUserBooks() {
-
+    async function getUserBooks(id, params) {
+        let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
+        let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=8";
+        let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${id}/books${page}${nbResult}`;
+        axios
+        .get(serverQuery)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(console.log)
     }
 
     useEffect(() => {
         getUserData(params.id);
     }, [params]);
+
+    useEffect(() => {
+        getUserBooks(params.id, searchParams)
+    }, [userData]);
 
     return (
         <div className="m-3">
