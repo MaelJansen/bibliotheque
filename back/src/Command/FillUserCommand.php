@@ -110,7 +110,7 @@ class FillUserCommand extends Command
                 // We add a given back date to 1/2 of the userbook
                 if ($i % 2 == 0) {
                     $weekCount = rand(0, 20);
-                    $createdUserBook->setUSBDateGivenBack(new \DateTime(datetime : 'now + '.$weekCount.' week'));
+                    $createdUserBook->setUSBDateGivenBack(new \DateTime(datetime : 'now + ' . $weekCount . ' week'));
                 }
                 // We add a grade to 1/3 of the userbook
                 if ($i % 3 == 0) {
