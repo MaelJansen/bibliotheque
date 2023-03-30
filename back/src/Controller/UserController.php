@@ -297,7 +297,7 @@ class UserController extends AbstractController
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
-                ref: "#/components/schemas/UserInfos"
+                ref: "#/components/schemas/LastBooksInfos"
             )
         )
     )]
@@ -364,6 +364,26 @@ class UserController extends AbstractController
         return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
     }
 
+    #[OA\Post(
+        summary: "Ajoute un ami"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Ajoute un ami",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "friendId",
+        description: "l'Id de l'utilisateur à ajouter en ami",
+        in: "query",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/friend', methods:['POST'])]
     public function addFriends(
         int $id,

@@ -63,11 +63,9 @@ class Book
 
     #[Groups(['preview', 'book_infos'])]
     #[ORM\ManyToMany(targetEntity: Author::class)]
-    #[OA\Property(example: "[3, 8]", description: "La liste des auteurs du livre")]
     private Collection $BOOAuthor;
 
     #[ORM\OneToMany(mappedBy: 'USBBook', targetEntity: UserBook::class, orphanRemoval: true)]
-    #[OA\Property(example: "[1, 6]", description: "La liste des emprunts du livre")]
     private Collection $BOOBorrows;
 
     #[Groups('preview')]

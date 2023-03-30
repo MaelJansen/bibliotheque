@@ -42,6 +42,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255, nullable: true)]
+    #[OA\Property(example: "https://randomuser.me/api/portraits/women/66.jpg")]
     private ?string $USRProfilePicture = null;
 
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'USRFollowingUsers')]
