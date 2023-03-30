@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class UserController extends AbstractController
 {
     #[Route('/populars', methods: ['GET'])]
-    public function getPopularsUsers(UserRepository $userRepository)
+    public function getPopularsUsers(UserRepository $userRepository, int $id = null)
     {
         // Check if nb_users is valid
         if (isset($_GET['nb_users'])) {
@@ -34,9 +34,16 @@ class UserController extends AbstractController
         foreach ($allUsers as $user) {
             $followedUsers = $user->getUSRFollowedUsers();
             foreach ($followedUsers as $followedUser) {
-                array_push($users, $followedUser->getId());
+                if ($id != null) {
+                    if ($followedUser->getId() != $id) {
+                        array_push($users, $followedUser->getId());
+                    }
+                } else {
+                    array_push($users, $followedUser->getId());
+                }
             }
         }
+
         $users = array_count_values($users);
         arsort($users);
         $users = array_slice($users, 0, $nbUsers, true);
@@ -131,14 +138,14 @@ class UserController extends AbstractController
     public function getUsersRecommendations(int $id, UserRepository $userRepository)
     {
         // Get the user with the specified id
-        $user = $userRepository->getOneUser($id);
-        if (!$user) {
-            return $this->json(['message' => 'User not found'], 400);
+        $thisUser = $userRepository->getOneUser($id);
+        if (!$thisUser) {
+            throw new HttpException(400, "User not found");
         }
         // Check if nb_users is valid
         if (isset($_GET['nb_users'])) {
             if ($_GET['nb_users'] < 0 || !is_numeric($_GET['nb_users'])) {
-                return $this->json(['message' => 'Invalid number of users'], 400);
+                throw new HttpException(400, "Wrong number of users");
             } else {
                 $nbUsers = $_GET['nb_users'];
             }
@@ -146,34 +153,50 @@ class UserController extends AbstractController
             $nbUsers = 4;
         }
         // Get the friends of the user
-        $friends = $user->getUSRFollowedUsers()->toArray();
+        $friends = $thisUser->getUSRFollowedUsers()->toArray();
+        $populars = $this->getPopularsUsers($userRepository, $id);
+        // If the user has no friends, return the most popular users
         if (empty($friends)) {
-            return $this->getPopularsUsers($userRepository);
+            return $this->json($populars, 200, [], ['groups' => 'user_infos']);
         }
-        $users = [];
+        $recommandedUsers = [];
+        // Get all the users
+        $allUsers = $userRepository->getAllUsers();
+        foreach ($allUsers as $user) {
+            $followedUsers = $user->getUSRFollowedUsers();
+            foreach ($followedUsers as $followedUser) {
+                if ($id != null) {
+                    if ($followedUser->getId() != $id) {
+                        array_push($recommandedUsers, $followedUser->getId());
+                    }
+                } else {
+                    array_push($recommandedUsers, $followedUser->getId());
+                }
+            }
+        }
         // Get the friends of the friends
         foreach ($friends as $friend) {
             $friendsFriends = $friend->getUSRFollowedUsers()->toArray();
             // Adding the friends friends to the users array
-            foreach ($friendsFriends as $user) {
-                array_push($users, $user->getId());
+            for ($i=0; $i < 3; $i++) {
+                foreach ($friendsFriends as $user) {
+                    if ($user->getId() != $thisUser->getId()) {
+                        array_push($recommandedUsers, $user->getId());
+                    }
+                }
             }
         }
         // Count the number of times a user is in the array
-        $users = array_count_values($users);
+        $recommandedUsers = array_count_values($recommandedUsers);
         // Sort the users by the number of times they are in the array
-        uasort($users, function ($a, $b) {
-            if ($a == $b) {
-                return 0;
-            }
-            return ($a > $b) ? -1 : 1;
-        });
+        arsort($recommandedUsers);
         $sortedUsers = [];
-        foreach ($users as $key => $value) {
-            array_push($sortedUsers, $userRepository->getOneUser($key));
+        foreach ($recommandedUsers as $key => $value) {
+            if ($key != $thisUser->getId()) {
+                array_push($sortedUsers, $userRepository->getOneUser($key));
+            }
         }
         $sortedUsers = array_slice($sortedUsers, 0, $nbUsers);
-
         return $this->json($sortedUsers, 200, [], ['groups' => 'user_infos']);
     }
 
@@ -207,12 +230,15 @@ class UserController extends AbstractController
         }
 
         $books = [];
+        $ourBorrowedBooks = $user->getUSRBorrowedBooks()->toArray();
         // Get the books of the friends
         foreach ($friends as $friend) {
             $friendsBooks = $friend->getUSRBorrowedBooks()->toArray();
             // Adding the friends books to the books array
             foreach ($friendsBooks as $book) {
-                array_push($books, $book->getUSBBook()->getId());
+                if (!in_array($book, $ourBorrowedBooks)) {
+                    array_push($books, $book->getUSBBook()->getId());
+                }
             }
         }
         // Count the number of times a book is in the array
