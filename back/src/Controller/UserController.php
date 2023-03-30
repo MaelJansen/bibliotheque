@@ -86,10 +86,7 @@ class UserController extends AbstractController
         response: 200,
         description: "1 utilisateur",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/UserLastBooks"
-            )
+            ref: "#/components/schemas/SingleUser"
         )
     )]
     #[View(serializerGroups: ['user_infos', 'last_books'])]
@@ -173,10 +170,7 @@ class UserController extends AbstractController
         response: 200,
         description: "les amis de l'utilisateur",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/UserInfos"
-            )
+            ref: "#/components/schemas/UserFriends"
         )
     )]
     #[OA\Parameter(
@@ -400,10 +394,7 @@ class UserController extends AbstractController
         response: 200,
         description: "Ajoute un ami",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/UserInfos"
-            )
+            ref: "#/components/schemas/AddOrRemoveFriend"
         )
     )]
     #[OA\Parameter(
@@ -456,10 +447,7 @@ class UserController extends AbstractController
         response: 200,
         description: "L'ami qui n'es plus suivi",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/UserInfos"
-            )
+            ref: "#/components/schemas/AddOrRemoveFriend"
         )
     )]
     #[OA\Parameter(

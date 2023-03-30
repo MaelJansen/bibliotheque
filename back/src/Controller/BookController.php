@@ -8,8 +8,6 @@ use App\Repository\BookRepository;
 use App\Repository\GradeRepository;
 use FOS\RestBundle\Controller\Annotations\View;
 use OpenApi\Attributes as OA;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 #[Route('/api/books')]
@@ -23,10 +21,7 @@ class BookController extends AbstractController
         response: 200,
         description: "10 livres pour la page d'accueil",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/BookPreview"
-            )
+            ref: "#/components/schemas/Books" 
         )
     )]
     #[OA\Parameter(
@@ -87,10 +82,7 @@ class BookController extends AbstractController
         response: 200,
         description: "Les livres populaires",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/BookPreview"
-            )
+            ref: "#/components/schemas/PopularBooks" 
         )
     )]
     #[OA\Parameter(
@@ -144,10 +136,7 @@ class BookController extends AbstractController
         response: 200,
         description: "Un livre",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/BookInfos"
-            )
+            ref: "#/components/schemas/SingleBook"   
         )
     )]
     #[View(serializerGroups: ['book_infos','book_grade'])]
