@@ -314,10 +314,10 @@ class UserController extends AbstractController
             if ($userFollowing != null) {
                 foreach ($user->getUSRFollowedUsers() as $fu) {
                     if ($fu->getId() === $userFollowing->getID()) {
-                        $followed = true;
+                        $following = true;
                     }
                 }
-                if ($followed == false) {
+                if ($following == false) {
                     throw new HttpException(400, 'You aren\'t following this user');
                 }
                 $user->removeUSRFollowedUser($userFollowing);
