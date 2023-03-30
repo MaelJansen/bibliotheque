@@ -5,6 +5,8 @@ import Home from './routes/Home';
 import Login from './routes/Login';
 import Main from './routes/Main';
 import Results from './routes/Results';
+import Profile from './routes/Profile';
+
 
 function App() {
     return (
@@ -15,6 +17,7 @@ function App() {
                 <Route path="books/:id" Component={BookPage} />
                 <Route path="friends" Component={FriendPage} />
                 <Route path="login" Component={Login} />
+                <Route path="user/:id" Component={Profile} />
             </Route>
         </Routes>
     );

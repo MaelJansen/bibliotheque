@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BookList from "./bookList";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Friend({ data, following }) {
 
@@ -15,7 +15,7 @@ function Friend({ data, following }) {
 
 
   function getBooks() {
-    let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${data.id}/books?nb_books=3`;
+    let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${data.id}/books?result=3`;
     axios
       .get(serverQuery)
       .then((response) => {
@@ -74,7 +74,7 @@ function Friend({ data, following }) {
 
   return (
     <div id="preview" className="flex flex-col">
-      <div className="group cursor-pointer overflow-hidden aspect-square ">
+      <Link to={`/user/${data.id}`} className="group cursor-pointer overflow-hidden aspect-square ">
         <img
           src={
             data.img ||
@@ -83,7 +83,7 @@ function Friend({ data, following }) {
           className="object-contain object-top w-full h-full"
           alt={data.name}
         />
-      </div>
+      </Link>
       <div className="flex flex-col bg-gray-200">
         <div className="m-2 space-y-3 flex flex-col justify-center">
           <p>{data.fname} {data.name}</p>
