@@ -293,7 +293,7 @@ class UserController extends AbstractController
         }
         return $this->json([
             'userId' => $user->getId(),
-            'followedUserID' => $userFollowed->getId()
+            'followedUserID' => $userFollowing->getId()
         ]);
     }
 
@@ -333,7 +333,7 @@ class UserController extends AbstractController
         }
         return $this->json([
             'userId' => $user->getId(),
-            'followedUserID' => $userFollowed->getId()
+            'followedUserID' => $userFollowing->getId()
         ]);
     }
 }
