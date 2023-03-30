@@ -56,7 +56,7 @@ function Header() {
 
 
         menuLine = <div className="hidden md:flex space-x-10">
-            <Link to={"/"} className="hover:underline hover:text-gray-700">Acceuil</Link>
+            <Link to={"/"} className="hover:underline hover:text-gray-700">Accueil</Link>
             <Link to={"/friends?page=1"} className="hover:underline hover:text-gray-700">Amis</Link>
             <Link to={`/user/${userId}`} className="hover:underline hover:text-gray-700">Mes livres</Link>
             <Link onClick={handleLogoutClick}>Déconnexion</Link>
