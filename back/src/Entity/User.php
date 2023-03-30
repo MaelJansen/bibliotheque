@@ -38,6 +38,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(['user_new'])]
+    #[OA\Property(example: "testtest")]
     private ?string $USRPassword = null;
 
     #[Groups(['last_books', 'user_infos'])]

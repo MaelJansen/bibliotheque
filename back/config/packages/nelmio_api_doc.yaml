@@ -70,6 +70,15 @@ nelmio_api_doc:
                         followedUserId:
                             type: integer
                             example: 20
+                LoginUser:
+                    type: 'object'
+                    properties:
+                        userId:
+                            type: integer
+                            example: 1
+                        followedUserId:
+                            type: integer
+                            example: 20
                         
     areas: # to filter documented areas
         path_patterns:

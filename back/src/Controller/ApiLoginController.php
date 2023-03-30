@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-#[Route('/api/login')]
 #[OA\Tag("Login")]
 class ApiLoginController extends AbstractController
 {
@@ -47,7 +46,7 @@ class ApiLoginController extends AbstractController
     #[OA\RequestBody(
         content: new OA\JsonContent(ref: "#/components/schemas/UserNew")
     )]
-    #[Route('/', name: 'app_api_login', methods: ['POST'])]
+    #[Route('/api/login', name: 'app_api_login', methods: ['POST'])]
     public function index(#[CurrentUser] ?User $user, UserRepository $repository)
     {
         if (null === $user) {
@@ -65,6 +64,19 @@ class ApiLoginController extends AbstractController
         ]);
     }
 
+    #[OA\Post(
+        summary: "Déconnecte un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Déconnecte un utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserNew"
+            )
+        )
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/api/logout', methods: ['POST'])]
