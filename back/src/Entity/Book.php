@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
@@ -18,22 +19,30 @@ class Book
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['preview', 'book_infos', 'last_books'])]
+    #[OA\Property(example: "1")]
     private ?int $id = null;
 
     #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 2000)]
+    #[OA\Property(example: "All-New Deadpool (2016)", description: "Nom du livre")]
     private ?string $BOOName = null;
 
     #[Groups('book_infos')]
     #[ORM\Column(length: 5000, nullable: true)]
+    #[OA\Property(example: "Deadpool a essayé de créer une franchise ...", description: "Le résumé du livre")]
     private ?string $BOOSummary = null;
 
     #[Groups('book_infos')]
     #[ORM\Column(nullable: true)]
+    #[OA\Property(example: "136", description: "Le nombre de page du livre")]
     private ?int $BOONbPages = null;
 
     #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 5000, nullable: true)]
+    #[OA\Property(
+        example: "http://books.google.com/books/content?id=S2F...&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        description: "Le lien vers l'image de couverture du livre"
+    )]
     private ?string $BOOLinkImg = null;
 
     #[Groups('book_infos')]
@@ -60,10 +69,11 @@ class Book
     #[Groups('preview')]
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[OA\Property(example: "2002-02-02", description: "La date de publication du livre")]
     private ?\DateTime $BOOPublishDate = null;
 
-
     #[ORM\OneToMany(mappedBy: 'GRABook', targetEntity: Grade::class, orphanRemoval: true)]
+    #[OA\Property(example: "[1, 3, 6]", description: "La liste des notes du livre")]
     private Collection $BOOGrades;
 
 

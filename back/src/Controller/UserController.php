@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,26 +18,51 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/api/user')]
+#[OA\Tag("User")]
 class UserController extends AbstractController
 {
+    #[OA\Get(
+        summary: "Donne des utilisateurs populaires"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Des utilisateurs populaires",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        description: "Le nombre d'utilisateurs voulu",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/populars', name:'popular', methods: ['GET'])]
     public function getPopularsUsers(UserRepository $userRepository, int $id = null)
     {
-        // Check if nb_users is valid
-        if (isset($_GET['nb_users'])) {
-            if ($_GET['nb_users'] < 0 || !is_numeric($_GET['nb_users'])) {
-                return $this->json(['message' => 'Invalid number of users'], 400);
+        // Check if result is valid
+        if (isset($_GET['result'])) {
+            if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
+                throw new HttpException(400, "Invalid number of users");
             } else {
-                $nbUsers = $_GET['nb_users'];
+                $nbUsers = $_GET['result'];
             }
         } else {
             $nbUsers = 4;
         }
+        // Get all users
         $allUsers = $userRepository->getAllUsers();
         $users = [];
+        // Get all followed users of each user
         foreach ($allUsers as $user) {
             $followedUsers = $user->getUSRFollowedUsers();
+            // For each followed user, add it to the array
             foreach ($followedUsers as $followedUser) {
+                // We don't want to count the user himself
                 if ($id != null) {
                     if ($followedUser->getId() != $id) {
                         array_push($users, $followedUser->getId());
@@ -46,43 +72,76 @@ class UserController extends AbstractController
                 }
             }
         }
-
+        // Sort the array by number of occurences
         $users = array_count_values($users);
         arsort($users);
+        // Get the first $nbUsers users
         $users = array_slice($users, 0, $nbUsers, true);
         $sortedUser = [];
+        // Get the user object from the id
         foreach ($users as $key => $value) {
             array_push($sortedUser, $userRepository->getOneUser($key));
         }
         return $this->json($sortedUser, 200, [], ['groups' => 'user_infos']);
     }
 
-
+    #[OA\Get(
+        summary: "Donne un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "1 utilisateur",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/SingleUser"
+        )
+    )]
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
     public function getOneUser(UserRepository $userRepository, int $id)
     {
-        $newUser = $userRepository->getOneUser($id);
-        if (!$newUser) {
-            return $this->json(['message' => 'User not found'], 400);
+        $user = $userRepository->getOneUser($id);
+        if (!$user) {
+            throw new HttpException(404, "User not found or this user doesn't exist");
         }
-        // Créer un tableau associatif contenant les données de $newUser et $books
-        $responseData = [
-            'user' => $newUser,
-        ];
-
         // Retourner le tableau associatif dans la réponse JSON
-        return $this->json($responseData, 200, [], ['groups' => 'last_books']);
+        return $this->json($user, 200, [], ['groups' => 'last_books']);
     }
 
+    #[OA\Get(
+        summary: "Donne les livres d'un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les livres de l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/LastBooksInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        description: "le nombre de livres voulu",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        description: "le numero de la page (de la liste)",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
     {
-        // Check if nb_books is valid
+        // Check if result is valid
         if (isset($_GET['result'])) {
             if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
-                return $this->json(['message' => 'Invalid number of books'], 400);
+                throw new HttpException(400, "Invalid number of books");
             } else {
                 $nbBooks = $_GET['result'];
             }
@@ -95,13 +154,43 @@ class UserController extends AbstractController
             if (is_numeric($_GET['page']) && $_GET['page'] > 0) {
                 $page = $_GET['page'];
             } else {
-                return $this->json(['message' => 'Invalid page value'], 400);
+                throw new HttpException(400, "Invalid page number");
             }
         }
         $books = $userBookRepository->getBorrowedBook($id, $nbBooks, $page);
-        return $this->json($books, 200, [], ['groups' => 'last_books']);
+        // Retourner le tableau associatif dans la réponse JSON
+        $res = [
+            'books' => $books,
+            'nbResult' => $userBookRepository->getTheNumberOfBorrowedBooks($id)
+        ];
+        return $this->json($res, 200, [], ['groups' => 'last_books']);
     }
 
+    // Get all friends from one user
+    #[OA\Get(
+        summary: "Donne les amis d'un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les amis de l'utilisateur",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/UserFriends"
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        description: "le numero de la page (de la liste)",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
@@ -127,16 +216,38 @@ class UserController extends AbstractController
         // Get the user with the specified id
         $user = $userRepository->getOneUser($id);
         if (!$user) {
-            return $this->json(['message' => 'User not found'], 400);
+            throw new HttpException(404, "User not found or this user doesn't exist");
         }
         // Get the friends of the user
         $friends = $user->getUSRFollowedUsers()->toArray();
+        // Get the number of friends
         $nbResult = count($friends);
+        // Get the number of friends asked
         $res = array_slice($friends, ($page - 1) * $nbUsers, $nbUsers);
         $returnPackage = ["nbResult" => $nbResult, "data" => $res];
         return $this->json($returnPackage, 200, [], ['groups' => 'user_infos']);
     }
 
+    #[OA\Get(
+        summary: "Donne une liste d'utilisateurs recommandés (comme amis)"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Une liste d'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/recommendedusers', methods: ['GET'])]
     public function getUsersRecommendations(int $id, UserRepository $userRepository)
     {
@@ -145,12 +256,12 @@ class UserController extends AbstractController
         if (!$thisUser) {
             throw new HttpException(400, "User not found");
         }
-        // Check if nb_users is valid
-        if (isset($_GET['nb_users'])) {
-            if ($_GET['nb_users'] < 0 || !is_numeric($_GET['nb_users'])) {
+        // Check if result is valid
+        if (isset($_GET['result'])) {
+            if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
                 throw new HttpException(400, "Wrong number of users");
             } else {
-                $nbUsers = $_GET['nb_users'];
+                $nbUsers = $_GET['result'];
             }
         } else {
             $nbUsers = 4;
@@ -204,6 +315,26 @@ class UserController extends AbstractController
         return $this->json($sortedUsers, 200, [], ['groups' => 'user_infos']);
     }
 
+    #[OA\Get(
+        summary: "Donne un certain nombre (4 par défaut) de livres recommandés à un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les livres recommandés à l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/LastBooksInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        in: "query",
+        description: "le nombre de livres à afficher",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 4)
+    )]
     #[Route('/{id}/recommendedbooks', methods: ['GET'])]
     public function getUserBookRecommendations(
         int $id,
@@ -216,12 +347,12 @@ class UserController extends AbstractController
         if (!$user) {
             return $this->json(['message' => 'User not found'], 400);
         }
-        // Check if nb_books is valid
-        if (isset($_GET['nb_books'])) {
-            if ($_GET['nb_books'] < 0 || !is_numeric($_GET['nb_books'])) {
+        // Check if result is valid
+        if (isset($_GET['result'])) {
+            if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
                 throw new HttpException(400, "Wrong number of books");
             } else {
-                $nbBooks = $_GET['nb_books'];
+                $nbBooks = $_GET['result'];
             }
         } else {
             $nbBooks = 4;
@@ -263,6 +394,23 @@ class UserController extends AbstractController
         return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
     }
 
+    #[OA\Post(
+        summary: "Ajoute un ami"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Ajoute un ami",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/AddOrRemoveFriend"
+        )
+    )]
+    #[OA\Parameter(
+        name: "friendId",
+        description: "l'Id de l'utilisateur à ajouter en ami",
+        in: "query",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/{id}/friends', methods: ['POST'])]
@@ -299,6 +447,23 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[OA\Delete(
+        summary: "Ne plus suivre un ami"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "L'ami qui n'es plus suivi",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/AddOrRemoveFriend"
+        )
+    )]
+    #[OA\Parameter(
+        name: "friendId",
+        description: "l'Id de l'utilisateur à ajouter en ami",
+        in: "query",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/{id}/friends', methods: ['DELETE'])]

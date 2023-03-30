@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\LanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
 class Language
@@ -16,6 +17,7 @@ class Language
 
     #[Groups('book_infos')]
     #[ORM\Column(length: 255)]
+    #[OA\Property(example: "fr", description: "Le nom de la langue")]
     private ?string $LANName = null;
 
     public function getLANId(): ?int

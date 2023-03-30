@@ -7,11 +7,44 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BookRepository;
 use App\Repository\GradeRepository;
 use FOS\RestBundle\Controller\Annotations\View;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 #[Route('/api/books')]
+#[OA\Tag("Books")]
 class BookController extends AbstractController
 {
+    #[OA\Get(
+        summary: "Donne les 10 livres affichés sur la page d'accueil"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "10 livres pour la page d'accueil",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/Books"
+        )
+    )]
+    #[OA\Parameter(
+        name: "q",
+        in: "query",
+        description: "une partie du nom de l'auteur",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        in: "query",
+        description: "le numéro de la page",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 1)
+    )]
+    #[OA\Parameter(
+        name: "result",
+        in: "query",
+        description: "le nombre de résultat à afficher",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 10)
+    )]
     #[View(serializerGroups: ['preview'])]
     #[Route('/', name: 'app_book', methods:['GET'])]
     public function index(BookRepository $repository)
@@ -42,6 +75,23 @@ class BookController extends AbstractController
         return ["nbResult" => count($repository->findByAuthor($query)) , "datas" => $res];
     }
 
+    #[OA\Get(
+        summary: "Donne un certain nombre (4 par défaut) de livre populaires",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Les livres populaires",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/PopularBooks"
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        in: "query",
+        description: "le nombre de résultat à afficher",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 4)
+    )]
     #[View(serializerGroups: ['preview'])]
     #[Route('/popular', name: 'endpoint_popularBook', methods: ['GET'])]
     public function getPopularBooks(BookRepository $repository)
@@ -59,13 +109,36 @@ class BookController extends AbstractController
     }
 
     // Get the four last books added to the database
+    #[OA\Get(
+        summary: "Donne les 4 derniers livres",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Les 4 derniers livres",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/BookPreview"
+            )
+        )
+    )]
     #[View(serializerGroups: ['preview'])]
-    #[Route('/latest', name: 'endpoint_latestBook')]
+    #[Route('/latest', name: 'endpoint_latestBook', methods:['GET'])]
     public function getFourLastBook(BookRepository $repository)
     {
         return $repository->getLastBook();
     }
 
+    #[OA\Get(
+        summary: "Donne un livre en particulier",
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Un livre",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/SingleBook"
+        )
+    )]
     #[View(serializerGroups: ['book_infos','book_grade'])]
     #[Route('/{id}', name: 'endpointId', methods: ['GET'])]
     public function getOneBook(BookRepository $bookRepository, GradeRepository $gradeRepository, int $id)
