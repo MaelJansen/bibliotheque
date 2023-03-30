@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 #[Route('/api/user')]
 class UserController extends AbstractController
 {
-    #[Route('/populars',name:'popular', methods: ['GET'])]
+    #[Route('/populars', name:'popular', methods: ['GET'])]
     public function getPopularsUsers(UserRepository $userRepository, int $id = null)
     {
         // Check if nb_users is valid
