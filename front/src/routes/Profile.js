@@ -58,6 +58,7 @@ function Profile() {
 
     return (
         <div className="m-3">
+            <button onClick={() => navigate(-1)} className="mb-3 hover:text-iut-hover-green">{"<"} Revenir en arrière</button>
             <p className="text-2xl text-iut-green">{userData.id === userId ? "Your profile" : `${userData.USRFirstName || "guest"} profile`}</p>
             <div className="flex flex-col items-center space-y-2">
                 <img src={userData.USRProfilePicture || ""} alt="Profile picture" className="rounded-full" />
