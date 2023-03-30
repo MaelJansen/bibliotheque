@@ -12,6 +12,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
@@ -65,8 +68,6 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
-    #[IsGranted("ROLE_USER")]
-    #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
@@ -123,8 +124,10 @@ class UserController extends AbstractController
         }
         // Get the friends of the user
         $friends = $user->getUSRFollowedUsers()->toArray();
+        $nbResult = count($friends);
         $res = array_slice($friends, ($page - 1) * $nbUsers, $nbUsers);
-        return $this->json($res, 200, [], ['groups' => 'user_infos']);
+        $returnPackage = ["nbResult" => $nbResult, "data" => $res];
+        return $this->json($returnPackage, 200, [], ['groups' => 'user_infos']);
     }
 
     #[Route('/{id}/recommendedusers', methods: ['GET'])]
@@ -231,5 +234,82 @@ class UserController extends AbstractController
         $sortedBooks = array_slice($sortedBooks, 0, $nbBooks);
 
         return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
+    }
+
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
+    #[Route('/{id}/friend', methods: ['POST'])]
+    public function addFriends(
+        int $id,
+        UserRepository $repository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ) {
+        $friendId = $request->query->get('friendId');
+        if (is_numeric($friendId)) {
+            $user = $repository->getOneUser($id);
+            $userFollowed = $repository->getOneUser($friendId);
+            if ($userFollowed != null) {
+                foreach ($user->getUSRFollowingUsers() as $fu) {
+                    if ($fu->getId() === $userFollowed->getID()) {
+                        throw new HttpException(400, 'You are already following this user');
+                    }
+                }
+                $user->addUSRFollowingUser($userFollowed);
+                $userFollowed->addUSRFollowedUser($user);
+                $entityManager->persist($user);
+                $entityManager->persist($userFollowed);
+                $entityManager->flush();
+            } else {
+                throw new HttpException(400, 'The followed user doesn\'t exist');
+            }
+        } else {
+            throw new HttpException(500, 'No numeric argument');
+        }
+        return $this->json([
+            'userId' => $user->getId(),
+            'followedUserID' => $userFollowed->getId()
+        ]);
+    }
+
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
+    #[Route('/{id}/friend', methods: ['DELETE'])]
+    public function removeFriends(
+        int $id,
+        UserRepository $repository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ) {
+        $followed = false;
+        $friendId = $request->query->get('friendId');
+        var_dump($friendId);
+        if (is_numeric($friendId)) {
+            $user = $repository->getOneUser($id);
+            $userFollowed = $repository->getOneUser($friendId);
+            if ($userFollowed != null) {
+                foreach ($user->getUSRFollowingUsers() as $fu) {
+                    if ($fu->getId() === $userFollowed->getID()) {
+                        $followed = true;
+                    }
+                }
+                if ($followed == false) {
+                    throw new HttpException(400, 'You aren\'t following this user');
+                }
+                $user->removeUSRFollowingUser($userFollowed);
+                $userFollowed->removeUSRFollowedUser($user);
+                $entityManager->persist($user);
+                $entityManager->persist($userFollowed);
+                $entityManager->flush();
+            } else {
+                throw new HttpException(400, 'The followed user doesn\'t exist');
+            }
+        } else {
+            throw new HttpException(500, 'No numeric argument');
+        }
+        return $this->json([
+            'userId' => $user->getId(),
+            'followedUserID' => $userFollowed->getId()
+        ]);
     }
 }
