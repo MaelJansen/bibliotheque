@@ -23,7 +23,7 @@ function FriendPage() {
     useEffect(() => {
         getFriend(searchParams);
         getSuggestFriends();
-    }, [])
+    }, [searchParams])
 
     function getFriend(params) {
         let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
