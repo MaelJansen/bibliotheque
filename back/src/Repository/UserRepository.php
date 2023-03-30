@@ -80,6 +80,13 @@ class UserRepository extends ServiceEntityRepository
         return $books;
     }
 
+    public function getAllUsers(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
