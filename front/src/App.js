@@ -13,7 +13,7 @@ function App() {
                 <Route index Component={Home} />
                 <Route path="books" Component={Results} />
                 <Route path="books/:id" Component={BookPage} />
-                <Route path="friend" Component={FriendPage} />
+                <Route path="friends" Component={FriendPage} />
                 <Route path="login" Component={Login} />
             </Route>
         </Routes>
