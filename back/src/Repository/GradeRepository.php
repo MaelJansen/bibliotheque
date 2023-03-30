@@ -46,6 +46,16 @@ class GradeRepository extends ServiceEntityRepository
             ->setParameter('val', $bookId)
             ->getQuery()
             ->getResult();
+
+    public function findOneById(int $BookId, int $UserId): ?Grade
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.book = :bookId')
+            ->andWhere('g.user = :userId')
+            ->setParameter('bookId', $BookId)
+            ->setParameter('userId', $UserId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**
