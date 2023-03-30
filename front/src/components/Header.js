@@ -78,7 +78,7 @@ function Header() {
             </div>;
 
         menuLine = <div class="hidden md:flex space-x-10">
-            <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
+            <Link to={"/"} class="hover:underline hover:text-gray-700">Accueil</Link>
             <Link to={"/login"} class="hover:underline hover:text-gray-700">Se connecter</Link>
         </div>;
     }
