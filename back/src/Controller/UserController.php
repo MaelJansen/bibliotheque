@@ -80,11 +80,11 @@ class UserController extends AbstractController
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
     {
         // Check if nb_books is valid
-        if (isset($_GET['nb_books'])) {
-            if ($_GET['nb_books'] < 0 || !is_numeric($_GET['nb_books'])) {
+        if (isset($_GET['result'])) {
+            if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
                 return $this->json(['message' => 'Invalid number of books'], 400);
             } else {
-                $nbBooks = $_GET['nb_books'];
+                $nbBooks = $_GET['result'];
             }
         } else {
             $nbBooks = 4;
