@@ -29,14 +29,23 @@ function Profile() {
 
     async function getUserBooks(id, params) {
         let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
-        let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=8";
+        let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=4";
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${id}/books${page}${nbResult}`;
         axios
-        .get(serverQuery)
-        .then(response => {
-            console.log(response);
-        })
-        .catch(console.log)
+            .get(serverQuery)
+            .then(response => {
+                let tmp = [];
+                for (let bookElem of response.data) {
+                    let book = bookElem.USBBook;
+                    let tmpBook = {
+                        "id": book.id,
+                        "img": book.BOOLinkImg,
+                    };
+                    tmp.push(tmpBook);
+                }
+                setUserBooks(tmp);
+            })
+            .catch(console.log)
     }
 
     useEffect(() => {
@@ -49,14 +58,14 @@ function Profile() {
 
     return (
         <div className="m-3">
-        <p className="text-2xl text-iut-green">{userData.id === userId ? "Your profile" : `${userData.USRFirstName || "guest"} profile`}</p>
-        <div className="flex flex-col items-center space-y-2">
-            <img src={userData.USRProfilePicture || ""} alt="Profile picture" className="rounded-full"/>
-            <p className="text-iut-green text-lg text-center">{userData.USRFirstName || "Guest"} {userData.USRName || ""}</p>
-        </div>
-        <BookList 
-        name={`${userData.USRFirstName || "Last"} books`}
-        books={[]} />
+            <p className="text-2xl text-iut-green">{userData.id === userId ? "Your profile" : `${userData.USRFirstName || "guest"} profile`}</p>
+            <div className="flex flex-col items-center space-y-2">
+                <img src={userData.USRProfilePicture || ""} alt="Profile picture" className="rounded-full" />
+                <p className="text-iut-green text-lg text-center">{userData.USRFirstName || "Guest"} {userData.USRName || ""}</p>
+            </div>s
+            <BookList
+                name={`${userData.USRFirstName || "Last"} books`}
+                books={userBooks} />
         </div>
     )
 }

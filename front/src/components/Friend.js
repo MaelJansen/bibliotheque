@@ -15,7 +15,7 @@ function Friend({ data, following }) {
 
 
   function getBooks() {
-    let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${data.id}/books?nb_books=3`;
+    let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${data.id}/books?result=3`;
     axios
       .get(serverQuery)
       .then((response) => {
