@@ -38,7 +38,6 @@ function Friend({ data, following }) {
     } else {
       follow();
     }
-    navigate(0);
   }
 
   function follow() {
@@ -48,6 +47,7 @@ function Friend({ data, following }) {
       .post(serverQuery, undefined, config)
       .then(response => {
         console.log(response);
+        navigate(0);
       })
       .catch(error => {
         console.log(error.response.status);
@@ -61,6 +61,7 @@ function Friend({ data, following }) {
       .delete(serverQuery, config)
       .then(response => {
         console.log(response);
+        navigate(0);
       })
       .catch(error => {
         console.log(error.response.status);
