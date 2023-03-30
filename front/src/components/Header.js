@@ -44,14 +44,14 @@ function Header(){
                 <Link to={"/"}>Accueil</Link>
             </Dropdown.Item>
             <Dropdown.Item>
-                <Link to={"/"}>Se connecter</Link>
+                <Link to={"/login"}>Se connecter</Link>
             </Dropdown.Item>
             </Dropdown>
         </div>;
 
         menuLine = <div class="hidden md:flex space-x-10">
                         <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
-                        <Link to={"/"} class="hover:underline hover:text-gray-700">Se connecter</Link>
+                        <Link to={"/login"} class="hover:underline hover:text-gray-700">Se connecter</Link>
                     </div>;
     }
 
