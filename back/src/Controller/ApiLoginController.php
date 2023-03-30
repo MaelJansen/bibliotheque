@@ -44,7 +44,6 @@ class ApiLoginController extends AbstractController
         required: true,
         schema: new OA\Schema(type: "string")
     )]
-
     #[OA\RequestBody(
         content: new OA\JsonContent(ref: "#/components/schemas/UserNew")
     )]

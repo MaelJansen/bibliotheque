@@ -18,6 +18,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 #[OA\Tag("User")]
 class UserController extends AbstractController
 {
+    #[OA\Get(
+        summary: "Donne des utilisateurs populaires"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Des utilisateurs populaires",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_users",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/populars', methods: ['GET'])]
     public function getPopularsUsers(UserRepository $userRepository)
     {
@@ -92,6 +112,20 @@ class UserController extends AbstractController
             )
         )
     )]
+    #[OA\Parameter(
+        name: "nb_books",
+        description: "le nombre de livres",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        description: "le numero de la page (de la liste)",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
@@ -135,6 +169,20 @@ class UserController extends AbstractController
             )
         )
     )]
+    #[OA\Parameter(
+        name: "nb_users",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        description: "le numero de la page (de la liste)",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
@@ -168,6 +216,26 @@ class UserController extends AbstractController
         return $this->json($res, 200, [], ['groups' => 'user_infos']);
     }
 
+    #[OA\Get(
+        summary: "Donne une liste d'utilisateurs recommandés (comme amis)"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Une liste d'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_users",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/recommendedusers', methods: ['GET'])]
     public function getUsersRecommendations(int $id, UserRepository $userRepository)
     {
