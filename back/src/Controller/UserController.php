@@ -126,8 +126,10 @@ class UserController extends AbstractController
         }
         // Get the friends of the user
         $friends = $user->getUSRFollowedUsers()->toArray();
+        $nbResult = count($friends);
         $res = array_slice($friends, ($page - 1) * $nbUsers, $nbUsers);
-        return $this->json($res, 200, [], ['groups' => 'user_infos']);
+        $returnPackage = ["nbResult" => $nbResult, "data" => $res];
+        return $this->json($returnPackage, 200, [], ['groups' => 'user_infos']);
     }
 
     #[Route('/{id}/recommendedusers', methods: ['GET'])]
