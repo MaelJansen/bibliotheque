@@ -14,7 +14,6 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
@@ -309,7 +308,6 @@ class UserController extends AbstractController
     ) {
         $followed = false;
         $friendId = $request->query->get('friendId');
-        var_dump($friendId);
         if (is_numeric($friendId)) {
             $user = $repository->getOneUser($id);
             $userFollowed = $repository->getOneUser($friendId);
