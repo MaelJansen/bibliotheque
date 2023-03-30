@@ -145,15 +145,19 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/friend', methods:['POST'])]
-    public function addFriends(int $id, UserRepository $repository, Request $request, EntityManagerInterface $entityManager){
+    public function addFriends(
+        int $id, UserRepository $repository, 
+        Request $request, 
+        EntityManagerInterface $entityManager)
+    {
         $friendId = $request->request->get('friendId');
-        $friendId=12;
-        if (is_numeric($friendId)){
+        $friendId = 12;
+        if (is_numeric($friendId)) {
             $user = $repository->getOneUser($id);
             $userFollowed = $repository->getOneUser($friendId);
-            if ($userFollowed != null){
-                foreach ($user->getUSRFollowingUsers() as $fu){
-                    if ($fu->getId() === $userFollowed->getID()){
+            if ($userFollowed != null) {
+                foreach ($user->getUSRFollowingUsers() as $fu) {
+                    if ($fu->getId() === $userFollowed->getID()) {
                         throw new HttpException(400, 'You are already following this user');
                     }
                 }
