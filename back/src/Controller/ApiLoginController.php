@@ -38,11 +38,13 @@ class ApiLoginController extends AbstractController
      *                     property="username",
      *                     description="The user's unique username",
      *                     type="string",
+     *                     example="ethan.petit@example.com",
      *                 ),
      *                 @OAn\Property(
      *                     property="password",
      *                     description="The user's password",
-     *                     type="string"
+     *                     type="string",
+     *                     example="testtest"
      *                 )
      *             )
      *         )
