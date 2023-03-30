@@ -8,10 +8,12 @@ WORKDIR /app
 
 RUN git clone ${CLONE_URL} sae4
 
-RUN cd sae4/front && npm install
+RUN apt update && apt install nginx -y
 
-EXPOSE 3000
+RUN cd sae4/front && npm install && printf "REACT_APP_API_URL=${REACT_URL}\nREACT_APP_API_PORT=${REACT_PORT}\n" > .env && npm run build
 
-RUN cd /app/sae4/front && printf "REACT_APP_API_URL=${REACT_URL}\nREACT_APP_API_PORT=${REACT_PORT}\n" > .env
+RUN cp -r /app/sae4/front/build/* /var/www/html/
 
-CMD cd /app/sae4/front && npm start
+EXPOSE 80
+
+CMD nginx -g "daemon off;"
