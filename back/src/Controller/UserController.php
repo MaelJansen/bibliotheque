@@ -133,8 +133,6 @@ class UserController extends AbstractController
         required: false,
         schema: new OA\Schema(type: "string")
     )]
-    #[IsGranted("ROLE_USER")]
-    #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
@@ -174,7 +172,7 @@ class UserController extends AbstractController
         )
     )]
     #[OA\Parameter(
-        name: "nb_users",
+        name: "result",
         description: "le nombre d'utilisateurs",
         in: "query",
         required: false,
