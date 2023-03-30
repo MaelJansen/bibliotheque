@@ -173,7 +173,7 @@ class FillBooksCommand extends Command
                     }
                     $createdBook->setBOOPublishDate($date);
                 }
-                if ($date != null) {
+                if ($createdBook->getBOOPublishDate() != null) {
                     $receivedDate = new DateTime();
                     $minDate = $date->getTimestamp();
                     if ($minDate < strtotime("01-01-2010")) {
