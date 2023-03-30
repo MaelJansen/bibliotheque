@@ -27,7 +27,7 @@ function FriendPage() {
 
     function getFriend(params) {
         let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
-        let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=4";
+        let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=6";
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/friends${page}${nbResult}`;
         console.log(serverQuery);
         axios
@@ -82,7 +82,7 @@ function FriendPage() {
                 friends={friends.data ? friends.data : []} />
             <Paginator
                 nbResult={friends.nbResult ? friends.nbResult : 0} 
-                default_res={4}/>
+                default_res={6}/>
             <FriendList
                 name={"Recommendations"}
                 following={false}
