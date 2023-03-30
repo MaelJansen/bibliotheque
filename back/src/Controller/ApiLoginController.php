@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class ApiLoginController extends AbstractController
 {
     #[Route('/api/login', name: 'app_api_login')]
-    public function index(#[CurrentUser] ?User $user, Request $request, UserRepository $repository, EntityManagerInterface $entityManager)
+    public function index(#[CurrentUser] ?User $user)
     {
         if (null === $user) {
             return $this->json([
@@ -26,6 +26,7 @@ class ApiLoginController extends AbstractController
         $token = uniqid();
         return $this->json([
             'user'  => $user->getUserIdentifier(),
+            'userId' => $user->getId(),
             'token' => $token,
         ]);
     }
