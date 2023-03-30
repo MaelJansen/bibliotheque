@@ -33,11 +33,12 @@ class ApiLoginController extends AbstractController
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/api/logout', methods: ['POST'])]
-    public function logout(UserRepository $userRepository, Request $request){
+    public function logout(UserRepository $userRepository, Request $request)
+    {
         $token = $request->headers->get('Authorization');
         $token = substr($token, 7);
         $user = $userRepository->getUserByToken($token);
-        $user->setToken(NULL);
+        $user->setToken(null);
         $userRepository->save($user, true);
         return $this->json(['userID' => $user->getId()]);
     }
