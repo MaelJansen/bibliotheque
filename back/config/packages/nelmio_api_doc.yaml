@@ -1,9 +1,94 @@
 nelmio_api_doc:
+    models:
+        names:
+            - { alias: BookInfos, type: App\Entity\Book, groups:[book_infos] }
+            - { alias: BookPreview, type: App\Entity\Book, groups:[preview] }
+            - { alias : AuthorInfos, type: App\Entity\Author, groups:[author_infos] }
+            - { alias : UserInfos, type: App\Entity\User, groups:[user_infos] }
+            - { alias : UserLastBooks, type: App\Entity\User, groups:[last_books] }
+            - { alias : LastBooksInfos, type: App\Entity\Book, groups:[last_books] }
+            - { alias : UserNew, type: App\Entity\User, groups:[user_new] }
+    
     documentation:
         info:
             title: My App
             description: This is an awesome app!
             version: 1.0.0
+        components:
+            schemas:
+                Books:
+                    type: 'object'
+                    properties:
+                        nbResult:
+                            type: integer
+                            example: 1
+                        datas:
+                            type: array
+                            items: 
+                                ref: "#/components/schemas/BookPreview"
+                PopularBooks:
+                    type: 'object'
+                    properties:
+                        0:
+                            type: array
+                            items: 
+                                ref: "#/components/schemas/BookPreview"
+                        nb_reads:
+                            type: integer
+                            example: 4
+                SingleBook:
+                    type: 'object'
+                    properties:
+                        averageGrade:
+                            type: integer
+                            example: 4
+                        book:
+                            type: array
+                            items: 
+                                ref: "#/components/schemas/BookInfos"
+                SingleUser:
+                    type: 'object'
+                    properties:
+                        user:
+                            ref: "#/components/schemas/UserLastBooks"
+                UserFriends:
+                    type: 'object'
+                    properties:
+                        nbResult:
+                            type: integer
+                            example: 1
+                        data:
+                            type: array
+                            items: 
+                                ref: "#/components/schemas/UserInfos"
+                AddOrRemoveFriend:
+                    type: 'object'
+                    properties:
+                        userId:
+                            type: integer
+                            example: 1
+                        followedUserId:
+                            type: integer
+                            example: 20
+                LoginUser:
+                    type: 'object'
+                    properties:
+                        user:
+                            type: string
+                            example: ethan.petit@example.com
+                        userId:
+                            type: integer
+                            example: 1
+                        token:
+                            type: string
+                            example: 6425bb56a8279
+                LogoutUser:
+                    type: 'object'
+                    properties:
+                        userId:
+                            type: integer
+                            example: 1
+                        
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

@@ -9,32 +9,41 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
-    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['last_books', 'user_infos'])]
+    #[OA\Property(example: "1")]
     private ?int $id = null;
 
-    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255)]
+    #[Groups(['last_books', 'user_infos'])]
+    #[OA\Property(example: "Gonzalez")]
     private ?string $USRName = null;
 
-    #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255)]
+    #[Groups(['last_books', 'user_infos'])]
+    #[OA\Property(example: "Constance")]
     private ?string $USRFirstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_infos', 'user_new'])]
+    #[OA\Property(example: "constance.gonzalez@example.com")]
     private ?string $USREmail = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_new'])]
+    #[OA\Property(example: "testtest")]
     private ?string $USRPassword = null;
 
     #[Groups(['last_books', 'user_infos'])]
     #[ORM\Column(length: 255, nullable: true)]
+    #[OA\Property(example: "https://randomuser.me/api/portraits/women/66.jpg")]
     private ?string $USRProfilePicture = null;
 
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'USRFollowingUsers')]

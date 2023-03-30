@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +18,29 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/api/user')]
+#[OA\Tag("User")]
 class UserController extends AbstractController
 {
+    #[OA\Get(
+        summary: "Donne des utilisateurs populaires"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Des utilisateurs populaires",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_users",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/populars', name:'popular', methods: ['GET'])]
     public function getPopularsUsers(UserRepository $userRepository, int $id = null)
     {
@@ -57,7 +79,16 @@ class UserController extends AbstractController
         return $this->json($sortedUser, 200, [], ['groups' => 'user_infos']);
     }
 
-
+    #[OA\Get(
+        summary: "Donne un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "1 utilisateur",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/SingleUser"
+        )
+    )]
     #[View(serializerGroups: ['user_infos', 'last_books'])]
     #[Route('/{id}', methods: ['GET'])]
     public function getOneUser(UserRepository $userRepository, int $id)
@@ -75,6 +106,33 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
+    #[OA\Get(
+        summary: "Donne les livres d'un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les livres de l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/LastBooksInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_books",
+        description: "le nombre de livres",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        description: "le numero de la page (de la liste)",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
@@ -102,6 +160,31 @@ class UserController extends AbstractController
         return $this->json($books, 200, [], ['groups' => 'last_books']);
     }
 
+    // Get all friends from one user
+    #[OA\Get(
+        summary: "Donne les amis d'un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les amis de l'utilisateur",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/UserFriends"
+        )
+    )]
+    #[OA\Parameter(
+        name: "result",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
+    #[OA\Parameter(
+        name: "page",
+        description: "le numero de la page (de la liste)",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
@@ -137,6 +220,26 @@ class UserController extends AbstractController
         return $this->json($returnPackage, 200, [], ['groups' => 'user_infos']);
     }
 
+    #[OA\Get(
+        summary: "Donne une liste d'utilisateurs recommandés (comme amis)"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Une liste d'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_users",
+        description: "le nombre d'utilisateurs",
+        in: "query",
+        required: false,
+        schema: new OA\Schema(type: "string")
+    )]
     #[Route('/{id}/recommendedusers', methods: ['GET'])]
     public function getUsersRecommendations(int $id, UserRepository $userRepository)
     {
@@ -204,6 +307,26 @@ class UserController extends AbstractController
         return $this->json($sortedUsers, 200, [], ['groups' => 'user_infos']);
     }
 
+    #[OA\Get(
+        summary: "Donne un certain nombre (4 par défaut) de livres recommandés à un utilisateur"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "les livres recommandés à l'utilisateur",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/LastBooksInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "nb_books",
+        in: "query",
+        description: "le nombre de livres à afficher",
+        required: false,
+        schema: new OA\Schema(type: "int", minimum: 1, default: 4)
+    )]
     #[Route('/{id}/recommendedbooks', methods: ['GET'])]
     public function getUserBookRecommendations(
         int $id,
@@ -263,6 +386,23 @@ class UserController extends AbstractController
         return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
     }
 
+    #[OA\Post(
+        summary: "Ajoute un ami"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Ajoute un ami",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/AddOrRemoveFriend"
+        )
+    )]
+    #[OA\Parameter(
+        name: "friendId",
+        description: "l'Id de l'utilisateur à ajouter en ami",
+        in: "query",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/{id}/friends', methods: ['POST'])]
@@ -299,6 +439,23 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[OA\Delete(
+        summary: "Ne plus suivre un ami"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "L'ami qui n'es plus suivi",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/AddOrRemoveFriend"
+        )
+    )]
+    #[OA\Parameter(
+        name: "friendId",
+        description: "l'Id de l'utilisateur à ajouter en ami",
+        in: "query",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/{id}/friends', methods: ['DELETE'])]
