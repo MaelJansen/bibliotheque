@@ -2,34 +2,27 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\UserRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class ApiLoginController extends AbstractController
 {
     #[Route('/api/login', name: 'app_api_login')]
-    public function index(Request $request, UserRepository $repository, EntityManagerInterface $entityManager)
+    public function index(#[CurrentUser] ?User $user)
     {
-        $email = $request->request->get('email');
-        if ($email != null) {
-            $user = $repository->getOneUserByEmail($email);
-            if (null === $user) {
-                throw new HttpException(401, 'Unauthorized');
-            }
-            $token = uniqid();
-            $user->setToken($token);
-            $entityManager->persist($user);
-            $entityManager->flush();
+        if (null === $user) {
             return $this->json([
-                'user'  => $user->getUserIdentifier(),
-                'token' => $token,
-            ]);
-        } else {
-            throw new HttpException(400, 'Missing email');
+               'message' => 'missing credentials',
+            ], Response::HTTP_UNAUTHORIZED);
         }
+        $token = uniqid();
+        return $this->json([
+            'user'  => $user->getUserIdentifier(),
+            'userId' => $user->getId(),
+            'token' => $token,
+        ]);
     }
 }
