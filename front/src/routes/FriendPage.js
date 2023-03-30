@@ -81,7 +81,8 @@ function FriendPage() {
                 following={true}
                 friends={friends.data ? friends.data : []} />
             <Paginator
-                nbResult={friends.nbResult ? friends.nbResult : 0} />
+                nbResult={friends.nbResult ? friends.nbResult : 0} 
+                default_res={4}/>
             <FriendList
                 name={"Recommendations"}
                 following={false}
