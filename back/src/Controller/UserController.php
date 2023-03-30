@@ -289,7 +289,7 @@ class UserController extends AbstractController
             if ($userFollowed != null) {
                 foreach ($user->getUSRFollowingUsers() as $fu) {
                     if ($fu->getId() === $userFollowed->getID()) {
-                        $followed = true; 
+                        $followed = true;
                     }
                 }
                 if ($followed == false) {
