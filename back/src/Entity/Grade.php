@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\GradeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: GradeRepository::class)]
 class Grade
@@ -18,6 +19,7 @@ class Grade
     #[ORM\JoinColumn(nullable: false)]
     private ?User $GRAUser = null;
 
+    #[Groups('book_grade')]
     #[ORM\Column]
     private ?int $GRARate = null;
 

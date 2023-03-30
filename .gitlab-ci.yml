@@ -68,6 +68,6 @@ deploy:
   image: curlimages/curl:latest
   stage: Deploy
   script:
-    - ./api.sh
+    - curl -X GET http://${PROD_URI}/deploy?token=${TOKEN}
   only:
     - main

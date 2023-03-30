@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import BookPage from './routes/BookPage';
+import FriendPage from './routes/FriendPage';
 import Home from './routes/Home';
 import Login from './routes/Login';
 import Main from './routes/Main';
@@ -12,6 +13,7 @@ function App() {
                 <Route index Component={Home} />
                 <Route path="books" Component={Results} />
                 <Route path="books/:id" Component={BookPage} />
+                <Route path="friends" Component={FriendPage} />
                 <Route path="login" Component={Login} />
             </Route>
         </Routes>

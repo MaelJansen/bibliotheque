@@ -48,7 +48,8 @@ class Book
     #[Groups('book_infos')]
     #[ORM\ManyToOne(targetEntity: Categories::class)]
     #[OA\Property(example: "1", description: "L'id de la catégorie du livre")]
-    private Categories $BOOCategory;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Categories $BOOCategory = null;
 
     #[Groups('book_infos')]
     #[ORM\ManyToMany(targetEntity: Language::class)]
@@ -74,7 +75,7 @@ class Book
     #[OA\Property(example: "2002-02-02", description: "La date de publication du livre")]
     private ?\DateTime $BOOPublishDate = null;
 
-    #[ORM\OneToMany(mappedBy: 'GRABookId', targetEntity: Grade::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'GRABook', targetEntity: Grade::class, orphanRemoval: true)]
     #[OA\Property(example: "[1, 3, 6]", description: "La liste des notes du livre")]
     private Collection $BOOGrades;
 
@@ -144,7 +145,7 @@ class Book
         return $this;
     }
 
-    public function getBOOCategory(): Categories
+    public function getBOOCategory(): ?Categories
     {
         return $this->BOOCategory;
     }
