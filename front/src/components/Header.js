@@ -10,8 +10,9 @@ function Header(){
     let menuDropdown;
     let menuLine;
 
+    const userId = localStorage.getItem("userId");
     //the layout of the menu depends on whether or not the user is connected
-    if(false){
+    if(userId){
         menuDropdown = 
         <div class="space-y-2 md:hidden">
             <Dropdown label="Menu" dismissOnClick={false}
@@ -20,7 +21,7 @@ function Header(){
                     <Link to={"/"}>Accueil</Link> 
                 </Dropdown.Item>
                 <Dropdown.Item>
-                    <Link to={"/"}>Amis</Link>
+                    <Link to={"/friends?page=1"}>Amis</Link>
                 </Dropdown.Item>
                 <Dropdown.Item>
                     <Link to={"/"}>Mes livres</Link>
@@ -31,7 +32,7 @@ function Header(){
 
         menuLine = <div class="hidden md:flex space-x-10">
                         <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
-                        <Link to={"/"} class="hover:underline hover:text-gray-700">Amis</Link>
+                        <Link to={"/friends?page=1"} class="hover:underline hover:text-gray-700">Amis</Link>
                         <Link to={"/"} class="hover:underline hover:text-gray-700">Mes livres</Link>
                     </div>;
     }

@@ -1,7 +1,12 @@
 import BookPrev from "./bookPrev";
 
+import { useLocation } from "react-router-dom";
+
 function BookList({ name, books }) {
-    console.log(books);
+
+    const location = useLocation();
+    const path = location.pathname;
+
     if (books.length === 0) {
         return (
             <>
@@ -12,11 +17,12 @@ function BookList({ name, books }) {
             </>
         )
     } else {
+
         return (
             <>
                 <div id="bookList" className="mt-5">
                     <p className="text-iut-green m-2 text-lg">{name}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 m-2">
+                    <div className={path.includes("friends") ? "grid grid-cols-3 gap-3 m-2" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 m-2"}>
                         {books.map((book) => (
                             <BookPrev data={book} />
                         ))}
