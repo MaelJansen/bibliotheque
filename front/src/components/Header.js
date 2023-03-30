@@ -47,7 +47,7 @@ function Header() {
                         <Link to={"/friends?page=1"}>Amis</Link>
                     </Dropdown.Item>
                     <Dropdown.Item>
-                        <Link to={"/"}>Mes livres</Link>
+                        <Link to={`/user/${userId}`}>Mes livres</Link>
                     </Dropdown.Item>
                     <Dropdown.Item>
                         <Link onClick={handleLogoutClick}>Déconnexion</Link>
@@ -59,7 +59,7 @@ function Header() {
         menuLine = <div class="hidden md:flex space-x-10">
             <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
             <Link to={"/friends?page=1"} class="hover:underline hover:text-gray-700">Amis</Link>
-            <Link to={"/"} class="hover:underline hover:text-gray-700">Mes livres</Link>
+            <Link to={`/user/${userId}`} class="hover:underline hover:text-gray-700">Mes livres</Link>
             <Link onClick={handleLogoutClick}>Déconnexion</Link>
         </div>;
     }
