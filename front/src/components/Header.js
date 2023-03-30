@@ -19,7 +19,6 @@ function Header() {
     };
 
     const logout = () => {
-        console.log("In logout");
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/logout`
         axios
             .post(serverQuery, {}, config)

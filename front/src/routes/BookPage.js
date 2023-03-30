@@ -16,7 +16,6 @@ function BookPage() {
                 if (response.data.book) {
                     let book = response.data.book[0];
                     book.grade = response.data.averageGrade;
-                    console.log(book);
                     setBookData(book);
                 } else {
                     setBookData({ "error": true });

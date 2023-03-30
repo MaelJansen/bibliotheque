@@ -26,9 +26,7 @@ function Login() {
   }
 
   useEffect(() =>{
-    console.log(data);
     if (data.token) {
-      console.log(data.token);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.userId);
       navigate('/');
@@ -42,7 +40,6 @@ function Login() {
     axios
     .post(serverQuery, inputs)
     .then(response => {
-      console.log(response);
       setData(response.data);
     })
     .catch(error => {

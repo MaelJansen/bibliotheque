@@ -29,11 +29,9 @@ function FriendPage() {
         let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
         let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=6";
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/friends${page}${nbResult}`;
-        console.log(serverQuery);
         axios
             .get(serverQuery)
             .then(response => {
-                console.log(response);
                 let tmp = [];
                 for (let friend of response.data.data) {
                     let data = {

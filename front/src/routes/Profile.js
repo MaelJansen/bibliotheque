@@ -46,7 +46,6 @@ function Profile() {
                     };
                     tmp.push(tmpBook);
                 }
-                console.log(response.data.nbResult);
                 setUserBooks({'books': tmp, 'nbResult': response.data.nbResult});
             })
             .catch(console.log)
