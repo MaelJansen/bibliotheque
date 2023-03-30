@@ -38,7 +38,7 @@ function Header() {
         menuDropdown =
             <div className="space-y-2 md:hidden">
                 <Dropdown label="Menu" dismissOnClick={false}
-                    className="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
+                    class="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
                     <Dropdown.Item>
                         <Link to={"/"}>Accueil</Link>
                     </Dropdown.Item>
@@ -66,7 +66,7 @@ function Header() {
         menuDropdown =
             <div className="space-y-2 md:hidden">
                 <Dropdown label="Menu" dismissOnClick={false}
-                    className="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
+                    class ="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
                     <Dropdown.Item>
                         <Link to={"/"}>Accueil</Link>
                     </Dropdown.Item>
