@@ -2,6 +2,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import BookList from "../components/bookList";
+import Paginator from "../components/Paginator";
 
 
 function Profile() {
@@ -18,8 +19,8 @@ function Profile() {
         axios
             .get(serverQuery)
             .then((response) => {
-                if (response.data.user) {
-                    let user = response.data.user;
+                if (response.data) {
+                    let user = response.data;
                     setUserData(user);
                 } else {
                     setUserData({ "error": true });
@@ -31,19 +32,22 @@ function Profile() {
         let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
         let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=4";
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${id}/books${page}${nbResult}`;
+        console.log(serverQuery);
         axios
             .get(serverQuery)
-            .then(response => {
+            .then((response) => {
                 let tmp = [];
-                for (let bookElem of response.data) {
-                    let book = bookElem.USBBook;
+                let datas = response.data;
+                for (let bookItem of datas.books) {
+                    let book = bookItem.USBBook;
                     let tmpBook = {
                         "id": book.id,
                         "img": book.BOOLinkImg,
                     };
                     tmp.push(tmpBook);
                 }
-                setUserBooks(tmp);
+                console.log(response.data.nbResult);
+                setUserBooks({'books': tmp, 'nbResult': response.data.nbResult});
             })
             .catch(console.log)
     }
@@ -66,7 +70,10 @@ function Profile() {
             </div>
             <BookList
                 name={`${userData.USRFirstName || ""} latest books`}
-                books={userBooks} />
+                books={userBooks.books ? userBooks.books : []} />
+            <Paginator 
+            nbResult={userBooks.nbResult || 0}
+            default_res={4} />
         </div>
     )
 }
