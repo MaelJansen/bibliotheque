@@ -273,17 +273,17 @@ class UserController extends AbstractController
         $friendId = $request->query->get('friendId');
         if (is_numeric($friendId)) {
             $user = $repository->getOneUser($id);
-            $userFollowed = $repository->getOneUser($friendId);
-            if ($userFollowed != null) {
-                foreach ($user->getUSRFollowingUsers() as $fu) {
-                    if ($fu->getId() === $userFollowed->getID()) {
+            $userFollowing = $repository->getOneUser($friendId);
+            if ($userFollowing != null) {
+                foreach ($user->getUSRFollowedUsers() as $fu) {
+                    if ($fu->getId() === $userFollowing->getID()) {
                         throw new HttpException(400, 'You are already following this user');
                     }
                 }
-                $user->addUSRFollowingUser($userFollowed);
-                $userFollowed->addUSRFollowedUser($user);
+                $user->addUSRFollowedUser($userFollowing);
+                $userFollowing->addUSRFollowingUser($user);
                 $entityManager->persist($user);
-                $entityManager->persist($userFollowed);
+                $entityManager->persist($userFollowing);
                 $entityManager->flush();
             } else {
                 throw new HttpException(400, 'The followed user doesn\'t exist');
@@ -293,7 +293,7 @@ class UserController extends AbstractController
         }
         return $this->json([
             'userId' => $user->getId(),
-            'followedUserID' => $userFollowed->getId()
+            'followedUserID' => $userFollowing->getId()
         ]);
     }
 
@@ -306,24 +306,24 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ) {
-        $followed = false;
+        $following = false;
         $friendId = $request->query->get('friendId');
         if (is_numeric($friendId)) {
             $user = $repository->getOneUser($id);
-            $userFollowed = $repository->getOneUser($friendId);
-            if ($userFollowed != null) {
-                foreach ($user->getUSRFollowingUsers() as $fu) {
-                    if ($fu->getId() === $userFollowed->getID()) {
+            $userFollowing = $repository->getOneUser($friendId);
+            if ($userFollowing != null) {
+                foreach ($user->getUSRFollowedUsers() as $fu) {
+                    if ($fu->getId() === $userFollowing->getID()) {
                         $followed = true;
                     }
                 }
                 if ($followed == false) {
                     throw new HttpException(400, 'You aren\'t following this user');
                 }
-                $user->removeUSRFollowingUser($userFollowed);
-                $userFollowed->removeUSRFollowedUser($user);
+                $user->removeUSRFollowedUser($userFollowing);
+                $userFollowing->removeUSRFollowingUser($user);
                 $entityManager->persist($user);
-                $entityManager->persist($userFollowed);
+                $entityManager->persist($userFollowing);
                 $entityManager->flush();
             } else {
                 throw new HttpException(400, 'The followed user doesn\'t exist');
@@ -333,7 +333,7 @@ class UserController extends AbstractController
         }
         return $this->json([
             'userId' => $user->getId(),
-            'followedUserID' => $userFollowed->getId()
+            'followedUserID' => $userFollowing->getId()
         ]);
     }
 }
