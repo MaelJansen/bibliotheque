@@ -1,5 +1,9 @@
 FROM node
 
+ARG CLONE_URL
+ARG REACT_URL
+ARG REACT_PORT
+
 WORKDIR /app
 
 RUN git clone ${CLONE_URL} sae4
