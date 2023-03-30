@@ -5,7 +5,6 @@ cd /root/deploy
 git clone ${CLONE_URL} sae4
 
 # copy dockerfiles
-cd sae4/deploy
 mkdir front
 cp ./sae4/front/Dockerfile ./front/Dockerfile
 mkdir back
