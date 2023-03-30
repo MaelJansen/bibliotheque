@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BookRepository;
+use App\Repository\GradeRepository;
 use FOS\RestBundle\Controller\Annotations\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -65,10 +66,19 @@ class BookController extends AbstractController
         return $repository->getLastBook();
     }
 
-    #[View(serializerGroups: ['book_infos'])]
+    #[View(serializerGroups: ['book_infos','book_grade'])]
     #[Route('/{id}', name: 'endpointId', methods: ['GET'])]
-    public function getOneBook(BookRepository $repository, int $id)
+    public function getOneBook(BookRepository $bookRepository, GradeRepository $gradeRepository, int $id)
     {
-        return $repository->getOneBook($id);
+        $grades = $gradeRepository->getBookGrades($id);
+        $averageGrade = null;
+        if (!empty($grades)) {
+            $averageGrade = 0;
+            foreach ($grades as $grade) {
+                $averageGrade += $grade->getGRARate();
+            }
+            $averageGrade = $averageGrade / count($grades);
+        }
+        return ["averageGrade" => round($averageGrade), "book" => $bookRepository->getOneBook($id)];
     }
 }
