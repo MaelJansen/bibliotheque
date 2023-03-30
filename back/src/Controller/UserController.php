@@ -12,6 +12,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/api/user')]
 class UserController extends AbstractController
@@ -140,5 +142,35 @@ class UserController extends AbstractController
         $sortedBooks = array_slice($sortedBooks, 0, $nbBooks);
 
         return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
+    }
+
+    #[Route('/{id}/friend', methods:['POST'])]
+    public function addFriends(int $id, UserRepository $repository, Request $request, EntityManagerInterface $entityManager){
+        $friendId = $request->request->get('friendId');
+        $friendId=12;
+        if (is_numeric($friendId)){
+            $user = $repository->getOneUser($id);
+            $userFollowed = $repository->getOneUser($friendId);
+            if ($userFollowed != null){
+                foreach ($user->getUSRFollowingUsers() as $fu){
+                    if ($fu->getId() === $userFollowed->getID()){
+                        throw new HttpException(400, 'You are already following this user');
+                    }
+                }
+                $user->addUSRFollowingUser($userFollowed);
+                $userFollowed->addUSRFollowedUser($user);
+                $entityManager->persist($user);
+                $entityManager->persist($userFollowed);
+                $entityManager->flush();
+            } else {
+                throw new HttpException(400, 'The followed user doesn\'t exist');
+            }
+        } else {
+            throw new HttpException(500, 'No numeric argument');
+        }
+        return $this->json([
+            'userId' => $user->getId(),
+            'followedUserID' => $userFollowed->getId()
+        ]);
     }
 }
