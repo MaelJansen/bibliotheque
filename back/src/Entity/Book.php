@@ -40,7 +40,7 @@ class Book
     #[Groups(['preview', 'book_infos', 'last_books'])]
     #[ORM\Column(length: 5000, nullable: true)]
     #[OA\Property(
-        example: "http://books.google.com/books/content?id=S2FkAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        example: "http://books.google.com/books/content?id=S2F...&printsec=frontcover&img=1&zoom=1&source=gbs_api",
         description: "Le lien vers l'image de couverture du livre"
     )]
     private ?string $BOOLinkImg = null;
