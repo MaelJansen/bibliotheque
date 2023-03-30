@@ -1,10 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BookList from "./bookList";
+import { useNavigate } from "react-router-dom";
 
-function Friend({ data, follow }) {
+function Friend({ data, following }) {
 
   const [books, setBooks] = useState([]);
+  const config = {
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+  };
+  const userId = localStorage.getItem("userId");
+
+
+  console.log(config);
+
+  const navigate = useNavigate();
+
 
   function getBooks() {
     let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${data.id}/books?nb_books=3`;
@@ -22,6 +33,41 @@ function Friend({ data, follow }) {
         }
         setBooks(tmp);
       });
+  }
+
+  function followButtonPressed() {
+    if (following) {
+      unfollow();
+    } else {
+      follow();
+    }
+    // navigate(0);
+  }
+
+  function follow() {
+    let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/friends?friendId=${data.id}`;
+    console.log(serverQuery);
+    axios
+      .post(serverQuery, undefined, config)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error.response.status);
+      })
+  }
+
+  function unfollow() {
+    let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/friends?friendId=${data.id}`;
+    console.log(serverQuery);
+    axios
+      .delete(serverQuery, config)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error.response.status);
+      })
   }
 
   useEffect(() => {
@@ -43,7 +89,9 @@ function Friend({ data, follow }) {
       <div className="flex flex-col bg-gray-200">
         <div className="m-2 space-y-3 flex flex-col justify-center">
           <p>{data.fname} {data.name}</p>
-          <button className="text-white bg-iut-green hover:bg-iut-hover-green focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">{follow ? "Suivre" : "Ne plus suivre"}</button>
+          <button className="text-white bg-iut-green hover:bg-iut-hover-green focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            onClick={followButtonPressed}>
+            {following ? "Ne plus suivre" : "Suivre"}</button>
         </div>
         <div className="flex justify-between p-1">
           <BookList

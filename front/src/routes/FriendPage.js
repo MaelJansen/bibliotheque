@@ -73,13 +73,13 @@ function FriendPage() {
             <p className="text-2xl text-iut-green">Amis</p>
             <FriendList 
             name={"Mes amis"}
-            follow={false}
+            following={true}
             friends={friends.data ? friends.data : []}/>
             <Paginator 
             nbResult={friends.nbResult ? friends.nbResult : 0}/>
             <FriendList 
             name={"Recommendations"}
-            follow={true}
+            following={false}
             friends={friendsSuggestion}/>
         </div>
     )
