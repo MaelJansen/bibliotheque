@@ -73,12 +73,21 @@ nelmio_api_doc:
                 LoginUser:
                     type: 'object'
                     properties:
+                        user:
+                            type: string
+                            example: ethan.petit@example.com
                         userId:
                             type: integer
                             example: 1
-                        followedUserId:
+                        token:
+                            type: string
+                            example: 6425bb56a8279
+                LogoutUser:
+                    type: 'object'
+                    properties:
+                        userId:
                             type: integer
-                            example: 20
+                            example: 1
                         
     areas: # to filter documented areas
         path_patterns:

@@ -23,10 +23,7 @@ class ApiLoginController extends AbstractController
         response: 200,
         description: "Connecte un utilisateur",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/UserNew"
-            )
+            ref: "#/components/schemas/LoginUser"
         )
     )]
     #[OA\Parameter(
@@ -71,10 +68,7 @@ class ApiLoginController extends AbstractController
         response: 200,
         description: "Déconnecte un utilisateur",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/UserNew"
-            )
+            ref: "#/components/schemas/LogoutUser"
         )
     )]
     #[IsGranted("ROLE_USER")]
