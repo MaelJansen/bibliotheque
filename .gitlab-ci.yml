@@ -68,6 +68,6 @@ deploy:
   image: curlimages/curl:latest
   stage: Deploy
   script:
-    - ./api.sh
+    - ./deploy/deploy_trigger.sh
   only:
     - main
