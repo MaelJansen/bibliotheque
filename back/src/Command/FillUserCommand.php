@@ -6,7 +6,6 @@ use App\Entity\Grade;
 use App\Entity\User;
 use App\Entity\UserBook;
 use App\Repository\BookRepository;
-use App\Repository\GradeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -31,7 +30,6 @@ class FillUserCommand extends Command
     private $entityManager;
     private $bookRepository;
     private $userRepository;
-    private $gradeRepository;
 
     /**
      * Summary of __construct
@@ -42,14 +40,12 @@ class FillUserCommand extends Command
         HttpClientInterface $client,
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
-        BookRepository $bookRepository,
-        GradeRepository $gradeRepository
+        BookRepository $bookRepository
     ) {
         // Setting the different repositories
         $this->bookRepository = $bookRepository;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
-        $this->gradeRepository = $gradeRepository;
         $this->client = $client;
         parent::__construct();
     }
@@ -92,6 +88,7 @@ class FillUserCommand extends Command
 
                 ]
             );
+            $io->success('You have created ' . $arg1 . ' users !');
         }
         // We get all the books from the database
         $books = $this->bookRepository->findAll();
@@ -109,25 +106,18 @@ class FillUserCommand extends Command
                 $createdUserBook->setUSBDateBorrowed(new \DateTime());
                 // We add a given back date to 1/2 of the userbook
                 if ($i % 2 == 0) {
-                    $weekCount = rand(0, 20);
-                    $createdUserBook->setUSBDateGivenBack(new \DateTime(datetime : 'now + ' . $weekCount . ' week'));
+                    $createdUserBook->setUSBDateGivenBack(new \DateTime(datetime : 'now + 1 week'));
                 }
                 // We add a grade to 1/3 of the userbook
                 if ($i % 3 == 0) {
-                    $grade = $this->gradeRepository->findOneById(
-                        $createdUser->getId(),
-                        $createdUserBook->getUSBBook()->getId()
-                    );
-                    if (!$grade) {
-                        $createdGrade = new Grade();
-                        $createdGrade->setGRABook($createdUserBook->getUSBBook());
-                        $createdGrade->setGRAUser($createdUser);
-                        // We add a random grade between 0 and 5
-                        $createdGrade->setGRARate(rand(0, 5));
-                        $this->entityManager->persist($createdGrade);
-                    }
+                    $createdGrade = new Grade();
+                    $createdGrade->setGRABook($createdUserBook->getUSBBook());
+                    $createdGrade->setGRAUser($createdUser);
+                    // We add a random grade between 0 and 5
+                    $createdGrade->setGRARate(rand(0, 5));
+                    $this->entityManager->persist($createdGrade);
                 }
-                $createdUserBook->setUSBUser($createdUser);
+                $createdUserBook->setUSBUser($createdUser->getId());
                 $this->entityManager->persist($createdUserBook);
                 $createdUser->addUSRBorrowedBook($createdUserBook);
             }
@@ -136,10 +126,9 @@ class FillUserCommand extends Command
             // We add a random number of follower between 0 and 5
             $nbFollows = rand(0, 5);
             for ($i = 0; $i < $nbFollows; $i++) {
-                // We check if there is a user in the database and if it's not already followed
-                $cacheUser = $users[array_rand($users)];
-                if (empty($users) && !$createdUser->getUSRFollowedUsers()->contains($cacheUser)) {
-                    $createdUser->addUSRFollowedUser($cacheUser);
+                // We check if there is a user in the database
+                if (count($users) > 0) {
+                    $createdUser->addUSRFollowedUser($users[array_rand($users)]);
                 }
             }
             // We add the information of the user from the api
