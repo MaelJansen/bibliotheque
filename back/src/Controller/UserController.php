@@ -67,8 +67,6 @@ class UserController extends AbstractController
         return $this->json($responseData, 200, [], ['groups' => 'last_books']);
     }
 
-    #[IsGranted("ROLE_USER")]
-    #[Security(name: "Bearer")]
     #[View(serializerGroups: ['user_infos'])]
     #[Route('/{id}/books', methods: ['GET'])]
     public function getOneUserBorrowedBooks(int $id, UserBookRepository $userBookRepository)
