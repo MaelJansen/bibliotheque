@@ -11,9 +11,6 @@ function Friend({ data, following }) {
   };
   const userId = localStorage.getItem("userId");
 
-
-  console.log(config);
-
   const navigate = useNavigate();
 
 
@@ -41,7 +38,7 @@ function Friend({ data, following }) {
     } else {
       follow();
     }
-    // navigate(0);
+    navigate(0);
   }
 
   function follow() {
