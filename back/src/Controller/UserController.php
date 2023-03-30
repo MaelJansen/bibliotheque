@@ -149,8 +149,7 @@ class UserController extends AbstractController
         int $id, UserRepository $repository,
         Request $request,
         EntityManagerInterface $entityManager
-    )
-    {
+    ) {
         $friendId = $request->request->get('friendId');
         $friendId = 12;
         if (is_numeric($friendId)) {
