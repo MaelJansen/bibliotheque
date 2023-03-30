@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategoriesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
@@ -16,6 +17,7 @@ class Categories
 
     #[Groups('book_infos')]
     #[ORM\Column(length: 255)]
+    #[OA\Property(example: "Sports & Recreation", description: "Le nom de la catégorie")]
     private ?string $CATName = null;
 
     public function getCATId(): ?int

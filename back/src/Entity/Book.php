@@ -47,19 +47,16 @@ class Book
 
     #[Groups('book_infos')]
     #[ORM\ManyToOne(targetEntity: Categories::class)]
-    #[OA\Property(example: "1", description: "L'id de la catégorie du livre")]
     #[ORM\JoinColumn(nullable: true)]
     private ?Categories $BOOCategory = null;
 
     #[Groups('book_infos')]
     #[ORM\ManyToMany(targetEntity: Language::class)]
-    #[OA\Property(example: "[1, 2]", description: "La liste des langues du livre")]
     private Collection $BOOLanguages;
 
     #[Groups('book_infos')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[OA\Property(example: "1", description: "L'id de l'éditeur du livre")]
     private ?Editor $BOOEditor = null;
 
     #[Groups(['preview', 'book_infos'])]
