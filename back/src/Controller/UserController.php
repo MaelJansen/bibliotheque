@@ -167,12 +167,14 @@ class UserController extends AbstractController
         foreach ($allUsers as $user) {
             $followedUsers = $user->getUSRFollowedUsers();
             foreach ($followedUsers as $followedUser) {
-                if ($id != null) {
-                    if ($followedUser->getId() != $id) {
+                if (!in_array($followedUser, $friends)) {
+                    if ($id != null) {
+                        if ($followedUser->getId() != $id) {
+                            array_push($recommandedUsers, $followedUser->getId());
+                        }
+                    } else {
                         array_push($recommandedUsers, $followedUser->getId());
                     }
-                } else {
-                    array_push($recommandedUsers, $followedUser->getId());
                 }
             }
         }
