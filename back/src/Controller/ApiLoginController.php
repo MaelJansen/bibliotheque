@@ -4,10 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\UserRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,7 +51,6 @@ class ApiLoginController extends AbstractController
                'message' => 'missing credentials',
             ], Response::HTTP_UNAUTHORIZED);
         }
-
         $token = uniqid();
         return $this->json([
             'user'  => $user->getUserIdentifier(),
