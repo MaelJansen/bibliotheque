@@ -21,7 +21,7 @@ class BookController extends AbstractController
         response: 200,
         description: "10 livres pour la page d'accueil",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/Books" 
+            ref: "#/components/schemas/Books"
         )
     )]
     #[OA\Parameter(
@@ -82,7 +82,7 @@ class BookController extends AbstractController
         response: 200,
         description: "Les livres populaires",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/PopularBooks" 
+            ref: "#/components/schemas/PopularBooks"
         )
     )]
     #[OA\Parameter(
@@ -136,7 +136,7 @@ class BookController extends AbstractController
         response: 200,
         description: "Un livre",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/SingleBook"   
+            ref: "#/components/schemas/SingleBook"
         )
     )]
     #[View(serializerGroups: ['book_infos','book_grade'])]
