@@ -236,8 +236,8 @@ class UserController extends AbstractController
         return $this->json($sortedBooks, 200, [], ['groups' => 'last_books']);
     }
 
-    /*#[IsGranted("ROLE_USER")]
-    #[Security(name: "Bearer")]*/
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
     #[Route('/{id}/friend', methods: ['POST'])]
     public function addFriends(
         int $id,
@@ -272,8 +272,8 @@ class UserController extends AbstractController
         ]);
     }
 
-    /*#[IsGranted("ROLE_USER")]
-    #[Security(name: "Bearer")]*/
+    #[IsGranted("ROLE_USER")]
+    #[Security(name: "Bearer")]
     #[Route('/{id}/friend', methods: ['DELETE'])]
     public function removeFriends(
         int $id,
