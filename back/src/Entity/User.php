@@ -32,11 +32,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     private ?string $USRFirstName = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user_infos'])]
+    #[Groups(['user_infos', 'user_new'])]
     #[OA\Property(example: "constance.gonzalez@example.com")]
     private ?string $USREmail = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user_new'])]
     private ?string $USRPassword = null;
 
     #[Groups(['last_books', 'user_infos'])]

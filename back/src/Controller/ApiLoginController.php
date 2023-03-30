@@ -23,23 +23,27 @@ class ApiLoginController extends AbstractController
         content: new OA\JsonContent(
             type: 'array',
             items: new OA\Items(
-                ref: "#/components/schemas/UserLastBooks"
+                ref: "#/components/schemas/UserNew"
             )
         )
     )]
     #[OA\Parameter(
         name: "email",
-        in: "query",
         description: "l'email de l'utilisateur",
+        in: "query",
         required: true,
         schema: new OA\Schema(type: "string")
     )]
     #[OA\Parameter(
         name: "password",
-        in: "query",
         description: "le mot de passe (en clair) de l'utilisateur",
+        in: "query",
         required: true,
         schema: new OA\Schema(type: "string")
+    )]
+
+    #[OA\RequestBody(
+        content: new OA\JsonContent(ref: "#/components/schemas/UserNew")
     )]
     #[Route('/', name: 'app_api_login', methods: ['POST'])]
     public function index(Request $request, UserRepository $repository, EntityManagerInterface $entityManager)
