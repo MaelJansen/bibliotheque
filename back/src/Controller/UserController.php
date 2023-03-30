@@ -238,7 +238,7 @@ class UserController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
-    #[Route('/{id}/friend', methods: ['POST'])]
+    #[Route('/{id}/friends', methods: ['POST'])]
     public function addFriends(
         int $id,
         UserRepository $repository,
@@ -274,7 +274,7 @@ class UserController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
-    #[Route('/{id}/friend', methods: ['DELETE'])]
+    #[Route('/{id}/friends', methods: ['DELETE'])]
     public function removeFriends(
         int $id,
         UserRepository $repository,
