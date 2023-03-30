@@ -21,7 +21,7 @@ class UserBook
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $USBDateGivenBack = null;
 
-    #[ORM\ManyToOne(inversedBy: 'USRBorrowedBooks')]
+    #[ORM\ManyToOne(inversedBy: 'USRBorrowedBooks', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $USBUser = null;
 
