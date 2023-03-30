@@ -36,9 +36,9 @@ function Header() {
     //the layout of the menu depends on whether or not the user is connected
     if (userId) {
         menuDropdown =
-            <div class="space-y-2 md:hidden">
+            <div className="space-y-2 md:hidden">
                 <Dropdown label="Menu" dismissOnClick={false}
-                    class="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
+                    className="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
                     <Dropdown.Item>
                         <Link to={"/"}>Accueil</Link>
                     </Dropdown.Item>
@@ -55,18 +55,18 @@ function Header() {
             </div>;
 
 
-        menuLine = <div class="hidden md:flex space-x-10">
-            <Link to={"/"} class="hover:underline hover:text-gray-700">Acceuil</Link>
-            <Link to={"/friends?page=1"} class="hover:underline hover:text-gray-700">Amis</Link>
-            <Link to={`/user/${userId}`} class="hover:underline hover:text-gray-700">Mes livres</Link>
+        menuLine = <div className="hidden md:flex space-x-10">
+            <Link to={"/"} className="hover:underline hover:text-gray-700">Acceuil</Link>
+            <Link to={"/friends?page=1"} className="hover:underline hover:text-gray-700">Amis</Link>
+            <Link to={`/user/${userId}`} className="hover:underline hover:text-gray-700">Mes livres</Link>
             <Link onClick={handleLogoutClick}>Déconnexion</Link>
         </div>;
     }
     else {
         menuDropdown =
-            <div class="space-y-2 md:hidden">
+            <div className="space-y-2 md:hidden">
                 <Dropdown label="Menu" dismissOnClick={false}
-                    class="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
+                    className="text-white bg-iut-green rounded-lg hover:bg-iut-hover-green">
                     <Dropdown.Item>
                         <Link to={"/"}>Accueil</Link>
                     </Dropdown.Item>
@@ -76,17 +76,17 @@ function Header() {
                 </Dropdown>
             </div>;
 
-        menuLine = <div class="hidden md:flex space-x-10">
-            <Link to={"/"} class="hover:underline hover:text-gray-700">Accueil</Link>
-            <Link to={"/login"} class="hover:underline hover:text-gray-700">Se connecter</Link>
+        menuLine = <div className="hidden md:flex space-x-10">
+            <Link to={"/"} className="hover:underline hover:text-gray-700">Accueil</Link>
+            <Link to={"/login"} className="hover:underline hover:text-gray-700">Se connecter</Link>
         </div>;
     }
 
     return (
         <header>
-            <div class="flex justify-between px-5 py-5 text-xl">
-                <div class="flex">
-                    <Link to={'/'} class="text-iut-green">IUT - Bibliothèque</Link>
+            <div className="flex justify-between px-5 py-5 text-xl">
+                <div className="flex">
+                    <Link to={'/'} className="text-iut-green">IUT - Bibliothèque</Link>
                 </div>
                 {menuDropdown}
                 {menuLine}
