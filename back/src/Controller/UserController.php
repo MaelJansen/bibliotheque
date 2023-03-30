@@ -146,9 +146,10 @@ class UserController extends AbstractController
 
     #[Route('/{id}/friend', methods:['POST'])]
     public function addFriends(
-        int $id, UserRepository $repository, 
-        Request $request, 
-        EntityManagerInterface $entityManager)
+        int $id, UserRepository $repository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    )
     {
         $friendId = $request->request->get('friendId');
         $friendId = 12;
