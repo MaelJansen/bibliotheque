@@ -178,7 +178,7 @@ class UserController extends AbstractController
         foreach ($friends as $friend) {
             $friendsFriends = $friend->getUSRFollowedUsers()->toArray();
             // Adding the friends friends to the users array
-            for ($i=0; $i < 3; $i++) {
+            for ($i = 0; $i < 3; $i++) {
                 foreach ($friendsFriends as $user) {
                     if ($user->getId() != $thisUser->getId()) {
                         array_push($recommandedUsers, $user->getId());
