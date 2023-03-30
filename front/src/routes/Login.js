@@ -4,11 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
 
+  
   const navigate = useNavigate();
-
+  
   const [inputs, setInputs] = useState({username: "", password: ""});
   const [data, setData] = useState({});
 
+  if(localStorage.getItem("userId")){
+    navigate("/");
+  }
+  
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
