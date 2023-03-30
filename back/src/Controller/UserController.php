@@ -104,12 +104,12 @@ class UserController extends AbstractController
     #[Route('/{id}/friends', methods: ['GET'])]
     public function getUserFriends(int $id, UserRepository $userRepository)
     {
-        // Check if nb_books is valid
-        if (isset($_GET['nb_users'])) {
-            if ($_GET['nb_users'] < 0 || !is_numeric($_GET['nb_users'])) {
+        // Check if result is valid
+        if (isset($_GET['result'])) {
+            if ($_GET['result'] < 0 || !is_numeric($_GET['result'])) {
                 throw new HttpException(400, "Wrong number of users");
             } else {
-                $nbUsers = $_GET['nb_users'];
+                $nbUsers = $_GET['result'];
             }
         } else {
             $nbUsers = 4;
