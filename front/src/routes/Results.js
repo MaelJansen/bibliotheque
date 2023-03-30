@@ -46,12 +46,14 @@ function Results() {
   return (
     <div className="results">
       <Paginator
-        nbResult={booksData.nbResult || 0} />
+        nbResult={booksData.nbResult || 0} 
+        default_res={10}/>
       <BookList
         name={`Resultats pour : ${searchParams.get('q') ? searchParams.get('q') : "Tous les livres"}`}
         books={booksData.datas || []} />
       <Paginator
-        nbResult={booksData.nbResult || 0} />
+        nbResult={booksData.nbResult || 0} 
+        default_res={10}/>
     </div>
   );
 }
