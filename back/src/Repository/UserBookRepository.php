@@ -52,6 +52,16 @@ class UserBookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getTheNumberOfBorrowedBooks(int $userId): int
+    {
+        return $this->createQueryBuilder('ub')
+            ->select('COUNT(ub)')
+            ->andWhere('ub.USBUser = :val')
+            ->setParameter('val', $userId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
 //    /**
 //     * @return UserBook[] Returns an array of UserBook objects
