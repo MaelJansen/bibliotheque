@@ -1,5 +1,8 @@
 FROM ubuntu:latest
 
+ARG CLONE_URL
+ARG DATABASE_URL
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
