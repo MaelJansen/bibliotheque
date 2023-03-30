@@ -421,6 +421,26 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[OA\Delete(
+        summary: "Ne plus suivre un ami"
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "L'ami qui n'es plus suivi",
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                ref: "#/components/schemas/UserInfos"
+            )
+        )
+    )]
+    #[OA\Parameter(
+        name: "friendId",
+        description: "l'Id de l'utilisateur à ajouter en ami",
+        in: "query",
+        required: true,
+        schema: new OA\Schema(type: "string")
+    )]
     #[IsGranted("ROLE_USER")]
     #[Security(name: "Bearer")]
     #[Route('/{id}/friend', methods:['DELETE'])]
