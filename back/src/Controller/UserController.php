@@ -292,7 +292,7 @@ class UserController extends AbstractController
             // Adding the friends friends to the users array
             for ($i = 0; $i < 3; $i++) {
                 foreach ($friendsFriends as $user) {
-                    if ($user->getId() != $thisUser->getId()) {
+                    if ($user->getId() != $thisUser->getId() && !in_array($user, $friends)) {
                         array_push($recommandedUsers, $user->getId());
                     }
                 }
