@@ -160,7 +160,9 @@ class FillBooksCommand extends Command
                     $createdBook->setBOOSummary($book['volumeInfo']['description']);
                 }
                 if (array_key_exists('imageLinks', $book['volumeInfo'])) {
-                    $createdBook->setBOOLinkImg($book['volumeInfo']['imageLinks']['thumbnail']);
+                    $thumbnail_url = $book['volumeInfo']['imageLinks']['thumbnail'];
+                    $thumbnail_url = str_replace("http://", "https://", $thumbnail_url);
+                    $createdBook->setBOOLinkImg($thumbnail_url);
                 }
                 if (array_key_exists('publishedDate', $book['volumeInfo'])) {
                     $date = DateTime::createFromFormat('Y-m-d', $book['volumeInfo']['publishedDate']);
