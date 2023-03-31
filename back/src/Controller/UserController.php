@@ -114,10 +114,7 @@ class UserController extends AbstractController
         response: 200,
         description: "les livres de l'utilisateur",
         content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(
-                ref: "#/components/schemas/LastBooksInfos"
-            )
+            ref: "#/components/schemas/UserBooks"
         )
     )]
     #[OA\Parameter(
