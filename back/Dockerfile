@@ -16,6 +16,7 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
 RUN cd sae4/back && symfony composer update && symfony composer install && echo "DATABASE_URL=${DATABASE_URL}" > .env.local
+RUN sed -i 's/%env(CORS_ALLOW_ORIGIN)%/*/g' sae4/back/config/packages/nelmio_cors.yaml
 
 EXPOSE 8000
 
