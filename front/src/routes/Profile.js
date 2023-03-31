@@ -32,7 +32,6 @@ function Profile() {
         let page = params.get('page') ? "?page=" + params.get('page') : "?page=1";
         let nbResult = params.get('result') ? "&result=" + params.get('result') : "&result=4";
         let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${id}/books${page}${nbResult}`;
-        console.log(serverQuery);
         axios
             .get(serverQuery)
             .then((response) => {
@@ -46,7 +45,6 @@ function Profile() {
                     };
                     tmp.push(tmpBook);
                 }
-                console.log(response.data.nbResult);
                 setUserBooks({'books': tmp, 'nbResult': response.data.nbResult});
             })
             .catch(console.log)
@@ -63,13 +61,13 @@ function Profile() {
     return (
         <div className="m-3">
             <button onClick={() => navigate(-1)} className="mb-3 hover:text-iut-hover-green">{"<"} Revenir en arrière</button>
-            <p className="text-2xl text-iut-green">{userData.id === userId ? "Your profile" : `${userData.USRFirstName || "guest"} profile`}</p>
+            <p className="text-2xl text-iut-green">{userId == userData.id ? "Your profile" : `${userData.USRFirstName || "guest"} profile`}</p>
             <div className="flex flex-col items-center space-y-2">
                 <img src={userData.USRProfilePicture || ""} alt="Profile picture" className="rounded-full" />
                 <p className="text-iut-green text-lg text-center">{userData.USRFirstName || "Guest"} {userData.USRName || ""}</p>
             </div>
             <BookList
-                name={`${userData.USRFirstName || ""} latest books`}
+                name={`${userId == userData.id ? "Your" : userData.USRFirstName || ""} latest books`}
                 books={userBooks.books ? userBooks.books : []} />
             <Paginator 
             nbResult={userBooks.nbResult || 0}

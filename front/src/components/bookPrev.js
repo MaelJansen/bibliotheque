@@ -11,7 +11,7 @@ function BookPrev({ data }) {
                     className="w-full h-fit overflow-hidden">
                     <img src={data.img || "https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg"}
                         className="object-cover object-top w-full h-full ease-in-out delay-100 transition-transform  group-hover:scale-110 group-focus:scale-110"
-                        alt={data.title} />
+                        alt={data.title ? data.title : data.id} />
                 </Link>
             </div>
             {

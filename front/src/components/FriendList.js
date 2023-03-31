@@ -8,7 +8,8 @@ function FriendList({name, following, friends}) {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 m-2">
           {friends.map((friend) => (
             <Friend data={friend} 
-            following={following}/>
+            following={following}
+            key={friend.id || ""}/>
           ))}
         </div>
       </div>

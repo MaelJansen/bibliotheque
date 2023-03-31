@@ -26,9 +26,7 @@ function Login() {
   }
 
   useEffect(() =>{
-    console.log(data);
     if (data.token) {
-      console.log(data.token);
       localStorage.setItem("token", data.token);
       localStorage.setItem("userId", data.userId);
       navigate('/');
@@ -42,7 +40,6 @@ function Login() {
     axios
     .post(serverQuery, inputs)
     .then(response => {
-      console.log(response);
       setData(response.data);
     })
     .catch(error => {
@@ -58,7 +55,7 @@ function Login() {
       <form className="md:w-1/3 space-y-4"
       onSubmit={handleSubmit}>
         <div className="w-full">
-          <label for="username" class=" text-sm">
+          <label for="username" className=" text-sm">
             Identifiant
           </label>
           <input
@@ -74,7 +71,7 @@ function Login() {
         <p className="text-red-600 hidden peer-:inline">Un email valid doit etre rentrer</p>
         </div>
         <div className="w-full">
-          <label for="login" class=" text-sm">
+          <label for="login" className=" text-sm">
             Mot de passe
           </label>
           <input
@@ -91,7 +88,7 @@ function Login() {
         <div>
           <button
             type="submit"
-            class="w-full text-white bg-iut-green hover:bg-iut-hover-green focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-iut-green hover:bg-iut-hover-green focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Sign in
           </button>

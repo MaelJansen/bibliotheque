@@ -20,7 +20,7 @@ function Friend({ data, following }) {
       .get(serverQuery)
       .then((response) => {
         let tmp = [];
-        for (let bookElem of response.data) {
+        for (let bookElem of response.data.books) {
           let book = bookElem.USBBook;
           let tmpBook = {
             "id": book.id,
@@ -42,11 +42,9 @@ function Friend({ data, following }) {
 
   function follow() {
     let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/friends?friendId=${data.id}`;
-    console.log(serverQuery);
     axios
       .post(serverQuery, undefined, config)
       .then(response => {
-        console.log(response);
         navigate(0);
       })
       .catch(error => {
@@ -56,11 +54,9 @@ function Friend({ data, following }) {
 
   function unfollow() {
     let serverQuery = `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/api/user/${userId}/friends?friendId=${data.id}`;
-    console.log(serverQuery);
     axios
       .delete(serverQuery, config)
       .then(response => {
-        console.log(response);
         navigate(0);
       })
       .catch(error => {
