@@ -10,7 +10,7 @@ COPY . /app
 RUN apt update && apt install nginx -y
 
 RUN npm install
-RUN printf "REACT_APP_API_URL=http://${BACK_URL}\nREACT_APP_API_PORT=${BACK_PORT}\n" > .env && npm run build
+RUN printf "REACT_APP_API_URL=${BACK_URL}\nREACT_APP_API_PORT=${BACK_PORT}\n" > .env && npm run build
 
 RUN cp -r ./build/* /var/www/html/
 
