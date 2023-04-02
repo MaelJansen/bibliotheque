@@ -5,6 +5,7 @@ stages:
     - CodingStandards
     - UnitTests
     - Eslint
+    - Build
     - Deploy
 
 security-checker:
@@ -64,10 +65,50 @@ unit-tests:
     - php bin/phpunit
   allow_failure: false
 
-deploy:
-  image: curlimages/curl:latest
-  stage: Deploy
+cache:
+  paths:
+    - front/
+    - back/
+
+build_front:
+  stage: Build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
   script:
-    - curl -X GET http://${PROD_URI}/deploy?token=${TOKEN}
+    - /kaniko/executor --context ./front --dockerfile ./front/Dockerfile --destination sae4-front --tarPath ./front/front.tar --no-push --build-arg BACK_URL="${BACK_URL}" --build-arg BACK_PORT="${BACK_PORT}"
+  only:
+    - main
+
+build_back:
+  stage: Build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  script:
+    - /kaniko/executor --context ./back --dockerfile ./back/Dockerfile --destination sae4-back --tarPath ./back/back.tar --no-push --build-arg DATABASE_URL="${DATABASE_URL}"
+  only:
+    - main
+
+deploy:
+  stage: Deploy
+  image:
+    name: docker:stable
+    entrypoint: [""]
+  script:
+    - apk add --no-cache openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan $REMOTE_HOST >> ~/.ssh/known_hosts
+    - scp -i ~/.ssh/id_rsa ./front/front.tar $REMOTE_HOST:/tmp/front.tar
+    - scp -i ~/.ssh/id_rsa ./back/back.tar $REMOTE_HOST:/tmp/back.tar
+    - ssh -i ~/.ssh/id_rsa $REMOTE_HOST "docker load -i /tmp/front.tar && docker load -i /tmp/back.tar"
+    - ssh -i ~/.ssh/id_rsa $REMOTE_HOST "docker stop sae4-front && docker rm sae4-front && docker stop sae4-back && docker rm sae4-back"
+    - ssh -i ~/.ssh/id_rsa $REMOTE_HOST "docker run -d --name sae4-front -p 3000:80 sae4-front"
+    - ssh -i ~/.ssh/id_rsa $REMOTE_HOST "docker run -d --name sae4-back -p 8001:8000 sae4-back"
+  dependencies:
+    - build_front
+    - build_back
   only:
     - main
