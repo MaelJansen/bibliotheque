@@ -1,47 +1,52 @@
 image: jakzal/phpqa:php8.1
 
 stages:
-    - SecurityChecker
-    - CodingStandards
-    - UnitTests
-    - Eslint
-    - Build
-    - Deploy
+  - SecurityChecker
+  - CodingStandards
+  - UnitTests
+  - Eslint
+  - Build
+  - Deploy
 
+# check composer.lock for package security issues
 security-checker:
-    stage: SecurityChecker
-    script:
-        - cd back
-        - composer install
-        - local-php-security-checker  --path=./composer.lock
-    allow_failure: false
+  stage: SecurityChecker
+  script:
+    - cd back
+    - composer install
+    - local-php-security-checker  --path=./composer.lock
+  allow_failure: false
 
+# check php code for coding standards
 phpcs:
-    stage: CodingStandards
-    script:
-        - cd back
-        - composer install
-        - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
-    allow_failure: false
+  stage: CodingStandards
+  script:
+    - cd back
+    - composer install
+    - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
+  allow_failure: false
 
+# check php code for static analysis
 phpstan:
-    stage: CodingStandards
-    script:
-        - cd back
-        - composer install
-        - phpstan analyse ./src
-    allow_failure: false
+  stage: CodingStandards
+  script:
+    - cd back
+    - composer install
+    - phpstan analyse ./src
+  allow_failure: false
 
+# check js code for coding standards
 eslint:
-    image: node:16
-    stage: Eslint
-    script:
-        - cd front
-        - npm install
-        - npm install eslint
-        - npx eslint src/*.js --max-warnings=0
-    allow_failure: false
+  image: node:16
+  stage: Eslint
+  script:
+    - cd front
+    - npm install
+    - npm install eslint
+    - npx eslint src/*.js --max-warnings=0
+  allow_failure: false
 
+# start mysql database service for unit tests
 services:
   - mysql:5.7
 
@@ -52,6 +57,7 @@ variables:
   MYSQL_PASSWORD: "symfony"
   MYSQL_HOST: mysql
 
+# test database and php using unit tests
 unit-tests:
   stage: UnitTests
   script:
@@ -61,15 +67,16 @@ unit-tests:
     - php bin/console doctrine:database:create --if-not-exists
     - php bin/console doctrine:schema:update --force --no-interaction
     - php bin/console app:fill-books 200
-    # - php bin/console app:fill-user
     - php bin/phpunit
   allow_failure: false
 
+# share docker images tar between jobs (the same runner needs to run build and deploy stages)
 cache:
   paths:
     - front/
     - back/
 
+# build docker images using kaniko (because it's running in rootless mode)
 build_front:
   stage: Build
   image:
@@ -90,6 +97,7 @@ build_back:
   only:
     - main
 
+# deploy project. Using ssh to transfer docker images tar to the remote host, loads them and deploy containers
 deploy:
   stage: Deploy
   image:
